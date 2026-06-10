@@ -1,0 +1,20 @@
+# dependencies & build output
+node_modules
+.next
+tsconfig.tsbuildinfo
+
+# local database (contains admin password hashes & order data)
+dev.db
+dev.db-journal
+dev.db.bak
+*.db
+*.db-journal
+*.db.bak
+
+# secrets
+.env
+.env.local
+.env*.local
+
+# logs
+*.log

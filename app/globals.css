@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f4f6f3;
+  color: #18212b;
+}
+
+* {
+  letter-spacing: 0;
+}
+
+.industrial-grid {
+  background-image:
+    linear-gradient(rgba(15, 45, 63, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 45, 63, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
