@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { AddToCartButton } from "@/components/add-to-cart-button";
 import { FitmentChecker } from "@/components/fitment-checker";
 import { InquiryButton } from "@/components/inquiry-button";
+import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
+import { QuantityAddToCart } from "@/components/quantity-add-to-cart";
 import { StockStatus } from "@/components/stock-status";
 import { engineHrefForModelText, problemHrefForTitle } from "@/lib/discovery-links";
 import { formatMoney } from "@/lib/format";
@@ -26,7 +27,21 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = await getStoreProduct(params.slug);
   if (!product) notFound();
-  const relatedProducts = (await getStoreProducts()).filter((item) => item.slug !== product.slug && item.category === product.category).slice(0, 3);
+  const allProducts = await getStoreProducts();
+  const relatedProducts = allProducts
+    .filter((item) => item.slug !== product.slug)
+    .map((item) => {
+      const modelOverlap = item.compatibleModels.filter((model) => product.compatibleModels.includes(model)).length;
+      const score =
+        modelOverlap * 3 +
+        (item.fitmentType === "UNIVERSAL" ? 2 : 0) +
+        (item.category === product.category ? 1 : 0);
+      return { item, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(({ item }) => item);
 
   const productUrl = `${SITE_URL}/products/${product.slug}`;
   const productImage = product.images?.find((image) => image.isPrimary)?.url || product.images?.[0]?.url || product.image;
@@ -66,7 +81,19 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             </div>
             <div className="mt-6">
               <p className="text-sm font-black uppercase text-steel">Retail reference</p>
-              <p className="text-3xl font-black">{formatMoney(product.priceCents, product.currency)}</p>
+              <p className="flex flex-wrap items-baseline gap-3">
+                <span className="text-3xl font-black">{formatMoney(product.priceCents, product.currency)}</span>
+                {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
+                  <>
+                    <span className="text-lg font-bold text-steel line-through">
+                      {formatMoney(product.compareAtPriceCents, product.currency)}
+                    </span>
+                    <span className="bg-red-100 px-2 py-0.5 text-sm font-black text-red-800">
+                      Save {Math.round((1 - product.priceCents / product.compareAtPriceCents) * 100)}%
+                    </span>
+                  </>
+                )}
+              </p>
               <p className="mt-1 text-sm font-bold text-navy">Wholesale price by volume — request a quote below</p>
               <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} className="mt-2" />
             </div>
@@ -81,9 +108,14 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 fitmentNote={product.fitmentNote}
               />
             </div>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <InquiryButton name={product.name} sku={product.sku} url={productUrl} className="min-w-52" />
-              <AddToCartButton slug={product.slug} name={product.name} className="min-w-44" outOfStock={outOfStock} />
+            <div className="mt-5 grid gap-3">
+              <QuantityAddToCart
+                slug={product.slug}
+                name={product.name}
+                outOfStock={outOfStock}
+                maxQuantity={product.stock ?? 99}
+              />
+              <InquiryButton name={product.name} sku={product.sku} url={productUrl} className="min-w-52 justify-self-start" />
             </div>
             <p className="mt-3 text-sm font-bold text-steel">
               Wholesale buyers: chat on WhatsApp for MOQ, carton plan and T/T pricing. The cart is for small trial orders by card.
@@ -170,12 +202,17 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
           )}
         </section>
 
-        <section className="mt-10">
-          <h2 className="text-2xl font-black">Recommended Matching Products</h2>
-          <div className="mt-4 grid gap-3">
-            {relatedProducts.map((item) => <Link key={item.slug} href={`/products/${item.slug}`} className="border border-line bg-white p-4 font-bold">{item.name}</Link>)}
-          </div>
-        </section>
+        {relatedProducts.length > 0 && (
+          <section className="mt-10">
+            <h2 className="text-2xl font-black">Frequently Needed Together</h2>
+            <p className="mt-1 text-steel">Kits for the same engines plus universal workshop parts.</p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {relatedProducts.map((item) => (
+                <ProductCard key={item.slug} product={item} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );

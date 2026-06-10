@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
 import { Minus, Plus, ShieldCheck, TicketPercent, Trash2 } from "lucide-react";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { useCart } from "@/components/cart-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
@@ -48,6 +49,20 @@ export function CartPageClient({ products }: CartPageClientProps) {
   const shippingCents = 1990;
   const discountCents = appliedCoupon?.discountCents || 0;
   const estimatedTotal = subtotal + shippingCents - discountCents;
+
+  const cartSlugs = new Set(lines.map((line) => line.product.slug));
+  const cartModels = new Set(lines.flatMap((line) => line.product.compatibleModels));
+  const crossSell = products
+    .filter((product) => !cartSlugs.has(product.slug) && (product.stock ?? 0) > 0)
+    .map((product) => {
+      const modelOverlap = product.compatibleModels.filter((model) => cartModels.has(model)).length;
+      const score = (product.fitmentType === "UNIVERSAL" ? 4 : 0) + modelOverlap * 3;
+      return { product, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(({ product }) => product);
 
   useEffect(() => {
     setAppliedCoupon(null);
@@ -192,6 +207,39 @@ export function CartPageClient({ products }: CartPageClientProps) {
                   </article>
                 ))}
               </div>
+              {crossSell.length > 0 && (
+                <div className="border-t-4 border-panel p-5">
+                  <h2 className="text-lg font-black">You may also need</h2>
+                  <p className="mt-1 text-sm text-steel">Parts that fit the engines in your cart — add before checkout.</p>
+                  <div className="mt-4 grid gap-3 md:grid-cols-3">
+                    {crossSell.map((product) => (
+                      <div key={product.slug} className="grid border border-line p-4">
+                        <Link href={`/products/${product.slug}`} className="mb-3 grid aspect-[4/3] place-items-center overflow-hidden bg-panel industrial-grid">
+                          {product.image || product.images?.[0]?.url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={product.image || product.images?.[0]?.url}
+                              alt={product.name}
+                              className="h-full w-full object-contain"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <span className="text-2xl font-black text-navy">{product.name.split(" ")[0]}</span>
+                          )}
+                        </Link>
+                        <Link href={`/products/${product.slug}`} className="text-sm font-black leading-snug hover:text-navy">
+                          {product.name}
+                        </Link>
+                        {product.fitmentType === "UNIVERSAL" && (
+                          <span className="mt-1 text-xs font-bold text-navy">Universal — fits all small engines</span>
+                        )}
+                        <strong className="mt-2">{formatMoney(product.priceCents, product.currency)}</strong>
+                        <AddToCartButton slug={product.slug} name={product.name} className="mt-3 w-full" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </section>
 
             <aside className="h-fit border border-line bg-white p-6">

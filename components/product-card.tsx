@@ -59,7 +59,14 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
       <div className="mt-5 flex items-center justify-between gap-3">
         <span>
-          <strong className="block text-lg text-ink">{formatMoney(product.priceCents, product.currency)}</strong>
+          <span className="flex items-baseline gap-2">
+            <strong className="text-lg text-ink">{formatMoney(product.priceCents, product.currency)}</strong>
+            {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
+              <small className="font-bold text-steel line-through">
+                {formatMoney(product.compareAtPriceCents, product.currency)}
+              </small>
+            )}
+          </span>
           <small className="font-bold text-steel">Wholesale by volume</small>
         </span>
         <Link className="bg-navy px-4 py-2 text-sm font-black text-white" href={`/products/${product.slug}`}>
