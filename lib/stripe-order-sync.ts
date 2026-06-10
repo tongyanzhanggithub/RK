@@ -116,11 +116,16 @@ async function reduceInventoryForOrder(orderId: string) {
     });
     if (!order || order.inventoryReduced) return;
 
+    const shortages: string[] = [];
+
     for (const item of order.items) {
       if (!item.productId) continue;
       const product = await tx.product.findUnique({ where: { id: item.productId } });
       if (!product) continue;
 
+      if (product.stock < item.quantity) {
+        shortages.push(`${item.productName}: paid ${item.quantity}, stock was ${product.stock}`);
+      }
       const stockAfter = Math.max(0, product.stock - item.quantity);
       const delta = stockAfter - product.stock;
       if (delta === 0) continue;
@@ -145,7 +150,16 @@ async function reduceInventoryForOrder(orderId: string) {
 
     await tx.order.update({
       where: { id: order.id },
-      data: { inventoryReduced: true }
+      data: {
+        inventoryReduced: true,
+        ...(shortages.length > 0
+          ? {
+              internalNote: [order.internalNote, `OVERSOLD — check before fulfilling: ${shortages.join("; ")}`]
+                .filter(Boolean)
+                .join("\n")
+            }
+          : {})
+      }
     });
   });
 }

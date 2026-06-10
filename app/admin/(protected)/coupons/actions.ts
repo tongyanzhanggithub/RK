@@ -18,7 +18,6 @@ const couponSchema = z
     isActive: z.boolean(),
     minSubtotal: z.coerce.number().min(0).optional(),
     usageLimit: z.coerce.number().int().positive().optional(),
-    perCustomerLimit: z.coerce.number().int().positive().optional(),
     startsAt: z.string().optional(),
     endsAt: z.string().optional(),
     allowWholesaleCustomers: z.boolean()
@@ -58,7 +57,6 @@ function couponDataFromForm(formData: FormData) {
     isActive: formData.get("isActive") === "on",
     minSubtotal: optionalNumberText(formData, "minSubtotal"),
     usageLimit: optionalNumberText(formData, "usageLimit"),
-    perCustomerLimit: optionalNumberText(formData, "perCustomerLimit"),
     startsAt: text(formData, "startsAt") || undefined,
     endsAt: text(formData, "endsAt") || undefined,
     allowWholesaleCustomers: formData.get("allowWholesaleCustomers") === "on"
@@ -82,7 +80,8 @@ function couponDataFromForm(formData: FormData) {
       isActive: coupon.isActive,
       minSubtotalCents: coupon.minSubtotal === undefined ? null : Math.round(coupon.minSubtotal * 100),
       usageLimit: coupon.usageLimit ?? null,
-      perCustomerLimit: coupon.perCustomerLimit ?? null,
+      // perCustomerLimit is intentionally not exposed: the checkout flow has no
+      // customer identity before payment, so the limit cannot be enforced yet.
       startsAt: dateOrNull(coupon.startsAt),
       endsAt: dateOrNull(coupon.endsAt),
       allowWholesaleCustomers: coupon.allowWholesaleCustomers

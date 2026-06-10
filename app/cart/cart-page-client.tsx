@@ -9,6 +9,7 @@ import { TrustBadges } from "@/components/trust-badges";
 import { useCart } from "@/components/cart-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
+import { SHIPPING_CENTS } from "@/lib/shipping";
 
 type CartPageClientProps = {
   products: Product[];
@@ -47,7 +48,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
     })
     .filter(Boolean) as { product: Product; quantity: number; lineTotal: number }[];
   const subtotal = lines.reduce((total, line) => total + line.lineTotal, 0);
-  const shippingCents = 1990;
+  const shippingCents = SHIPPING_CENTS;
   const discountCents = appliedCoupon?.discountCents || 0;
   const estimatedTotal = subtotal + shippingCents - discountCents;
 

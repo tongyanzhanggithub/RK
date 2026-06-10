@@ -8,11 +8,22 @@ type AdminSessionPayload = {
   sub: string;
   email: string;
   role: "ADMIN";
+  /** Fingerprint of the password hash at login time — changing the password revokes existing sessions. */
+  pwd: string;
   exp: number;
 };
 
 function sessionSecret() {
-  return process.env.ADMIN_SESSION_SECRET || "dev-admin-session-secret-change-me";
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  if (secret) return secret;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("ADMIN_SESSION_SECRET must be set in production — admin sessions cannot use the dev fallback.");
+  }
+  return "dev-admin-session-secret-change-me";
+}
+
+export function passwordFingerprint(passwordHash: string) {
+  return crypto.createHash("sha256").update(passwordHash).digest("hex").slice(0, 16);
 }
 
 function base64UrlEncode(value: string | Buffer) {
@@ -44,9 +55,10 @@ export function verifyPassword(rawPassword: string, storedHash: string) {
   return safeEqual(candidate, hash);
 }
 
-export function createAdminToken(payload: Omit<AdminSessionPayload, "exp">) {
+export function createAdminToken(payload: Omit<AdminSessionPayload, "exp" | "pwd">, passwordHash: string) {
   const body: AdminSessionPayload = {
     ...payload,
+    pwd: passwordFingerprint(passwordHash),
     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 8
   };
   const encodedPayload = base64UrlEncode(JSON.stringify(body));
@@ -74,6 +86,7 @@ export async function getCurrentAdmin() {
   if (!payload) return null;
   const admin = await prisma.adminUser.findUnique({ where: { id: payload.sub } });
   if (!admin || admin.role !== "ADMIN") return null;
+  if (payload.pwd !== passwordFingerprint(admin.passwordHash)) return null;
   return admin;
 }
 

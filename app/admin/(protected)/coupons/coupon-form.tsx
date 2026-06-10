@@ -74,7 +74,6 @@ export function CouponForm({ coupon, action, submitLabel, saved }: Props) {
           />
           <Field label="Minimum Product Subtotal USD" name="minSubtotal" type="number" step="0.01" defaultValue={money(coupon?.minSubtotalCents)} />
           <Field label="Usage Limit" name="usageLimit" type="number" defaultValue={coupon?.usageLimit ? String(coupon.usageLimit) : ""} />
-          <Field label="Per Customer Limit" name="perCustomerLimit" type="number" defaultValue={coupon?.perCustomerLimit ? String(coupon.perCustomerLimit) : ""} />
           <Field label="Start Time" name="startsAt" type="datetime-local" defaultValue={dateTimeValue(coupon?.startsAt)} />
           <Field label="End Time" name="endsAt" type="datetime-local" defaultValue={dateTimeValue(coupon?.endsAt)} />
           <Checkbox label="Active" name="isActive" defaultChecked={coupon?.isActive ?? true} />

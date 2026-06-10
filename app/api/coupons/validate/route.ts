@@ -3,6 +3,7 @@ import { z } from "zod";
 import { calculateCouponDiscount, normalizeCouponCode } from "@/lib/coupons";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
+import { SHIPPING_CENTS } from "@/lib/shipping";
 
 export const runtime = "nodejs";
 
@@ -15,8 +16,6 @@ const payloadSchema = z.object({
     })
   )
 });
-
-const SHIPPING_CENTS = 1990;
 
 export async function POST(request: NextRequest) {
   let payload: z.infer<typeof payloadSchema>;

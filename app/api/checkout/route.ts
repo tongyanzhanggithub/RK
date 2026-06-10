@@ -1,8 +1,10 @@
+import crypto from "crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
 import { calculateCouponDiscount, normalizeCouponCode } from "@/lib/coupons";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
+import { SHIPPING_CENTS } from "@/lib/shipping";
 
 export const runtime = "nodejs";
 
@@ -27,7 +29,7 @@ function getBaseUrl(request: NextRequest) {
 function createOrderNumber() {
   const now = new Date();
   const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
-  return `RK-${date}-${String(now.getTime()).slice(-6)}`;
+  return `RK-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 }
 
 export async function POST(request: NextRequest) {
@@ -101,7 +103,7 @@ export async function POST(request: NextRequest) {
   const stripe = new Stripe(secretKey);
   const baseUrl = getBaseUrl(request);
   const subtotalCents = orderLines.reduce((total, line) => total + line.product.priceCents * line.quantity, 0);
-  const shippingCents = 1990;
+  const shippingCents = SHIPPING_CENTS;
   const couponCode = normalizeCouponCode(payload.couponCode);
   const coupon = couponCode ? await prisma.coupon.findUnique({ where: { code: couponCode } }) : null;
   const couponValidation = couponCode
@@ -121,6 +123,25 @@ export async function POST(request: NextRequest) {
   }
 
   const appliedCoupon = couponValidation?.ok ? couponValidation.result : null;
+
+  // usageCount only increments after payment, so concurrent pending checkouts
+  // could exceed a limited coupon. Count recent pending sessions toward the limit.
+  if (appliedCoupon && appliedCoupon.coupon.usageLimit !== null) {
+    const pendingRecent = await prisma.order.count({
+      where: {
+        couponId: appliedCoupon.coupon.id,
+        couponUsageRecorded: false,
+        paymentStatus: "PENDING",
+        createdAt: { gt: new Date(Date.now() - 60 * 60 * 1000) }
+      }
+    });
+    if (appliedCoupon.coupon.usageCount + pendingRecent >= appliedCoupon.coupon.usageLimit) {
+      return NextResponse.json(
+        { error: "This coupon has reached its usage limit." },
+        { status: 400 }
+      );
+    }
+  }
   const discountCents = appliedCoupon?.discountCents || 0;
   const order = await prisma.order.create({
     data: {
@@ -158,20 +179,28 @@ export async function POST(request: NextRequest) {
   });
   let session: Stripe.Checkout.Session;
 
+  // Stripe amount_off coupons only discount line items, never shipping — a
+  // free-shipping coupon must zero the shipping rate itself or small orders
+  // would still pay full shipping.
+  const isFreeShipping = appliedCoupon?.type === "FREE_SHIPPING";
+  const stripeShippingCents = isFreeShipping ? 0 : SHIPPING_CENTS;
+  let stripeCoupon: Stripe.Coupon | null = null;
+
   try {
-    const stripeCoupon = appliedCoupon
-      ? await stripe.coupons.create({
-          amount_off: appliedCoupon.discountCents,
-          currency: "usd",
-          duration: "once",
-          name: appliedCoupon.label,
-          metadata: {
-            source: "repairkit-supply",
-            couponId: appliedCoupon.coupon.id,
-            couponCode: appliedCoupon.code
-          }
-        })
-      : null;
+    stripeCoupon =
+      appliedCoupon && !isFreeShipping
+        ? await stripe.coupons.create({
+            amount_off: appliedCoupon.discountCents,
+            currency: "usd",
+            duration: "once",
+            name: appliedCoupon.label,
+            metadata: {
+              source: "repairkit-supply",
+              couponId: appliedCoupon.coupon.id,
+              couponCode: appliedCoupon.code
+            }
+          })
+        : null;
 
     session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -179,7 +208,11 @@ export async function POST(request: NextRequest) {
       line_items: lineItems,
       success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/checkout/cancel`,
-      ...(stripeCoupon ? { discounts: [{ coupon: stripeCoupon.id }] } : { allow_promotion_codes: true }),
+      ...(stripeCoupon
+        ? { discounts: [{ coupon: stripeCoupon.id }] }
+        : appliedCoupon
+          ? {}
+          : { allow_promotion_codes: true }),
       billing_address_collection: "auto",
       phone_number_collection: { enabled: true },
       shipping_address_collection: {
@@ -199,10 +232,12 @@ export async function POST(request: NextRequest) {
           shipping_rate_data: {
             type: "fixed_amount",
             fixed_amount: {
-              amount: 1990,
+              amount: stripeShippingCents,
               currency: "usd"
             },
-            display_name: "Standard international shipping",
+            display_name: isFreeShipping
+              ? "Standard international shipping (free with coupon)"
+              : "Standard international shipping",
             delivery_estimate: {
               minimum: {
                 unit: "business_day",
@@ -241,6 +276,16 @@ export async function POST(request: NextRequest) {
       }
     });
     return NextResponse.json({ error: message }, { status: 500 });
+  }
+
+  if (stripeCoupon) {
+    // One-time coupon is already attached to the session; delete the template
+    // so abandoned checkouts don't pile up coupons in the Stripe dashboard.
+    try {
+      await stripe.coupons.del(stripeCoupon.id);
+    } catch {
+      // Cleanup failure is harmless — the coupon simply stays in Stripe.
+    }
   }
 
   if (!session.url) {
