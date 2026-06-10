@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ShoppingCart } from "lucide-react";
+import { Check, ShoppingCart, XCircle } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
 
 type AddToCartButtonProps = {
@@ -9,9 +9,10 @@ type AddToCartButtonProps = {
   name: string;
   className?: string;
   quantity?: number;
+  outOfStock?: boolean;
 };
 
-export function AddToCartButton({ slug, name, className = "", quantity = 1 }: AddToCartButtonProps) {
+export function AddToCartButton({ slug, name, className = "", quantity = 1, outOfStock = false }: AddToCartButtonProps) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
 
@@ -19,6 +20,19 @@ export function AddToCartButton({ slug, name, className = "", quantity = 1 }: Ad
     addItem(slug, quantity);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
+  }
+
+  if (outOfStock) {
+    return (
+      <button
+        type="button"
+        disabled
+        aria-label={`${name} is out of stock`}
+        className={`inline-flex h-11 cursor-not-allowed items-center justify-center gap-2 border border-line bg-panel px-4 text-sm font-black text-steel ${className}`}
+      >
+        <XCircle size={17} /> Out of Stock
+      </button>
+    );
   }
 
   return (

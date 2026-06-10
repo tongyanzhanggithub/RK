@@ -3,6 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { FitBadge } from "@/components/fit-badge";
 import { InquiryButton } from "@/components/inquiry-button";
+import { StockStatus } from "@/components/stock-status";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
 
@@ -12,8 +13,18 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="grid min-h-[360px] border border-line bg-white p-5 shadow-sm">
       <div>
-        <div className="mb-4 grid aspect-[4/3] place-items-center bg-panel industrial-grid">
-          <span className="text-4xl font-black text-navy">{product.name.split(" ")[0]}</span>
+        <div className="mb-4 grid aspect-[4/3] place-items-center overflow-hidden bg-panel industrial-grid">
+          {product.image || product.images?.[0]?.url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.image || product.images?.[0]?.url}
+              alt={product.images?.[0]?.alt || product.name}
+              className="h-full w-full object-contain"
+              loading="lazy"
+            />
+          ) : (
+            <span className="text-4xl font-black text-navy">{product.name.split(" ")[0]}</span>
+          )}
         </div>
         <div className="mb-3 flex flex-wrap gap-2">
           {product.tags.slice(0, 3).map((tag) => (
@@ -44,6 +55,7 @@ export function ProductCard({ product }: { product: Product }) {
             <CheckCircle2 size={16} /> Wholesale available
           </p>
         )}
+        <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} />
       </div>
       <div className="mt-5 flex items-center justify-between gap-3">
         <span>
@@ -60,7 +72,12 @@ export function ProductCard({ product }: { product: Product }) {
         url={`${SITE_URL}/products/${product.slug}`}
         className="mt-3 w-full"
       />
-      <AddToCartButton slug={product.slug} name={product.name} className="mt-2 w-full" />
+      <AddToCartButton
+        slug={product.slug}
+        name={product.name}
+        className="mt-2 w-full"
+        outOfStock={(product.stock ?? 0) <= 0}
+      />
     </article>
   );
 }
