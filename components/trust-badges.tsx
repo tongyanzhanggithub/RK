@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CreditCard, ShieldCheck, Timer, Truck } from "lucide-react";
 
 const items = [
-  [Truck, "Ships within 2 business days", "/shipping"],
+  [Truck, "Ships within 3–5 business days", "/shipping"],
   [Timer, "Delivery in 7–15 business days", "/shipping"],
   [ShieldCheck, "30-day warranty on defects", "/returns"],
   [CreditCard, "Secure card payment via Stripe", null]

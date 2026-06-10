@@ -25,8 +25,8 @@ export default function ShippingPage() {
             <li className="flex items-start gap-3">
               <Timer className="mt-0.5 shrink-0 text-navy" size={18} />
               <span>
-                <strong className="text-ink">Processing:</strong> orders are packed and handed to the courier within 2
-                business days of payment confirmation.
+                <strong className="text-ink">Processing:</strong> orders are packed and handed to the courier within
+                3–5 business days of payment confirmation.
               </span>
             </li>
             <li className="flex items-start gap-3">
