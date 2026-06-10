@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import Link from "next/link";
 import { Minus, Plus, ShieldCheck, TicketPercent, Trash2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import { TrustBadges } from "@/components/trust-badges";
 import { useCart } from "@/components/cart-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
@@ -322,6 +323,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
               <p className="mt-4 text-xs leading-5 text-steel">
                 Checkout is powered by Stripe. No card data is stored by this site.
               </p>
+              <TrustBadges className="mt-4 border-t border-line pt-4" />
             </aside>
           </div>
         )}

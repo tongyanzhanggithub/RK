@@ -21,8 +21,16 @@ export function SiteFooter() {
           <div className="mt-3 grid gap-2 text-sm font-bold text-white/80">
             <Link href="/">Home</Link>
             <Link href="/products">Products</Link>
+            <Link href="/engines">Shop by Engine</Link>
+            <Link href="/problems">Troubleshooting</Link>
             <Link href="/wholesale">Wholesale / RFQ</Link>
             <Link href="/cart">Cart (trial orders)</Link>
+          </div>
+          <strong className="mt-5 block text-sm uppercase tracking-wide text-safety">Policies</strong>
+          <div className="mt-3 grid gap-2 text-sm font-bold text-white/80">
+            <Link href="/shipping">Shipping Policy</Link>
+            <Link href="/returns">Returns &amp; Warranty</Link>
+            <Link href="/about">About Us</Link>
           </div>
         </div>
         <div>

@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { QuantityAddToCart } from "@/components/quantity-add-to-cart";
 import { StockStatus } from "@/components/stock-status";
+import { TrustBadges } from "@/components/trust-badges";
 import { engineHrefForModelText, problemHrefForTitle } from "@/lib/discovery-links";
 import { formatMoney } from "@/lib/format";
 import { getStoreProduct, getStoreProducts } from "@/lib/product-store";
@@ -120,6 +121,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             <p className="mt-3 text-sm font-bold text-steel">
               Wholesale buyers: chat on WhatsApp for MOQ, carton plan and T/T pricing. The cart is for small trial orders by card.
             </p>
+            <TrustBadges className="mt-5 border-t border-line pt-4 sm:grid-cols-2" />
           </div>
         </div>
 
