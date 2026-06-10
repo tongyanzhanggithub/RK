@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import { FitBadge } from "@/components/fit-badge";
 import { InquiryButton } from "@/components/inquiry-button";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
@@ -25,9 +26,16 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="mt-2 text-sm leading-6 text-steel">{product.shortDescription}</p>
       </div>
       <div className="mt-4 space-y-2 text-sm">
-        <p>
-          <strong>Models:</strong> {product.compatibleModels.slice(0, 3).join(", ")}
-        </p>
+        <FitBadge
+          fitmentType={product.fitmentType}
+          fitmentNote={product.fitmentNote}
+          compatibleModels={product.compatibleModels}
+        />
+        {product.compatibleModels.length > 0 && (
+          <p>
+            <strong>Models:</strong> {product.compatibleModels.slice(0, 3).join(", ")}
+          </p>
+        )}
         <p>
           <strong>Solves:</strong> {product.problemsSolved.slice(0, 2).join(", ")}
         </p>

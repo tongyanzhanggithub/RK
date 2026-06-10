@@ -184,6 +184,23 @@ const products = [
     compatibleEquipment: ["Portable generator", "Gasoline water pump", "Tiller", "Sprayer", "Lawn & garden machine"],
     problemsSolved: ["Poor maintenance", "Hard starting", "Dirty air filter"],
     kitIncludes: ["2 spark plugs", "2 air filters", "Fuel hose", "Gasket set", "Pull rope", "Maintenance checklist"]
+  },
+  {
+    slug: "universal-fuel-line-clamp-kit",
+    name: "Universal Fuel Line & Clamp Kit",
+    category: "Universal Parts",
+    shortDescription: "Universal fuel hose, inline fuel filters and spring clamps that fit nearly every small gasoline engine in the field.",
+    priceRange: "USD 6.90-9.90",
+    priceCents: 790,
+    currency: "usd",
+    wholesaleAvailable: true,
+    fitmentType: "UNIVERSAL",
+    fitmentNote: "Fits engines using 4.5mm or 5.5mm inner-diameter fuel line",
+    tags: ["Universal", "Fuel System", "Workshop Stock"],
+    compatibleModels: [],
+    compatibleEquipment: ["Portable generator", "Gasoline water pump", "Tiller", "Sprayer", "Lawn & garden machine"],
+    problemsSolved: ["Poor fuel flow", "Engine won't start", "Engine runs rough"],
+    kitIncludes: ["1m fuel hose 4.5mm", "1m fuel hose 5.5mm", "4 inline fuel filters", "10 spring clamps"]
   }
 ];
 
@@ -258,6 +275,8 @@ function createTables() {
       wholesaleAvailable INTEGER NOT NULL DEFAULT 0,
       isFeatured INTEGER NOT NULL DEFAULT 0,
       isHotSeller INTEGER NOT NULL DEFAULT 0,
+      fitmentType TEXT NOT NULL DEFAULT 'SPECIFIC',
+      fitmentNote TEXT,
       tags TEXT NOT NULL,
       compatibleModels TEXT NOT NULL,
       compatibleEquipment TEXT NOT NULL,
@@ -468,6 +487,8 @@ function ensureProductColumns() {
     ["heightMm", "INTEGER"],
     ["isFeatured", "INTEGER NOT NULL DEFAULT 0"],
     ["isHotSeller", "INTEGER NOT NULL DEFAULT 0"],
+    ["fitmentType", "TEXT NOT NULL DEFAULT 'SPECIFIC'"],
+    ["fitmentNote", "TEXT"],
     ["images", "TEXT"],
     ["seoTitle", "TEXT"],
     ["seoDescription", "TEXT"],
@@ -629,11 +650,11 @@ async function main() {
       id, slug, name, subtitle, sku, category, brand, shortDescription, description, status,
       priceRange, priceCents, currency, compareAtPriceCents, wholesalePriceCents, costPriceCents,
       allowCoupons, stock, lowStockThreshold, weightGrams, lengthMm, widthMm, heightMm, wholesaleAvailable,
-      isFeatured, isHotSeller,
+      isFeatured, isHotSeller, fitmentType, fitmentNote,
       tags, compatibleModels, compatibleEquipment, problemsSolved, kitIncludes,
       notCompatibleWith, specifications, faqs, images, image,
       seoTitle, seoDescription, seoKeywords, ogImage, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   products.forEach((product, index) => {
@@ -665,6 +686,8 @@ async function main() {
       product.wholesaleAvailable ? 1 : 0,
       index < 5 ? 1 : 0,
       product.tags.includes("Best Seller") || product.tags.includes("Main Profit Kit") ? 1 : 0,
+      product.fitmentType || "SPECIFIC",
+      product.fitmentNote || null,
       JSON.stringify(product.tags),
       JSON.stringify(product.compatibleModels),
       JSON.stringify(product.compatibleEquipment),

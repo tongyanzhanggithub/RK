@@ -125,6 +125,19 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
       </Section>
 
       <Section title="Kit and Compatibility">
+        <label className="grid gap-2 text-sm font-bold">
+          Fitment Type
+          <select name="fitmentType" defaultValue={product?.fitmentType || "SPECIFIC"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
+            <option value="SPECIFIC">SPECIFIC — must match compatible models</option>
+            <option value="UNIVERSAL">UNIVERSAL — fits all small engines</option>
+          </select>
+        </label>
+        <Field
+          label="Fitment Note (shown next to Universal badge)"
+          name="fitmentNote"
+          defaultValue={product?.fitmentNote}
+          placeholder="Fits engines using 5.5mm inner-diameter fuel line"
+        />
         <Textarea label="Tags" name="tagsText" defaultValue={list(product?.tags)} placeholder="Best Seller&#10;For 168F" />
         <Textarea label="Kit Includes" name="kitIncludesText" defaultValue={list(product?.kitIncludes)} placeholder="Carburetor x1&#10;Spark plug x1" />
         <Textarea label="Compatible Models" name="compatibleModelsText" defaultValue={list(product?.compatibleModels)} placeholder="168F&#10;GX160" />

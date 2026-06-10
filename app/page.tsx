@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Wrench
 } from "lucide-react";
+import { PartFinder } from "@/components/part-finder";
 import { ProductCard } from "@/components/product-card";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { getStoreProducts } from "@/lib/product-store";
@@ -85,6 +86,12 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-white px-4 py-8">
+        <div className="mx-auto max-w-7xl">
+          <PartFinder />
         </div>
       </section>
 

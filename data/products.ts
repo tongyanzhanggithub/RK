@@ -25,6 +25,10 @@ export type Product = {
   wholesaleAvailable: boolean;
   isFeatured?: boolean;
   isHotSeller?: boolean;
+  /** SPECIFIC parts must match compatibleModels; UNIVERSAL parts fit all small engines. */
+  fitmentType?: "SPECIFIC" | "UNIVERSAL";
+  /** One-line spec hint shown next to the universal badge, e.g. "Fits engines using 5.5mm fuel line". */
+  fitmentNote?: string;
   tags: string[];
   compatibleModels: string[];
   compatibleEquipment: string[];

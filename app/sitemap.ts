@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+import { models } from "@/data/models";
+import { problems } from "@/data/problems";
 import { getStoreProducts } from "@/lib/product-store";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
@@ -9,8 +11,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/products`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/engines`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/problems`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/wholesale`, changeFrequency: "monthly", priority: 0.6 }
   ];
+
+  const problemRoutes: MetadataRoute.Sitemap = problems.map((problem) => ({
+    url: `${SITE_URL}/problems/${problem.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7
+  }));
+
+  const modelRoutes: MetadataRoute.Sitemap = models.map((model) => ({
+    url: `${SITE_URL}/engines/${model.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7
+  }));
 
   const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${SITE_URL}/products/${product.slug}`,
@@ -19,5 +35,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }));
 
-  return [...staticRoutes, ...productRoutes];
+  return [...staticRoutes, ...productRoutes, ...problemRoutes, ...modelRoutes];
 }

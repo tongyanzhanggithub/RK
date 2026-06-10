@@ -1,11 +1,15 @@
 import Link from "next/link";
-import { MessageCircle, Search } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { CartNavLink } from "@/components/cart-nav-link";
+import { MyEngineChip } from "@/components/my-engine-chip";
+import { SearchBox } from "@/components/search-box";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 
 const navItems = [
   ["Home", "/"],
   ["Products", "/products"],
+  ["Shop by Engine", "/engines"],
+  ["Troubleshooting", "/problems"],
   ["Wholesale / RFQ", "/wholesale"]
 ];
 
@@ -26,12 +30,7 @@ export function SiteHeader() {
             <small className="font-bold uppercase text-steel">Factory-direct engine parts supplier</small>
           </span>
         </Link>
-        <form action="/products" className="grid grid-cols-[1fr_auto] border border-line bg-white">
-          <input name="q" className="min-w-0 px-4 py-3 outline-none" placeholder="Search 168F, GX160, water pump seal, recoil starter..." />
-          <button className="inline-flex items-center gap-2 bg-navy px-4 font-bold text-white" type="submit">
-            <Search size={18} /> Search
-          </button>
-        </form>
+        <SearchBox />
         <a
           href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
           target="_blank"
@@ -49,6 +48,7 @@ export function SiteHeader() {
             </Link>
           ))}
           <CartNavLink />
+          <MyEngineChip />
         </div>
       </nav>
     </header>
