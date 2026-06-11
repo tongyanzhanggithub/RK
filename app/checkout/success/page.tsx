@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, CircleX, Clock3, RotateCcw } from "lucide-react";
+import { CheckCircle2, CircleX, Clock3, MessageCircle, RotateCcw } from "lucide-react";
 import { ClearCartOnSuccess } from "@/components/clear-cart-on-success";
+import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -71,6 +72,30 @@ export default async function CheckoutSuccessPage({ searchParams }: { searchPara
           <p className="mt-5 break-all border border-line bg-panel p-3 text-sm font-bold">
             Session ID: {sessionId}
           </p>
+        )}
+        {paid && order && (
+          <div className="mt-6 border border-green-200 bg-green-50 p-4 text-center">
+            <p className="text-sm font-bold text-green-800">
+              Send us your order number on WhatsApp to confirm shipping details and get a dispatch update.
+            </p>
+            <a
+              href={whatsappLink(`Hello, I just placed order ${order.orderNumber}. Please confirm shipping details.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex h-10 items-center gap-2 bg-green-700 px-4 text-sm font-black text-white hover:bg-green-800"
+            >
+              <MessageCircle size={16} /> Confirm on WhatsApp
+            </a>
+          </div>
+        )}
+        {!paid && (
+          <div className="mt-6 border border-line bg-panel p-4 text-center text-sm text-steel">
+            Questions? Contact us on{" "}
+            <a href={whatsappLink(GENERAL_INQUIRY_MESSAGE)} target="_blank" rel="noopener noreferrer" className="font-bold text-navy underline-offset-2 hover:underline">
+              WhatsApp
+            </a>
+            .
+          </div>
         )}
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link href="/products" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">

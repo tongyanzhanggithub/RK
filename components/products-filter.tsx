@@ -10,7 +10,7 @@ type ProductsFilterProps = {
   problems: string[];
 };
 
-const FILTER_KEYS = ["q", "category", "model", "equipment", "problem"] as const;
+const FILTER_KEYS = ["q", "category", "model", "equipment", "problem", "sort"] as const;
 
 export function ProductsFilter({ categories, models, equipmentOptions, problems }: ProductsFilterProps) {
   const router = useRouter();
@@ -34,7 +34,7 @@ export function ProductsFilter({ categories, models, equipmentOptions, problems 
 
   return (
     <div className="border border-line bg-white p-4">
-      <div className="grid gap-3 lg:grid-cols-5">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <input
           defaultValue={currentValue("q")}
           onKeyDown={(event) => {
@@ -52,6 +52,16 @@ export function ProductsFilter({ categories, models, equipmentOptions, problems 
         <FilterSelect label="All models" value={currentValue("model")} options={models} onChange={(value) => apply("model", value)} />
         <FilterSelect label="All equipment" value={currentValue("equipment")} options={equipmentOptions} onChange={(value) => apply("equipment", value)} />
         <FilterSelect label="All problems" value={currentValue("problem")} options={problems} onChange={(value) => apply("problem", value)} />
+        <select
+          value={currentValue("sort")}
+          onChange={(event) => apply("sort", event.target.value)}
+          className="border border-line bg-white px-3 py-2 outline-none focus:border-navy"
+        >
+          <option value="">Sort: Default</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="name-asc">Name: A → Z</option>
+        </select>
       </div>
       {activeFilters.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3">

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { sendMail } from "@/lib/mailer";
 
 export type WholesaleApplicationState = {
   error?: string;
@@ -69,6 +70,30 @@ export async function submitWholesaleApplication(
       message: parsed.data.message || null
     }
   });
+
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL;
+  if (adminEmail) {
+    const qty = parsed.data.estimatedMonthlyQuantity ?? "—";
+    await sendMail({
+      to: adminEmail,
+      subject: `New wholesale application: ${parsed.data.companyName}`,
+      text: [
+        `Company: ${parsed.data.companyName}`,
+        `Contact: ${parsed.data.contactName}`,
+        `Country: ${parsed.data.country}`,
+        `Business type: ${parsed.data.businessType}`,
+        `WhatsApp: ${parsed.data.whatsapp}`,
+        `Email: ${parsed.data.email}`,
+        `Products: ${parsed.data.productInterest}`,
+        `Est. monthly qty: ${qty}`,
+        parsed.data.message ? `Message: ${parsed.data.message}` : ""
+      ]
+        .filter(Boolean)
+        .join("\n")
+    }).catch(() => {
+      // Non-fatal: application is already saved; mail failure should not block the user.
+    });
+  }
 
   redirect("/wholesale?submitted=1");
 }

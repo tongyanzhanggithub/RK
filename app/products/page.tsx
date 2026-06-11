@@ -18,6 +18,7 @@ type ProductsSearchParams = {
   model?: string;
   equipment?: string;
   problem?: string;
+  sort?: string;
 };
 
 function fuzzyIncludes(values: string[], needle: string) {
@@ -37,6 +38,7 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
   const model = searchParams?.model || "";
   const equipmentFilter = searchParams?.equipment || "";
   const problem = searchParams?.problem || "";
+  const sort = searchParams?.sort || "";
 
   const categories = [...new Set(products.map((product) => product.category))];
   const models = [...new Set(products.flatMap((product) => product.compatibleModels))];
@@ -65,13 +67,22 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
     );
   });
 
-  const sorted = model
+  const universalLast = model
     ? [...filtered].sort((a, b) => {
         const aUniversal = a.fitmentType === "UNIVERSAL" ? 1 : 0;
         const bUniversal = b.fitmentType === "UNIVERSAL" ? 1 : 0;
         return aUniversal - bUniversal;
       })
-    : filtered;
+    : [...filtered];
+
+  const sorted =
+    sort === "price-asc"
+      ? universalLast.sort((a, b) => a.priceCents - b.priceCents)
+      : sort === "price-desc"
+        ? universalLast.sort((a, b) => b.priceCents - a.priceCents)
+        : sort === "name-asc"
+          ? universalLast.sort((a, b) => a.name.localeCompare(b.name))
+          : universalLast;
 
   return (
     <main className="px-4 py-10">

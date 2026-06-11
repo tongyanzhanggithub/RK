@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { FaqAccordion } from "@/components/faq-accordion";
 import { FitmentChecker } from "@/components/fitment-checker";
 import { InquiryButton } from "@/components/inquiry-button";
 import { ProductCard } from "@/components/product-card";
@@ -197,10 +198,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             />
           )}
           {product.faqs && product.faqs.length > 0 && (
-            <LinkedInfoBlock
-              title="FAQ"
-              items={product.faqs.map((faq) => ({ label: `${faq.question} ${faq.answer}`, href: null }))}
-            />
+            <FaqAccordion items={product.faqs} />
           )}
         </section>
 
