@@ -4,18 +4,17 @@ import {
   BadgeCheck,
   Boxes,
   CheckCircle2,
-  ClipboardList,
   Cog,
-  Droplets,
   Factory,
   Globe2,
   MessageCircle,
   Ship,
-  ShieldCheck,
-  Wrench
+  Stethoscope
 } from "lucide-react";
 import { PartFinder } from "@/components/part-finder";
 import { ProductCard } from "@/components/product-card";
+import { models } from "@/data/models";
+import { problems } from "@/data/problems";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { getStoreProducts } from "@/lib/product-store";
 import { getServerDict } from "@/lib/locale";
@@ -26,15 +25,14 @@ export default async function HomePage() {
   const dict = getServerDict();
   const hp = dict.homepage;
   const products = await getStoreProducts();
-  const bestSellers = products.slice(0, 5);
+  const bestSellers = products.slice(0, 10);
 
-  const featuredCategories = [
-    ["Small Engine Repair Kits", "For 168F, 170F, GX160 and GX200 style engines", "Small Engine Repair Kit", Cog],
-    ["Water Pump Repair Kits", "Seal kits, O-rings, gaskets and pump connectors", "Water Pump Repair Kit", Droplets],
-    ["Generator Maintenance Kits", "Maintenance kits for portable generator service", "Generator Repair Kit", ShieldCheck],
-    ["Pull Starter Replacement Kits", "Recoil starter, rope and quick service parts", "Starter System Kit", Wrench],
-    ["Carburetor Troubleshooting Kits", "Fuel system repair kits for no-start issues", "Fuel System Kit", ClipboardList]
-  ];
+  // Data-driven category grid: grows automatically as new categories are added.
+  const categoryCounts = new Map<string, number>();
+  for (const product of products) {
+    categoryCounts.set(product.category, (categoryCounts.get(product.category) || 0) + 1);
+  }
+  const categories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]);
 
   const supplyAdvantages = [
     [Factory, hp.supply_badge, "Sourced from China's largest motorcycle and small-engine parts cluster — the same ecosystem behind Loncin, Zongshen and Lifan engines."],
@@ -122,16 +120,85 @@ export default async function HomePage() {
 
       <section className="border-y border-line bg-panel px-4 py-14">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-6">
-            <p className="font-black uppercase text-safety">{hp.category_badge}</p>
-            <h2 className="text-3xl font-black">{hp.category_title}</h2>
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-black uppercase text-safety">{hp.category_badge}</p>
+              <h2 className="text-3xl font-black">{hp.category_title}</h2>
+            </div>
+            <Link href="/products" className="font-black text-navy">{dict.common.view_catalog}</Link>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-            {featuredCategories.map(([title, copy, category, Icon]) => (
-              <Link key={title as string} href={`/products?category=${encodeURIComponent(category as string)}`} className="border border-line bg-white p-5 shadow-sm">
-                <Icon className="mb-5 text-navy" size={28} />
-                <strong className="block leading-snug">{title as string}</strong>
-                <span className="mt-2 block text-sm leading-6 text-steel">{copy as string}</span>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {categories.map(([category, count]) => (
+              <Link
+                key={category}
+                href={`/products?category=${encodeURIComponent(category)}`}
+                className="group flex items-center justify-between gap-3 border border-line bg-white p-5 shadow-sm hover:border-navy"
+              >
+                <span>
+                  <strong className="block leading-snug">{category}</strong>
+                  <span className="mt-1 block text-sm font-bold text-steel">
+                    {hp.products_count.replace("{n}", String(count))}
+                  </span>
+                </span>
+                <ArrowRight size={18} className="shrink-0 text-navy transition-transform group-hover:translate-x-1" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-white px-4 py-14">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-black uppercase text-safety">{hp.engine_badge}</p>
+              <h2 className="text-3xl font-black">{hp.engine_title}</h2>
+            </div>
+            <Link href="/engines" className="font-black text-navy">{hp.engine_view_all}</Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {models.map((model) => (
+              <Link
+                key={model.slug}
+                href={`/engines/${model.slug}`}
+                className="group flex items-center gap-3 border border-line bg-white p-4 shadow-sm hover:border-navy"
+              >
+                <Cog size={22} className="shrink-0 text-navy" />
+                <span>
+                  <strong className="block leading-tight">{model.name}</strong>
+                  <span className="mt-0.5 block text-xs font-bold text-steel">
+                    {model.commonEquipment[0]}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-panel px-4 py-14">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-black uppercase text-safety">{hp.problem_badge}</p>
+              <h2 className="text-3xl font-black">{hp.problem_title}</h2>
+            </div>
+            <Link href="/problems" className="font-black text-navy">{hp.problem_view_all}</Link>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {problems.map((problem) => (
+              <Link
+                key={problem.slug}
+                href={`/problems/${problem.slug}`}
+                className="group flex items-start gap-3 border border-line bg-white p-4 shadow-sm hover:border-navy"
+              >
+                <Stethoscope size={20} className="mt-0.5 shrink-0 text-navy" />
+                <span>
+                  <strong className="block leading-snug">{problem.title}</strong>
+                  <span className="mt-1 block text-sm leading-5 text-steel">
+                    {problem.commonCauses.slice(0, 2).join(" · ")}
+                  </span>
+                </span>
               </Link>
             ))}
           </div>
