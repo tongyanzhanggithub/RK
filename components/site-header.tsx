@@ -27,10 +27,7 @@ export function SiteHeader() {
       <div className="bg-ink px-4 py-2 text-sm font-semibold text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <span>{h.topbar_left}</span>
-          <div className="flex items-center gap-3">
-            <span className="text-safety">{h.topbar_right}</span>
-            <LanguageSwitcher />
-          </div>
+          <LanguageSwitcher />
         </div>
       </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-4 lg:grid-cols-[280px_1fr_auto] lg:items-center">

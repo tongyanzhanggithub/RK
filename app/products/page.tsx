@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { ProductCard } from "@/components/product-card";
 import { ProductsFilter } from "@/components/products-filter";
 import { getStoreProducts } from "@/lib/product-store";
+import { getServerDict } from "@/lib/locale";
 import type { Product } from "@/data/products";
 
 export const metadata: Metadata = {
@@ -32,6 +33,8 @@ function matchesModel(product: Product, model: string) {
 }
 
 export default async function ProductsPage({ searchParams }: { searchParams?: ProductsSearchParams }) {
+  const dict = getServerDict();
+  const p = dict.products;
   const products = await getStoreProducts();
   const q = searchParams?.q?.toLowerCase() || "";
   const category = searchParams?.category || "";
@@ -87,18 +90,15 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
-        <h1 className="text-4xl font-black">Repair Kit Products</h1>
-        <p className="mt-3 max-w-3xl text-steel">
-          Filter by category, compatible model, equipment and problem solved. Model-specific kits show first; universal
-          parts that also fit are listed after them.
-        </p>
+        <h1 className="text-4xl font-black">{p.heading}</h1>
+        <p className="mt-3 max-w-3xl text-steel">{p.subtext}</p>
         <div className="mt-8">
           <Suspense>
             <ProductsFilter categories={categories} models={models} equipmentOptions={equipmentOptions} problems={problems} />
           </Suspense>
         </div>
         <p className="mt-6 text-sm font-black uppercase text-steel">
-          {sorted.length} {sorted.length === 1 ? "product" : "products"} found
+          {sorted.length === 1 ? p.count_one : p.count_other.replace("{n}", String(sorted.length))}
         </p>
         {sorted.length > 0 ? (
           <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -108,10 +108,8 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
           </div>
         ) : (
           <div className="mt-4 border border-line bg-white p-8 text-center">
-            <p className="text-lg font-black">No products match these filters.</p>
-            <p className="mt-2 text-steel">
-              Try removing a filter, or contact us on WhatsApp — we stock more parts than the catalog shows.
-            </p>
+            <p className="text-lg font-black">{p.no_results}</p>
+            <p className="mt-2 text-steel">{p.no_results_sub}</p>
           </div>
         )}
       </div>

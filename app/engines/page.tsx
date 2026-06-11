@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Cog } from "lucide-react";
 import { models } from "@/data/models";
+import { getServerDict } from "@/lib/locale";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shop Parts by Engine Model",
@@ -10,15 +13,15 @@ export const metadata: Metadata = {
 };
 
 export default function EnginesPage() {
+  const dict = getServerDict();
+  const e = dict.engines;
+
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
-        <p className="font-black uppercase text-safety">Shop by engine</p>
-        <h1 className="mt-1 text-4xl font-black">Pick your engine or machine</h1>
-        <p className="mt-3 max-w-3xl text-steel">
-          Every model page lists the parts that fit, what to double-check before ordering, and the most common
-          failures for that platform.
-        </p>
+        <p className="font-black uppercase text-safety">{e.badge}</p>
+        <h1 className="mt-1 text-4xl font-black">{e.main_heading}</h1>
+        <p className="mt-3 max-w-3xl text-steel">{e.main_sub}</p>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {models.map((model) => (
             <Link
@@ -30,10 +33,10 @@ export default function EnginesPage() {
               <h2 className="text-lg font-black leading-snug">{model.name}</h2>
               <p className="mt-2 text-sm leading-6 text-steel">{model.description}</p>
               <p className="mt-3 text-sm font-bold text-steel">
-                Used in: {model.commonEquipment.slice(0, 3).join(" · ")}
+                {e.used_in} {model.commonEquipment.slice(0, 3).join(" · ")}
               </p>
               <span className="mt-4 inline-flex items-center gap-2 font-black text-navy">
-                View parts <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                {e.view_parts} <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
               </span>
             </Link>
           ))}

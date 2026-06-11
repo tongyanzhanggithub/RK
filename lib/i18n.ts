@@ -191,11 +191,30 @@ const en = {
   engines: {
     heading: "Shop by Engine Model",
     subtext: "Select your engine to see compatible repair kits, spare parts and maintenance accessories.",
-    set_engine: "Set as My Engine"
+    set_engine: "Set as My Engine",
+    badge: "Shop by engine",
+    main_heading: "Pick your engine or machine",
+    main_sub: "Every model page lists the parts that fit, what to double-check before ordering, and the most common failures for that platform.",
+    used_in: "Used in:",
+    view_parts: "View parts"
   },
   problems: {
     heading: "Troubleshooting Guides",
-    subtext: "Select a symptom to find the right repair kit for your engine."
+    subtext: "Select a symptom to find the right repair kit for your engine.",
+    badge: "Fix by symptom",
+    main_heading: "What is wrong with your machine?",
+    main_sub: "Pick the symptom you see in the field. Each guide lists the common causes, quick checks and the repair kit that fixes it — the same diagnosis flow repair shops use every day.",
+    common_causes: "Common causes:",
+    diagnose: "Diagnose & fix",
+    cta_heading: "Symptom not listed, or not sure what you are looking at?",
+    cta_sub: "Send us a photo or video on WhatsApp — we diagnose and quote the right kit.",
+    cta_btn: "Ask on WhatsApp"
+  },
+  cancel: {
+    badge: "Checkout Canceled",
+    heading: "Your cart was kept",
+    body: "No payment was completed. You can review quantities, remove items or try Stripe Checkout again.",
+    back_to_cart: "Back to Cart"
   },
   finder: {
     heading: "Find the right repair kit",
@@ -392,11 +411,30 @@ const zh: typeof en = {
   engines: {
     heading: "按发动机型号选购",
     subtext: "选择您的发动机型号，查看兼容的维修套件、备品备件及保养配件。",
-    set_engine: "设为我的发动机"
+    set_engine: "设为我的发动机",
+    badge: "按型号选购",
+    main_heading: "选择您的发动机或机器",
+    main_sub: "每个型号页面列出兼容零件、下单前需确认的事项，以及该平台最常见的故障。",
+    used_in: "适用设备：",
+    view_parts: "查看零件"
   },
   problems: {
     heading: "故障排查指南",
-    subtext: "选择故障症状，找到适合您发动机的维修套件。"
+    subtext: "选择故障症状，找到适合您发动机的维修套件。",
+    badge: "按症状排查",
+    main_heading: "您的机器出了什么问题？",
+    main_sub: "选择您在现场看到的症状。每份指南列出常见原因、快速检查步骤及对应的维修套件 — 与维修店每天使用的诊断流程相同。",
+    common_causes: "常见原因：",
+    diagnose: "诊断并修复",
+    cta_heading: "症状未列出，或不确定问题所在？",
+    cta_sub: "通过 WhatsApp 发送照片或视频 — 我们诊断并报价正确的套件。",
+    cta_btn: "WhatsApp 咨询"
+  },
+  cancel: {
+    badge: "结账已取消",
+    heading: "您的购物车已保留",
+    body: "未完成任何付款。您可以重新确认数量、删除商品或再次尝试 Stripe 结账。",
+    back_to_cart: "返回购物车"
   },
   finder: {
     heading: "找到合适的维修套件",

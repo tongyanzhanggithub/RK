@@ -5,6 +5,7 @@ import { ClearCartOnSuccess } from "@/components/clear-cart-on-success";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
+import { getServerDict } from "@/lib/locale";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CheckoutSuccessPage({ searchParams }: { searchParams?: { session_id?: string } }) {
+  const dict = getServerDict();
+  const ck = dict.checkout;
   const sessionId = searchParams?.session_id || "";
   const order = sessionId
     ? await prisma.order.findFirst({ where: { stripeCheckoutSessionId: sessionId } })
@@ -21,20 +24,8 @@ export default async function CheckoutSuccessPage({ searchParams }: { searchPara
   const paid = order?.paymentStatus === "PAID";
   const failed = order?.paymentStatus === "FAILED";
   const refunded = order?.paymentStatus === "REFUNDED";
-  const statusLabel = paid
-    ? "Payment Confirmed"
-    : failed
-      ? "Payment Not Completed"
-      : refunded
-        ? "Payment Refunded"
-        : "Confirmation In Progress";
-  const statusMessage = paid
-    ? "Stripe confirmed your payment and the order is ready for processing."
-    : failed
-      ? "Stripe could not complete this payment. Please contact us or place the order again."
-      : refunded
-        ? "Stripe reports that this order has been refunded."
-        : "Checkout is complete. Stripe payment confirmation may take a moment, and the order will update automatically.";
+  const statusLabel = paid ? ck.confirmed : failed ? ck.not_completed : refunded ? ck.refunded : ck.in_progress;
+  const statusMessage = paid ? ck.msg_paid : failed ? ck.msg_failed : refunded ? ck.msg_refunded : ck.msg_pending;
 
   return (
     <main className="px-4 py-14">
@@ -50,20 +41,20 @@ export default async function CheckoutSuccessPage({ searchParams }: { searchPara
           <Clock3 className="mx-auto text-amber-600" size={56} />
         )}
         <p className="mt-5 font-black uppercase text-safety">{statusLabel}</p>
-        <h1 className="mt-2 text-4xl font-black">Thanks for your order</h1>
+        <h1 className="mt-2 text-4xl font-black">{ck.thanks}</h1>
         <p className="mt-4 text-steel">{statusMessage}</p>
         {order && (
           <dl className="mx-auto mt-6 grid max-w-lg gap-3 border border-line bg-panel p-5 text-left text-sm">
             <div className="flex items-center justify-between gap-4">
-              <dt className="font-bold text-steel">Order Number</dt>
+              <dt className="font-bold text-steel">{ck.order_number}</dt>
               <dd className="font-black">{order.orderNumber}</dd>
             </div>
             <div className="flex items-center justify-between gap-4">
-              <dt className="font-bold text-steel">Payment Status</dt>
+              <dt className="font-bold text-steel">{ck.payment_status}</dt>
               <dd className="font-black">{order.paymentStatus}</dd>
             </div>
             <div className="flex items-center justify-between gap-4">
-              <dt className="font-bold text-steel">Order Total</dt>
+              <dt className="font-bold text-steel">{ck.order_total}</dt>
               <dd className="font-black">{formatMoney(order.totalCents, order.currency)}</dd>
             </div>
           </dl>
@@ -75,34 +66,32 @@ export default async function CheckoutSuccessPage({ searchParams }: { searchPara
         )}
         {paid && order && (
           <div className="mt-6 border border-green-200 bg-green-50 p-4 text-center">
-            <p className="text-sm font-bold text-green-800">
-              Send us your order number on WhatsApp to confirm shipping details and get a dispatch update.
-            </p>
+            <p className="text-sm font-bold text-green-800">{ck.whatsapp_note}</p>
             <a
               href={whatsappLink(`Hello, I just placed order ${order.orderNumber}. Please confirm shipping details.`)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-3 inline-flex h-10 items-center gap-2 bg-green-700 px-4 text-sm font-black text-white hover:bg-green-800"
             >
-              <MessageCircle size={16} /> Confirm on WhatsApp
+              <MessageCircle size={16} /> {ck.whatsapp_btn}
             </a>
           </div>
         )}
         {!paid && (
           <div className="mt-6 border border-line bg-panel p-4 text-center text-sm text-steel">
-            Questions? Contact us on{" "}
+            {ck.questions}{" "}
             <a href={whatsappLink(GENERAL_INQUIRY_MESSAGE)} target="_blank" rel="noopener noreferrer" className="font-bold text-navy underline-offset-2 hover:underline">
-              WhatsApp
+              {ck.whatsapp_link}
             </a>
             .
           </div>
         )}
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link href="/products" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-            Continue Shopping
+            {dict.common.continue_shopping}
           </Link>
           <Link href="/" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-panel">
-            Back Home
+            {dict.common.back_home}
           </Link>
         </div>
       </section>
