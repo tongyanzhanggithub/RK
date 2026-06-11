@@ -10,8 +10,17 @@ export type CustomerFormState = {
   error?: string;
 };
 
-const customerUpdateSchema = z.object({
+const customerProfileSchema = z.object({
+  name: z.string().min(1).max(160),
+  email: z.string().email().max(200),
+  phone: z.string().max(50).optional(),
+  whatsapp: z.string().max(50).optional(),
+  country: z.string().max(100).optional(),
+  city: z.string().max(100).optional(),
+  address: z.string().max(300).optional(),
+  postalCode: z.string().max(30).optional(),
   status: z.enum(["ACTIVE", "VIP", "BLOCKED"]),
+  role: z.enum(["CUSTOMER", "WHOLESALE"]),
   tags: z.string().max(1000).optional(),
   internalNote: z.string().max(3000).optional()
 });
@@ -28,6 +37,70 @@ function tagsFromText(value: string) {
     .slice(0, 30);
 }
 
+function parseProfile(formData: FormData) {
+  return customerProfileSchema.safeParse({
+    name: text(formData, "name"),
+    email: text(formData, "email").toLowerCase(),
+    phone: text(formData, "phone") || undefined,
+    whatsapp: text(formData, "whatsapp") || undefined,
+    country: text(formData, "country") || undefined,
+    city: text(formData, "city") || undefined,
+    address: text(formData, "address") || undefined,
+    postalCode: text(formData, "postalCode") || undefined,
+    status: text(formData, "status"),
+    role: text(formData, "role"),
+    tags: text(formData, "tags"),
+    internalNote: text(formData, "internalNote")
+  });
+}
+
+function profileData(data: z.infer<typeof customerProfileSchema>) {
+  return {
+    name: data.name,
+    email: data.email,
+    phone: data.phone || null,
+    whatsapp: data.whatsapp || null,
+    country: data.country || null,
+    city: data.city || null,
+    address: data.address || null,
+    postalCode: data.postalCode || null,
+    status: data.status,
+    role: data.role,
+    tags: JSON.stringify(tagsFromText(data.tags || "")),
+    internalNote: data.internalNote || null
+  };
+}
+
+function revalidateCustomerRoutes(customerId?: string) {
+  revalidatePath("/admin/dashboard");
+  revalidatePath("/admin/customers");
+  if (customerId) revalidatePath(`/admin/customers/${customerId}`);
+}
+
+export async function createCustomer(_prevState: CustomerFormState, formData: FormData): Promise<CustomerFormState> {
+  await requireAdmin();
+
+  const parsed = parseProfile(formData);
+  if (!parsed.success) {
+    return { error: "Please check the required fields (name, valid email) and field lengths." };
+  }
+
+  const existing = await prisma.customer.findUnique({ where: { email: parsed.data.email } });
+  if (existing) {
+    return { error: `A customer with email ${parsed.data.email} already exists.` };
+  }
+
+  const customer = await prisma.customer.create({
+    data: {
+      ...profileData(parsed.data),
+      wholesaleApprovedAt: parsed.data.role === "WHOLESALE" ? new Date() : null
+    }
+  });
+
+  revalidateCustomerRoutes(customer.id);
+  redirect(`/admin/customers/${customer.id}?saved=1`);
+}
+
 export async function updateCustomer(
   customerId: string,
   _prevState: CustomerFormState,
@@ -35,27 +108,35 @@ export async function updateCustomer(
 ): Promise<CustomerFormState> {
   await requireAdmin();
 
-  const parsed = customerUpdateSchema.safeParse({
-    status: text(formData, "status"),
-    tags: text(formData, "tags"),
-    internalNote: text(formData, "internalNote")
-  });
-
+  const parsed = parseProfile(formData);
   if (!parsed.success) {
-    return { error: "Please check customer status, tags and note length." };
+    return { error: "Please check the required fields (name, valid email) and field lengths." };
+  }
+
+  const current = await prisma.customer.findUnique({ where: { id: customerId } });
+  if (!current) {
+    return { error: "Customer not found." };
+  }
+
+  if (parsed.data.email !== current.email) {
+    const emailTaken = await prisma.customer.findUnique({ where: { email: parsed.data.email } });
+    if (emailTaken) {
+      return { error: `Another customer already uses ${parsed.data.email}.` };
+    }
   }
 
   await prisma.customer.update({
     where: { id: customerId },
     data: {
-      status: parsed.data.status,
-      tags: JSON.stringify(tagsFromText(parsed.data.tags || "")),
-      internalNote: parsed.data.internalNote || null
+      ...profileData(parsed.data),
+      // Stamp approval time when upgrading to wholesale; clear it on downgrade.
+      wholesaleApprovedAt:
+        parsed.data.role === "WHOLESALE"
+          ? current.wholesaleApprovedAt || new Date()
+          : null
     }
   });
 
-  revalidatePath("/admin/dashboard");
-  revalidatePath("/admin/customers");
-  revalidatePath(`/admin/customers/${customerId}`);
+  revalidateCustomerRoutes(customerId);
   redirect(`/admin/customers/${customerId}?saved=1`);
 }

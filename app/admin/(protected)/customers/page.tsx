@@ -84,10 +84,26 @@ export default async function AdminCustomersPage({
 
   return (
     <main>
-      <div>
-        <p className="font-black uppercase text-safety">Customers</p>
-        <h1 className="text-4xl font-black">Customer Management</h1>
-        <p className="mt-3 text-steel">Review customer profiles, purchase history, value and internal classification.</p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="font-black uppercase text-safety">Customers</p>
+          <h1 className="text-4xl font-black">Customer Management</h1>
+          <p className="mt-3 text-steel">Review customer profiles, purchase history, value and internal classification.</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="/admin/customers/export"
+            className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white"
+          >
+            Export CSV
+          </a>
+          <Link
+            href="/admin/customers/new"
+            className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400"
+          >
+            + New Customer
+          </Link>
+        </div>
       </div>
 
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
