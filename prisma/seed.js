@@ -400,6 +400,7 @@ function createTables() {
       stripeLastEventType TEXT,
       stripeLastSyncedAt DATETIME,
       paidAt DATETIME,
+      confirmationEmailSentAt DATETIME,
       shippingCarrier TEXT,
       trackingNumber TEXT,
       trackingUrl TEXT,

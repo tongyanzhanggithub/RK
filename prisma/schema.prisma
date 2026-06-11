@@ -140,6 +140,7 @@ model Order {
   stripeLastEventType     String?
   stripeLastSyncedAt      DateTime?
   paidAt                  DateTime?
+  confirmationEmailSentAt DateTime?
   shippingCarrier         String?
   trackingNumber          String?
   trackingUrl             String?

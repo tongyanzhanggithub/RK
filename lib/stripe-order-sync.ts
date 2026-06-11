@@ -1,5 +1,6 @@
 import type Stripe from "stripe";
 import { prisma } from "@/lib/db";
+import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
 
 type StripeEventReference = {
   id: string;
@@ -226,6 +227,10 @@ export async function syncCheckoutSession(
     await reduceInventoryForOrder(updatedOrder.id);
   }
 
+  if (finalStatus === "PAID") {
+    await sendOrderConfirmationEmail(updatedOrder.id);
+  }
+
   return syncCustomerFromOrder(updatedOrder);
 }
 
@@ -277,6 +282,10 @@ export async function syncPaymentIntentSucceeded(paymentIntent: Stripe.PaymentIn
 
   if (updatedOrder.paymentStatus === "PAID" && !updatedOrder.inventoryReduced) {
     await reduceInventoryForOrder(updatedOrder.id);
+  }
+
+  if (updatedOrder.paymentStatus === "PAID") {
+    await sendOrderConfirmationEmail(updatedOrder.id);
   }
 
   return updatedOrder;
