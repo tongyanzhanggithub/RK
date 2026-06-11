@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
+import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
 import { sendShippingNotificationEmail } from "@/lib/shipping-notification";
 
 export type OrderFormState = {
@@ -70,4 +71,37 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${orderId}`);
   redirect(`/admin/orders/${orderId}?saved=1`);
+}
+
+export async function resendConfirmationEmail(orderId: string) {
+  await requireAdmin();
+  if (!process.env.SMTP_HOST) {
+    redirect(`/admin/orders/${orderId}?mail=nosmtp`);
+  }
+
+  // Clear the sent flag so the sender's duplicate guard lets it through.
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { confirmationEmailSentAt: null }
+  });
+  await sendOrderConfirmationEmail(orderId);
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  redirect(`/admin/orders/${orderId}?mail=confirmation`);
+}
+
+export async function resendShippingEmail(orderId: string) {
+  await requireAdmin();
+  if (!process.env.SMTP_HOST) {
+    redirect(`/admin/orders/${orderId}?mail=nosmtp`);
+  }
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { shippingEmailSentAt: null }
+  });
+  await sendShippingNotificationEmail(orderId);
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  redirect(`/admin/orders/${orderId}?mail=shipping`);
 }

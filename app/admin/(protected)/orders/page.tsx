@@ -74,6 +74,12 @@ export default async function AdminOrdersPage({
           <h1 className="text-4xl font-black">Order Management</h1>
           <p className="mt-3 text-steel">Review orders, fulfillment status, logistics details and internal notes.</p>
         </div>
+        <a
+          href="/admin/orders/export"
+          className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white"
+        >
+          Export CSV
+        </a>
       </div>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-7">

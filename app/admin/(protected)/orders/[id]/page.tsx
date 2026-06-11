@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { updateOrder } from "@/app/admin/(protected)/orders/actions";
+import { resendConfirmationEmail, resendShippingEmail, updateOrder } from "@/app/admin/(protected)/orders/actions";
 import { OrderManagementForm } from "@/app/admin/(protected)/orders/order-management-form";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -18,7 +18,7 @@ export default async function AdminOrderDetailPage({
   searchParams
 }: {
   params: { id: string };
-  searchParams?: { saved?: string };
+  searchParams?: { saved?: string; mail?: string };
 }) {
   const order = await prisma.order.findUnique({
     where: { id: params.id },
@@ -121,6 +121,55 @@ export default async function AdminOrderDetailPage({
 
         <aside className="grid h-fit gap-6">
           <OrderManagementForm order={order} action={updateOrder.bind(null, order.id)} saved={searchParams?.saved === "1"} />
+
+          <section className="border border-line bg-white">
+            <div className="border-b border-line p-5">
+              <h2 className="text-xl font-black">Customer Emails</h2>
+            </div>
+            <div className="grid gap-4 p-5 text-sm">
+              {searchParams?.mail === "confirmation" && (
+                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">Confirmation email re-sent.</p>
+              )}
+              {searchParams?.mail === "shipping" && (
+                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">Shipping email re-sent.</p>
+              )}
+              {searchParams?.mail === "nosmtp" && (
+                <p className="border border-red-200 bg-red-50 p-3 font-bold text-red-800">
+                  SMTP is not configured — set SMTP_HOST in .env to enable email sending.
+                </p>
+              )}
+              <div className="flex items-center justify-between gap-3 border-b border-line pb-3">
+                <div>
+                  <strong className="block">Order Confirmation</strong>
+                  <span className="text-xs text-steel">
+                    {order.confirmationEmailSentAt
+                      ? `Sent ${order.confirmationEmailSentAt.toLocaleString("en-US")}`
+                      : "Not sent yet"}
+                  </span>
+                </div>
+                <form action={resendConfirmationEmail.bind(null, order.id)}>
+                  <button type="submit" className="font-black text-navy hover:underline" disabled={order.paymentStatus !== "PAID"}>
+                    {order.paymentStatus === "PAID" ? "Resend" : "Requires PAID"}
+                  </button>
+                </form>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <strong className="block">Shipping Notification</strong>
+                  <span className="text-xs text-steel">
+                    {order.shippingEmailSentAt
+                      ? `Sent ${order.shippingEmailSentAt.toLocaleString("en-US")}`
+                      : "Not sent yet"}
+                  </span>
+                </div>
+                <form action={resendShippingEmail.bind(null, order.id)}>
+                  <button type="submit" className="font-black text-navy hover:underline">
+                    Resend
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
           <InfoPanel title="Logistics Snapshot">
             <Info label="Order Status" value={order.orderStatus} />
             <Info label="Fulfillment" value={order.fulfillmentStatus} />

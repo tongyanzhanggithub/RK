@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Analytics } from "@/components/analytics";
 import { CartProvider } from "@/components/cart-provider";
 import { EngineProvider } from "@/components/engine-provider";
 import { LanguageProvider } from "@/components/language-provider";
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <Analytics />
         <LanguageProvider>
           <EngineProvider>
             <CartProvider>
