@@ -7,8 +7,9 @@ export const metadata: Metadata = {
   description: "Sign in to the RepairKit Supply admin system."
 };
 
-export default function AdminLoginPage({ searchParams }: { searchParams?: { next?: string } }) {
+export default function AdminLoginPage({ searchParams }: { searchParams?: { next?: string; reset?: string } }) {
   const next = searchParams?.next?.startsWith("/admin") ? searchParams.next : "/admin/dashboard";
+  const justReset = searchParams?.reset === "1";
 
   return (
     <main className="grid min-h-screen place-items-center bg-panel px-4 py-12">
@@ -27,7 +28,17 @@ export default function AdminLoginPage({ searchParams }: { searchParams?: { next
             Only ADMIN users can access product management and dashboard pages.
           </p>
         </div>
+        {justReset && (
+          <p className="mt-5 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">
+            Password updated. Sign in with your new password.
+          </p>
+        )}
         <AdminLoginForm next={next} />
+        <p className="mt-5 text-sm">
+          <Link href="/admin/forgot-password" className="font-black text-navy hover:underline">
+            Forgot your password?
+          </Link>
+        </p>
       </section>
     </main>
   );

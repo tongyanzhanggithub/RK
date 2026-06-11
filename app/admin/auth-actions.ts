@@ -1,9 +1,17 @@
 "use server";
 
+import crypto from "crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { clearAdminSessionCookie, createAdminToken, setAdminSessionCookie, verifyPassword } from "@/lib/admin-auth";
+import {
+  clearAdminSessionCookie,
+  createAdminToken,
+  hashPassword,
+  setAdminSessionCookie,
+  verifyPassword
+} from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
+import { sendMail } from "@/lib/mailer";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -65,4 +73,120 @@ export async function loginAdmin(_prevState: { error?: string }, formData: FormD
 export async function logoutAdmin() {
   clearAdminSessionCookie();
   redirect("/admin/login");
+}
+
+// ---- Password reset ----
+
+const RESET_TOKEN_TTL_MS = 30 * 60 * 1000;
+// Rate limit: one reset email per address per 2 minutes.
+const RESET_REQUEST_COOLDOWN_MS = 2 * 60 * 1000;
+const resetRequests = new Map<string, number>();
+
+const GENERIC_RESET_MESSAGE =
+  "If an admin account exists for that email, a reset link has been sent. The link expires in 30 minutes.";
+
+function hashResetToken(token: string) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+export async function requestPasswordReset(
+  _prevState: { error?: string; message?: string },
+  formData: FormData
+): Promise<{ error?: string; message?: string }> {
+  const parsed = z.string().email().safeParse(String(formData.get("email") || "").trim().toLowerCase());
+  if (!parsed.success) {
+    return { error: "Please enter a valid email address." };
+  }
+  const email = parsed.data;
+
+  const lastRequest = resetRequests.get(email) || 0;
+  if (Date.now() - lastRequest < RESET_REQUEST_COOLDOWN_MS) {
+    // Same generic response — no hint about whether the account exists.
+    return { message: GENERIC_RESET_MESSAGE };
+  }
+  resetRequests.set(email, Date.now());
+
+  const admin = await prisma.adminUser.findUnique({ where: { email } });
+  if (admin && admin.role === "ADMIN") {
+    const token = crypto.randomBytes(32).toString("base64url");
+    await prisma.adminUser.update({
+      where: { id: admin.id },
+      data: {
+        resetTokenHash: hashResetToken(token),
+        resetTokenExpiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS)
+      }
+    });
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
+    const resetUrl = `${siteUrl}/admin/reset-password?token=${token}`;
+
+    if (process.env.SMTP_HOST) {
+      await sendMail({
+        to: email,
+        subject: "Reset your RepairKit Supply admin password",
+        text: [
+          "A password reset was requested for your admin account.",
+          "",
+          `Reset link (valid for 30 minutes): ${resetUrl}`,
+          "",
+          "If you did not request this, you can ignore this email — your password is unchanged."
+        ].join("\n")
+      }).catch(() => {
+        // Swallow mail errors: response stays generic either way.
+      });
+    } else if (process.env.NODE_ENV !== "production") {
+      // Dev convenience: no SMTP configured, print the link to the server console.
+      console.log(`[password-reset] ${email}: ${resetUrl}`);
+    }
+  }
+
+  return { message: GENERIC_RESET_MESSAGE };
+}
+
+const resetPasswordSchema = z
+  .object({
+    token: z.string().min(20).max(200),
+    password: z.string().min(8).max(200),
+    confirmPassword: z.string()
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"]
+  });
+
+export async function resetPassword(
+  _prevState: { error?: string },
+  formData: FormData
+): Promise<{ error?: string }> {
+  const parsed = resetPasswordSchema.safeParse({
+    token: formData.get("token"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword")
+  });
+
+  if (!parsed.success) {
+    return { error: "Passwords must match and be at least 8 characters." };
+  }
+
+  const admin = await prisma.adminUser.findFirst({
+    where: { resetTokenHash: hashResetToken(parsed.data.token) }
+  });
+
+  if (!admin || !admin.resetTokenExpiresAt || admin.resetTokenExpiresAt < new Date()) {
+    return { error: "This reset link is invalid or has expired. Please request a new one." };
+  }
+
+  await prisma.adminUser.update({
+    where: { id: admin.id },
+    data: {
+      passwordHash: hashPassword(parsed.data.password),
+      // Single use: clear the token. Existing sessions are revoked automatically
+      // because the session token embeds a fingerprint of the old password hash.
+      resetTokenHash: null,
+      resetTokenExpiresAt: null
+    }
+  });
+
+  failedLogins.delete(admin.email);
+  redirect("/admin/login?reset=1");
 }

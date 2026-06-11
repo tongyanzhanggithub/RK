@@ -33,6 +33,8 @@ function createTable() {
       name TEXT NOT NULL,
       passwordHash TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'ADMIN',
+      resetTokenHash TEXT,
+      resetTokenExpiresAt DATETIME,
       createdAt TEXT NOT NULL,
       updatedAt TEXT NOT NULL
     );
