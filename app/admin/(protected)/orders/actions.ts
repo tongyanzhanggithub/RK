@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
+import { sendShippingNotificationEmail } from "@/lib/shipping-notification";
 
 export type OrderFormState = {
   error?: string;
@@ -56,6 +57,14 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
       updatedAt: new Date()
     }
   });
+
+  const nowShipped =
+    parsed.data.orderStatus === "SHIPPED" ||
+    parsed.data.fulfillmentStatus === "SHIPPED" ||
+    parsed.data.fulfillmentStatus === "FULFILLED";
+  if (nowShipped) {
+    await sendShippingNotificationEmail(orderId);
+  }
 
   revalidatePath("/admin/dashboard");
   revalidatePath("/admin/orders");

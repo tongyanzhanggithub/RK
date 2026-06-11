@@ -9,6 +9,7 @@ import {
   Globe2,
   MessageCircle,
   Ship,
+  Star,
   Stethoscope
 } from "lucide-react";
 import { PartFinder } from "@/components/part-finder";
@@ -16,6 +17,7 @@ import { ProductCard } from "@/components/product-card";
 import { models } from "@/data/models";
 import { problems } from "@/data/problems";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
+import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
 import { getServerDict } from "@/lib/locale";
 
@@ -26,6 +28,11 @@ export default async function HomePage() {
   const hp = dict.homepage;
   const products = await getStoreProducts();
   const bestSellers = products.slice(0, 10);
+  const testimonials = await prisma.testimonial.findMany({
+    where: { isPublished: true },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+    take: 6
+  });
 
   // Data-driven category grid: grows automatically as new categories are added.
   const categoryCounts = new Map<string, number>();
@@ -221,6 +228,37 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {testimonials.length > 0 && (
+        <section className="border-b border-line bg-panel px-4 py-14">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-6">
+              <p className="font-black uppercase text-safety">{hp.testimonial_badge}</p>
+              <h2 className="text-3xl font-black">{hp.testimonial_title}</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {testimonials.map((testimonial) => (
+                <figure key={testimonial.id} className="grid content-start gap-3 border border-line bg-white p-6 shadow-sm">
+                  <span className="inline-flex items-center gap-0.5 text-safety">
+                    {Array.from({ length: testimonial.rating }).map((_, index) => (
+                      <Star key={index} size={15} fill="currentColor" />
+                    ))}
+                  </span>
+                  <blockquote className="text-sm leading-6 text-steel">
+                    {dict.locale === "zh" && testimonial.contentZh ? testimonial.contentZh : testimonial.content}
+                  </blockquote>
+                  <figcaption className="text-sm font-black">
+                    {testimonial.authorName}
+                    <span className="font-bold text-steel">
+                      {testimonial.company ? ` · ${testimonial.company}` : ""} · {testimonial.country}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="bg-ink px-4 py-16 text-white">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">

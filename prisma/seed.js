@@ -295,6 +295,20 @@ function createTables() {
       updatedAt DATETIME NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS Testimonial (
+      id TEXT PRIMARY KEY,
+      authorName TEXT NOT NULL,
+      company TEXT,
+      country TEXT NOT NULL,
+      content TEXT NOT NULL,
+      contentZh TEXT,
+      rating INTEGER NOT NULL DEFAULT 5,
+      isPublished INTEGER NOT NULL DEFAULT 0,
+      sortOrder INTEGER NOT NULL DEFAULT 0,
+      createdAt DATETIME NOT NULL,
+      updatedAt DATETIME NOT NULL
+    );
+
     CREATE TABLE IF NOT EXISTS AdminUser (
       id TEXT PRIMARY KEY,
       email TEXT NOT NULL UNIQUE,
@@ -401,6 +415,7 @@ function createTables() {
       stripeLastSyncedAt DATETIME,
       paidAt DATETIME,
       confirmationEmailSentAt DATETIME,
+      shippingEmailSentAt DATETIME,
       shippingCarrier TEXT,
       trackingNumber TEXT,
       trackingUrl TEXT,

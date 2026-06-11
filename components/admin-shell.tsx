@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, Boxes, FileText, LayoutDashboard, Package, Settings, ShoppingBag, Tag, Ticket, Users } from "lucide-react";
+import { BarChart3, Boxes, FileText, LayoutDashboard, MessageSquareQuote, Package, Settings, ShoppingBag, Tag, Ticket, Users } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/auth-actions";
 
 const activeItems = [
@@ -9,7 +9,8 @@ const activeItems = [
   ["Inventory", "/admin/inventory", Boxes],
   ["Customers", "/admin/customers", Users],
   ["Wholesale", "/admin/wholesale", BarChart3],
-  ["Coupons", "/admin/coupons", Ticket]
+  ["Coupons", "/admin/coupons", Ticket],
+  ["Testimonials", "/admin/testimonials", MessageSquareQuote]
 ];
 
 const plannedItems = [

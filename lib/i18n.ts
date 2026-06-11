@@ -66,6 +66,8 @@ const en = {
     problem_title: "Not sure which part? Start from the problem",
     problem_view_all: "All troubleshooting guides",
     products_count: "{n} products",
+    testimonial_badge: "What buyers say",
+    testimonial_title: "Trusted by repair shops and distributors",
     cta_section_badge: "Ready to order?",
     cta_section_title: "Send us your model list and quantities for a same-day quote",
     cta_section_body:
@@ -309,6 +311,8 @@ const zh: typeof en = {
     problem_title: "不确定要买什么？从故障入手",
     problem_view_all: "全部故障排查指南",
     products_count: "{n} 件产品",
+    testimonial_badge: "买家评价",
+    testimonial_title: "维修店与经销商的共同选择",
     cta_section_badge: "准备下单？",
     cta_section_title: "发送您的型号清单和数量，当天回复报价",
     cta_section_body:

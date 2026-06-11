@@ -141,6 +141,7 @@ model Order {
   stripeLastSyncedAt      DateTime?
   paidAt                  DateTime?
   confirmationEmailSentAt DateTime?
+  shippingEmailSentAt     DateTime?
   shippingCarrier         String?
   trackingNumber          String?
   trackingUrl             String?
@@ -213,6 +214,20 @@ model AdminUser {
   resetTokenExpiresAt DateTime?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  authorName  String
+  company     String?
+  country     String
+  content     String
+  contentZh   String?
+  rating      Int      @default(5)
+  isPublished Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Problem {
