@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { X } from "lucide-react";
+import { useLanguage } from "@/components/language-provider";
 
 type ProductsFilterProps = {
   categories: string[];
@@ -15,6 +16,8 @@ const FILTER_KEYS = ["q", "category", "model", "equipment", "problem", "sort"] a
 export function ProductsFilter({ categories, models, equipmentOptions, problems }: ProductsFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { dict } = useLanguage();
+  const p = dict.products;
 
   function currentValue(key: string) {
     return searchParams.get(key) || "";
@@ -48,24 +51,24 @@ export function ProductsFilter({ categories, models, equipmentOptions, problems 
           className="border border-line px-3 py-2 outline-none focus:border-navy"
           placeholder="Search kits..."
         />
-        <FilterSelect label="All categories" value={currentValue("category")} options={categories} onChange={(value) => apply("category", value)} />
-        <FilterSelect label="All models" value={currentValue("model")} options={models} onChange={(value) => apply("model", value)} />
-        <FilterSelect label="All equipment" value={currentValue("equipment")} options={equipmentOptions} onChange={(value) => apply("equipment", value)} />
-        <FilterSelect label="All problems" value={currentValue("problem")} options={problems} onChange={(value) => apply("problem", value)} />
+        <FilterSelect label={p.filter_categories} value={currentValue("category")} options={categories} onChange={(value) => apply("category", value)} />
+        <FilterSelect label={p.filter_models} value={currentValue("model")} options={models} onChange={(value) => apply("model", value)} />
+        <FilterSelect label={p.filter_equipment} value={currentValue("equipment")} options={equipmentOptions} onChange={(value) => apply("equipment", value)} />
+        <FilterSelect label={p.filter_problems} value={currentValue("problem")} options={problems} onChange={(value) => apply("problem", value)} />
         <select
           value={currentValue("sort")}
           onChange={(event) => apply("sort", event.target.value)}
           className="border border-line bg-white px-3 py-2 outline-none focus:border-navy"
         >
-          <option value="">Sort: Default</option>
-          <option value="price-asc">Price: Low → High</option>
-          <option value="price-desc">Price: High → Low</option>
-          <option value="name-asc">Name: A → Z</option>
+          <option value="">{p.sort_default}</option>
+          <option value="price-asc">{p.sort_price_asc}</option>
+          <option value="price-desc">{p.sort_price_desc}</option>
+          <option value="name-asc">{p.sort_name_asc}</option>
         </select>
       </div>
       {activeFilters.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3">
-          <span className="text-xs font-black uppercase text-steel">Active filters:</span>
+          <span className="text-xs font-black uppercase text-steel">{p.active_filters}</span>
           {activeFilters.map(([key, value]) => (
             <button
               key={key}
@@ -81,7 +84,7 @@ export function ProductsFilter({ categories, models, equipmentOptions, problems 
             onClick={() => router.push("/products")}
             className="text-xs font-black text-steel underline hover:text-ink"
           >
-            Clear all
+            {p.clear_all}
           </button>
         </div>
       )}

@@ -1,0 +1,421 @@
+export type Locale = "en" | "zh";
+
+export const LOCALE_COOKIE = "rk-locale";
+
+const en = {
+  locale: "en" as Locale,
+  header: {
+    topbar_left: "Factory-direct engine parts & complete engines — Chongqing, China",
+    topbar_right: "Serving the Middle East, Central Asia & Southeast Asia",
+    tagline: "Factory-direct engine parts supplier",
+    quote: "Get a Quote"
+  },
+  nav: {
+    home: "Home",
+    products: "Products",
+    engines: "Shop by Engine",
+    problems: "Troubleshooting",
+    wholesale: "Wholesale / RFQ",
+    cart: "Cart"
+  },
+  footer: {
+    description:
+      "Factory-direct supplier of small engine parts, repair kits and complete engines from the Chongqing manufacturing cluster. Wholesale and OEM for the Middle East, Central Asia and Southeast Asia.",
+    logistics: "Logistics: sea LCL/FCL and China–Central Asia rail · full export documents · T/T payment terms.",
+    navigate: "Navigate",
+    policies: "Policies",
+    cart_link: "Cart (trial orders)",
+    shipping: "Shipping Policy",
+    returns: "Returns & Warranty",
+    about: "About Us",
+    quote: "Get a quote"
+  },
+  common: {
+    in_stock: "In Stock",
+    low_stock: "Only {n} left",
+    out_of_stock: "Out of Stock",
+    universal: "Universal — fits all small engines",
+    back_to_products: "Back to products",
+    continue_shopping: "Continue Shopping",
+    back_home: "Back Home",
+    view_catalog: "View full catalog"
+  },
+  homepage: {
+    badge: "Factory-direct B2B supplier",
+    headline: "Wholesale Small Engine Parts & Complete Engines — Direct From China",
+    subtext:
+      "Repair kits, spare parts and complete 168F / GX160-style engines for repair shops, distributors and dealers across the Middle East, Central Asia and Southeast Asia. Factory pricing, low MOQ, OEM welcome.",
+    cta_quote: "Get Wholesale Quote",
+    cta_distributor: "Become a Distributor",
+    cta_browse: "Browse Catalog",
+    why_title: "Why buyers source from us",
+    why_1: "Factory-direct pricing — no middleman markup",
+    why_2: "Low MOQ and mixed-carton trial orders",
+    why_3: "OEM / private-label packaging available",
+    why_4: "Sea & rail freight + T/T payment terms",
+    supply_badge: "The supply-chain advantage",
+    supply_title: "A real factory network behind every order",
+    category_badge: "Product range",
+    category_title: "Source by category",
+    bestseller_badge: "Fast-moving SKUs",
+    bestseller_title: "High-demand parts for resale",
+    cta_section_badge: "Ready to order?",
+    cta_section_title: "Send us your model list and quantities for a same-day quote",
+    cta_section_body:
+      "Tell us the engine models or part numbers you need. We reply with wholesale pricing, MOQ, carton plan and freight options by WhatsApp.",
+    cta_whatsapp: "WhatsApp Us",
+    cta_apply: "Apply for Wholesale"
+  },
+  products: {
+    heading: "Repair Kit Products",
+    subtext:
+      "Filter by category, compatible model, equipment and problem solved. Model-specific kits show first; universal parts that also fit are listed after them.",
+    count_one: "1 product found",
+    count_other: "{n} products found",
+    no_results: "No products match these filters.",
+    no_results_sub: "Try removing a filter, or contact us on WhatsApp — we stock more parts than the catalog shows.",
+    sort_default: "Sort: Default",
+    sort_price_asc: "Price: Low → High",
+    sort_price_desc: "Price: High → Low",
+    sort_name_asc: "Name: A → Z",
+    filter_categories: "All categories",
+    filter_models: "All models",
+    filter_equipment: "All equipment",
+    filter_problems: "All problems",
+    active_filters: "Active filters:",
+    clear_all: "Clear all"
+  },
+  product: {
+    retail_label: "Retail reference",
+    wholesale_note: "Wholesale price by volume — request a quote below",
+    wholesale_buyers:
+      "Wholesale buyers: chat on WhatsApp for MOQ, carton plan and T/T pricing. The cart is for small trial orders by card.",
+    kit_includes: "Kit Includes",
+    compatibility_table: "Compatibility Table",
+    compatible_models: "Compatible Models",
+    compatible_equipment: "Compatible Equipment",
+    problems_solved: "Problems Solved",
+    not_compatible: "Not Compatible With",
+    specifications: "Specifications",
+    related_title: "Frequently Needed Together",
+    related_sub: "Kits for the same engines plus universal workshop parts.",
+    engine_model_col: "Engine Model",
+    compatible_equipment_col: "Compatible Equipment",
+    inquiry: "Inquire on WhatsApp",
+    save_pct: "Save {n}%"
+  },
+  cart: {
+    badge: "Secure checkout",
+    heading: "Cart",
+    subtext: "Review repair kits before secure Stripe checkout. Prices are sample-order prices; bulk quotes can be handled later.",
+    empty_heading: "Your cart is empty",
+    empty_sub: "Add repair kits from the product list or product detail page.",
+    browse: "Browse Products",
+    unit_price: "Unit price:",
+    cross_sell_title: "You may also need",
+    cross_sell_sub: "Parts that fit the engines in your cart — add before checkout.",
+    order_summary: "Order Summary",
+    coupon_label: "Coupon code",
+    coupon_apply: "Apply",
+    coupon_applying: "Applying",
+    coupon_remove: "Remove",
+    coupon_enter_first: "Enter a coupon code first.",
+    items: "Items",
+    subtotal: "Subtotal",
+    shipping: "Shipping",
+    discount: "Discount",
+    estimated_total: "Estimated Total",
+    checkout_btn: "Proceed to Stripe Checkout",
+    checking_out: "Creating Checkout...",
+    clear_cart: "Clear Cart",
+    stripe_note: "Checkout is powered by Stripe. No card data is stored by this site."
+  },
+  wholesale: {
+    badge: "Wholesale & RFQ",
+    heading: "Request a wholesale quote",
+    quote_btn: "Quote on WhatsApp",
+    form_btn: "Fill the RFQ form",
+    subtext:
+      "For repair shops, distributors, dealers and rental fleets across the Middle East, Central Asia and Southeast Asia. Send your model list and quantities — we reply with factory pricing, MOQ, carton plan and freight options.",
+    step1_title: "1. Send your list",
+    step1_body:
+      "Share engine models, part numbers or equipment types plus target quantities — by WhatsApp or the form below.",
+    step2_title: "2. Get a quote",
+    step2_body:
+      "We confirm compatibility and reply with wholesale pricing, MOQ, carton plan and freight to your port.",
+    step3_title: "3. Sample & order",
+    step3_body: "Start with a small trial order, then scale to bulk cartons or containers with T/T terms.",
+    form_badge: "RFQ form",
+    form_heading: "Tell us what you sell or repair",
+    form_sub:
+      "We review the product fit, expected quantity and destination market, then reply with a quote and activate a wholesale customer profile.",
+    form_chat_note:
+      "Prefer to chat? Most buyers get a faster quote on WhatsApp — send your model list and we reply with pricing the same day.",
+    browse_first: "Browse products before applying",
+    form_title: "Wholesale application",
+    form_desc: "Required fields help us review the request without a long email exchange.",
+    submitted_heading: "Application received",
+    submitted_body:
+      "Our team will review your company, product interest and expected quantity before confirming wholesale access.",
+    browse_products: "Browse Products"
+  },
+  checkout: {
+    confirmed: "Payment Confirmed",
+    not_completed: "Payment Not Completed",
+    refunded: "Payment Refunded",
+    in_progress: "Confirmation In Progress",
+    thanks: "Thanks for your order",
+    msg_paid: "Stripe confirmed your payment and the order is ready for processing.",
+    msg_failed: "Stripe could not complete this payment. Please contact us or place the order again.",
+    msg_refunded: "Stripe reports that this order has been refunded.",
+    msg_pending:
+      "Checkout is complete. Stripe payment confirmation may take a moment, and the order will update automatically.",
+    order_number: "Order Number",
+    payment_status: "Payment Status",
+    order_total: "Order Total",
+    whatsapp_note: "Send us your order number on WhatsApp to confirm shipping details and get a dispatch update.",
+    whatsapp_btn: "Confirm on WhatsApp",
+    questions: "Questions? Contact us on",
+    whatsapp_link: "WhatsApp"
+  },
+  about: {
+    heading: "About RepairKit Supply",
+    subheading: "Factory-direct from Chongqing's engine-parts cluster"
+  },
+  shipping: {
+    heading: "Shipping Policy"
+  },
+  returns: {
+    heading: "Returns & Warranty"
+  },
+  engines: {
+    heading: "Shop by Engine Model",
+    subtext: "Select your engine to see compatible repair kits, spare parts and maintenance accessories.",
+    set_engine: "Set as My Engine"
+  },
+  problems: {
+    heading: "Troubleshooting Guides",
+    subtext: "Select a symptom to find the right repair kit for your engine."
+  },
+  finder: {
+    heading: "Find the right repair kit",
+    subtext: "3 steps — or send a photo on WhatsApp and we confirm fitment for free.",
+    step1: "1 · MY EQUIPMENT",
+    step2: "2 · ENGINE / MODEL",
+    step3: "3 · PROBLEM (OPTIONAL)",
+    any_equipment: "Any equipment",
+    not_sure: "Not sure",
+    any_problem: "Any problem",
+    find_btn: "Find parts",
+    whatsapp_btn: "Send a photo on WhatsApp"
+  }
+};
+
+const zh: typeof en = {
+  locale: "zh" as Locale,
+  header: {
+    topbar_left: "工厂直供 · 小型发动机零配件及整机 — 中国重庆",
+    topbar_right: "服务中东、中亚及东南亚市场",
+    tagline: "工厂直供发动机零配件",
+    quote: "获取报价"
+  },
+  nav: {
+    home: "首页",
+    products: "产品",
+    engines: "按型号选购",
+    problems: "故障排查",
+    wholesale: "批发询价",
+    cart: "购物车"
+  },
+  footer: {
+    description:
+      "重庆制造业集群工厂直供小型发动机零配件、维修套件及整机。面向中东、中亚及东南亚市场提供批发及OEM服务。",
+    logistics: "物流方式：海运拼箱/整柜 · 中国-中亚铁路 · 提供完整出口单证 · 支持电汇付款。",
+    navigate: "导航",
+    policies: "政策",
+    cart_link: "购物车（试样订单）",
+    shipping: "运输政策",
+    returns: "退换及保修",
+    about: "关于我们",
+    quote: "获取报价"
+  },
+  common: {
+    in_stock: "有库存",
+    low_stock: "仅剩 {n} 件",
+    out_of_stock: "暂时缺货",
+    universal: "通用型 — 适配所有小型发动机",
+    back_to_products: "返回产品列表",
+    continue_shopping: "继续购物",
+    back_home: "返回首页",
+    view_catalog: "查看全部产品"
+  },
+  homepage: {
+    badge: "工厂直供 B2B 供应商",
+    headline: "小型发动机零配件及整机批发 — 中国直发",
+    subtext:
+      "168F / GX160 系列发动机维修套件、备品备件及整机，服务中东、中亚及东南亚地区的维修店、经销商和代理商。工厂价格，低起订量，支持OEM。",
+    cta_quote: "获取批发报价",
+    cta_distributor: "成为经销商",
+    cta_browse: "浏览产品目录",
+    why_title: "为什么选择我们",
+    why_1: "工厂直供价格 — 无中间商差价",
+    why_2: "低起订量，支持混箱试样",
+    why_3: "支持OEM / 私标包装",
+    why_4: "海运及铁路运输 + 电汇付款条件",
+    supply_badge: "供应链优势",
+    supply_title: "每笔订单背后的真实工厂网络",
+    category_badge: "产品系列",
+    category_title: "按品类采购",
+    bestseller_badge: "热销SKU",
+    bestseller_title: "高需求转售零件",
+    cta_section_badge: "准备下单？",
+    cta_section_title: "发送您的型号清单和数量，当天回复报价",
+    cta_section_body:
+      "告诉我们您需要的发动机型号或零件编号，我们通过WhatsApp回复批发价格、起订量、装箱方案及运输选项。",
+    cta_whatsapp: "WhatsApp 咨询",
+    cta_apply: "申请批发资格"
+  },
+  products: {
+    heading: "维修套件产品",
+    subtext: "按品类、兼容型号、设备类型和故障症状筛选。特定型号套件优先显示，通用件排列在后。",
+    count_one: "找到 1 件产品",
+    count_other: "找到 {n} 件产品",
+    no_results: "没有产品符合当前筛选条件。",
+    no_results_sub: "请尝试移除筛选条件，或通过 WhatsApp 联系我们 — 我们的库存比目录多。",
+    sort_default: "排序：默认",
+    sort_price_asc: "价格：低 → 高",
+    sort_price_desc: "价格：高 → 低",
+    sort_name_asc: "名称：A → Z",
+    filter_categories: "全部品类",
+    filter_models: "全部型号",
+    filter_equipment: "全部设备",
+    filter_problems: "全部故障",
+    active_filters: "已选筛选：",
+    clear_all: "清除全部"
+  },
+  product: {
+    retail_label: "零售参考价",
+    wholesale_note: "批量批发价格 — 请联系询价",
+    wholesale_buyers: "批发买家：通过 WhatsApp 咨询起订量、装箱方案及电汇价格。购物车用于小额试样刷卡订单。",
+    kit_includes: "套件内容",
+    compatibility_table: "兼容型号表",
+    compatible_models: "兼容型号",
+    compatible_equipment: "兼容设备",
+    problems_solved: "可解决故障",
+    not_compatible: "不兼容型号",
+    specifications: "规格参数",
+    related_title: "经常一起购买",
+    related_sub: "同款发动机配套件及通用型维修工具。",
+    engine_model_col: "发动机型号",
+    compatible_equipment_col: "兼容设备",
+    inquiry: "WhatsApp 询价",
+    save_pct: "节省 {n}%"
+  },
+  cart: {
+    badge: "安全结账",
+    heading: "购物车",
+    subtext: "通过 Stripe 安全结账前请确认维修套件。价格为试样订单价格；批量报价可后续处理。",
+    empty_heading: "购物车为空",
+    empty_sub: "请从产品列表或产品详情页添加维修套件。",
+    browse: "浏览产品",
+    unit_price: "单价：",
+    cross_sell_title: "您可能还需要",
+    cross_sell_sub: "适配购物车中发动机的零件 — 结账前添加。",
+    order_summary: "订单摘要",
+    coupon_label: "优惠码",
+    coupon_apply: "使用",
+    coupon_applying: "应用中",
+    coupon_remove: "移除",
+    coupon_enter_first: "请先输入优惠码。",
+    items: "商品数量",
+    subtotal: "小计",
+    shipping: "运费",
+    discount: "优惠",
+    estimated_total: "预计总价",
+    checkout_btn: "前往 Stripe 结账",
+    checking_out: "创建结账中...",
+    clear_cart: "清空购物车",
+    stripe_note: "结账由 Stripe 提供支持，本站不存储任何银行卡信息。"
+  },
+  wholesale: {
+    badge: "批发 & 询价",
+    heading: "提交批发询价",
+    quote_btn: "WhatsApp 询价",
+    form_btn: "填写询价表单",
+    subtext:
+      "服务中东、中亚及东南亚地区的维修店、经销商、代理商和租赁车队。发送您的型号清单和数量，我们回复工厂价格、起订量、装箱方案及运输选项。",
+    step1_title: "1. 发送清单",
+    step1_body: "通过 WhatsApp 或下方表单分享发动机型号、零件编号或设备类型及目标数量。",
+    step2_title: "2. 获取报价",
+    step2_body: "我们确认兼容性后，回复批发价格、起订量、装箱方案及到港运费。",
+    step3_title: "3. 试样下单",
+    step3_body: "先从小批量试样订单开始，再以电汇条件扩展至整箱或整柜。",
+    form_badge: "询价表单",
+    form_heading: "告诉我们您销售或维修的产品",
+    form_sub: "我们审核产品匹配度、预计数量和目的地市场后，回复报价并开通批发客户账户。",
+    form_chat_note: "更喜欢直接沟通？大多数买家通过 WhatsApp 能更快获取报价 — 发送型号清单，当天回复价格。",
+    browse_first: "申请前浏览产品",
+    form_title: "批发申请",
+    form_desc: "必填项帮助我们无需长时间邮件沟通即可完成审核。",
+    submitted_heading: "申请已收到",
+    submitted_body: "我们团队将审核您的公司信息、产品需求和预计数量后确认批发访问权限。",
+    browse_products: "浏览产品"
+  },
+  checkout: {
+    confirmed: "付款已确认",
+    not_completed: "付款未完成",
+    refunded: "已退款",
+    in_progress: "确认处理中",
+    thanks: "感谢您的订单",
+    msg_paid: "Stripe 已确认您的付款，订单正在处理中。",
+    msg_failed: "Stripe 无法完成此次付款，请联系我们或重新下单。",
+    msg_refunded: "Stripe 报告此订单已退款。",
+    msg_pending: "结账已完成。Stripe 付款确认可能需要片刻，订单将自动更新。",
+    order_number: "订单编号",
+    payment_status: "付款状态",
+    order_total: "订单总额",
+    whatsapp_note: "请通过 WhatsApp 发送订单编号以确认收货信息并获取发货更新。",
+    whatsapp_btn: "WhatsApp 确认",
+    questions: "有疑问？联系我们",
+    whatsapp_link: "WhatsApp"
+  },
+  about: {
+    heading: "关于 RepairKit Supply",
+    subheading: "重庆发动机零配件产业集群工厂直供"
+  },
+  shipping: {
+    heading: "运输政策"
+  },
+  returns: {
+    heading: "退换及保修"
+  },
+  engines: {
+    heading: "按发动机型号选购",
+    subtext: "选择您的发动机型号，查看兼容的维修套件、备品备件及保养配件。",
+    set_engine: "设为我的发动机"
+  },
+  problems: {
+    heading: "故障排查指南",
+    subtext: "选择故障症状，找到适合您发动机的维修套件。"
+  },
+  finder: {
+    heading: "找到合适的维修套件",
+    subtext: "3 步完成 — 或通过 WhatsApp 发送照片，我们免费确认适配型号。",
+    step1: "1 · 我的设备",
+    step2: "2 · 发动机 / 型号",
+    step3: "3 · 故障症状（可选）",
+    any_equipment: "任意设备",
+    not_sure: "不确定",
+    any_problem: "任意故障",
+    find_btn: "查找零件",
+    whatsapp_btn: "WhatsApp 发送照片"
+  }
+};
+
+const dicts = { en, zh } as const;
+
+export type Dict = typeof en;
+
+export function getDict(locale: Locale): Dict {
+  return dicts[locale] ?? dicts.en;
+}

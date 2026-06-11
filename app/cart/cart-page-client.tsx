@@ -7,6 +7,7 @@ import { Minus, Plus, ShieldCheck, TicketPercent, Trash2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { TrustBadges } from "@/components/trust-badges";
 import { useCart } from "@/components/cart-provider";
+import { useLanguage } from "@/components/language-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
 import { SHIPPING_CENTS } from "@/lib/shipping";
@@ -28,6 +29,8 @@ type AppliedCoupon = {
 
 export function CartPageClient({ products }: CartPageClientProps) {
   const { items, updateItem, removeItem, clearCart, totalQuantity } = useCart();
+  const { dict } = useLanguage();
+  const c = dict.cart;
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const [couponCode, setCouponCode] = useState("");
@@ -133,23 +136,21 @@ export function CartPageClient({ products }: CartPageClientProps) {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-safety">Secure checkout</p>
-            <h1 className="text-4xl font-black">Cart</h1>
-            <p className="mt-3 max-w-3xl text-steel">
-              Review repair kits before secure Stripe checkout. Prices are sample-order prices; bulk quotes can be handled later.
-            </p>
+            <p className="font-black uppercase text-safety">{c.badge}</p>
+            <h1 className="text-4xl font-black">{c.heading}</h1>
+            <p className="mt-3 max-w-3xl text-steel">{c.subtext}</p>
           </div>
           <Link href="/products" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-panel">
-            Continue Shopping
+            {dict.common.continue_shopping}
           </Link>
         </div>
 
         {lines.length === 0 ? (
           <section className="mt-8 border border-line bg-white p-8">
-            <h2 className="text-2xl font-black">Your cart is empty</h2>
-            <p className="mt-3 text-steel">Add repair kits from the product list or product detail page.</p>
+            <h2 className="text-2xl font-black">{c.empty_heading}</h2>
+            <p className="mt-3 text-steel">{c.empty_sub}</p>
             <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-              Browse Products
+              {c.browse}
             </Link>
           </section>
         ) : (
@@ -168,7 +169,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                       </Link>
                       <p className="mt-2 max-w-2xl text-sm leading-6 text-steel">{product.shortDescription}</p>
                       <p className="mt-3 text-sm">
-                        <strong>Unit price:</strong> {formatMoney(product.priceCents, product.currency)}
+                        <strong>{c.unit_price}</strong> {formatMoney(product.priceCents, product.currency)}
                       </p>
                     </div>
                     <div className="grid gap-4 md:min-w-44 md:justify-items-end">
@@ -211,8 +212,8 @@ export function CartPageClient({ products }: CartPageClientProps) {
               </div>
               {crossSell.length > 0 && (
                 <div className="border-t-4 border-panel p-5">
-                  <h2 className="text-lg font-black">You may also need</h2>
-                  <p className="mt-1 text-sm text-steel">Parts that fit the engines in your cart — add before checkout.</p>
+                  <h2 className="text-lg font-black">{c.cross_sell_title}</h2>
+                  <p className="mt-1 text-sm text-steel">{c.cross_sell_sub}</p>
                   <div className="mt-4 grid gap-3 md:grid-cols-3">
                     {crossSell.map((product) => (
                       <div key={product.slug} className="grid border border-line p-4">
@@ -233,7 +234,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                           {product.name}
                         </Link>
                         {product.fitmentType === "UNIVERSAL" && (
-                          <span className="mt-1 text-xs font-bold text-navy">Universal — fits all small engines</span>
+                          <span className="mt-1 text-xs font-bold text-navy">{dict.common.universal}</span>
                         )}
                         <strong className="mt-2">{formatMoney(product.priceCents, product.currency)}</strong>
                         <AddToCartButton slug={product.slug} name={product.name} className="mt-3 w-full" />
@@ -245,10 +246,10 @@ export function CartPageClient({ products }: CartPageClientProps) {
             </section>
 
             <aside className="h-fit border border-line bg-white p-6">
-              <h2 className="text-2xl font-black">Order Summary</h2>
+              <h2 className="text-2xl font-black">{c.order_summary}</h2>
               <form onSubmit={handleApplyCoupon} className="mt-5 grid gap-3 border-b border-line pb-5">
                 <label className="grid gap-2 text-sm font-bold">
-                  Coupon code
+                  {c.coupon_label}
                   <div className="grid grid-cols-[1fr_auto] border border-line">
                     <input
                       value={couponCode}
@@ -262,7 +263,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                       className="inline-flex items-center gap-2 bg-navy px-3 text-sm font-black text-white disabled:opacity-60"
                     >
                       <TicketPercent size={16} />
-                      {isApplyingCoupon ? "Applying" : "Apply"}
+                      {isApplyingCoupon ? c.coupon_applying : c.coupon_apply}
                     </button>
                   </div>
                 </label>
@@ -270,7 +271,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                   <div className="flex items-center justify-between gap-3 border border-green-200 bg-green-50 p-3 text-sm">
                     <span className="font-bold text-green-800">{appliedCoupon.label} applied</span>
                     <button type="button" className="font-black text-navy" onClick={() => setAppliedCoupon(null)}>
-                      Remove
+                      {c.coupon_remove}
                     </button>
                   </div>
                 )}
@@ -278,25 +279,25 @@ export function CartPageClient({ products }: CartPageClientProps) {
               </form>
               <dl className="mt-5 grid gap-3 text-sm">
                 <div className="flex justify-between gap-4">
-                  <dt className="text-steel">Items</dt>
+                  <dt className="text-steel">{c.items}</dt>
                   <dd className="font-black">{totalQuantity}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-steel">Subtotal</dt>
+                  <dt className="text-steel">{c.subtotal}</dt>
                   <dd className="font-black">{formatMoney(subtotal, "usd")}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-steel">Shipping</dt>
+                  <dt className="text-steel">{c.shipping}</dt>
                   <dd className="font-black">{formatMoney(shippingCents, "usd")}</dd>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between gap-4 text-green-800">
-                    <dt className="font-bold">Discount</dt>
+                    <dt className="font-bold">{c.discount}</dt>
                     <dd className="font-black">-{formatMoney(discountCents, "usd")}</dd>
                   </div>
                 )}
                 <div className="flex justify-between gap-4 border-t border-line pt-3 text-base">
-                  <dt className="font-black">Estimated Total</dt>
+                  <dt className="font-black">{c.estimated_total}</dt>
                   <dd className="font-black">{formatMoney(estimatedTotal, "usd")}</dd>
                 </div>
               </dl>
@@ -307,14 +308,14 @@ export function CartPageClient({ products }: CartPageClientProps) {
                 className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <ShieldCheck size={18} />
-                {isCheckingOut ? "Creating Checkout..." : "Proceed to Stripe Checkout"}
+                {isCheckingOut ? c.checking_out : c.checkout_btn}
               </button>
               <button
                 type="button"
                 onClick={clearCart}
                 className="mt-3 inline-flex h-11 w-full items-center justify-center border border-line px-4 font-black text-navy hover:bg-panel"
               >
-                Clear Cart
+                {c.clear_cart}
               </button>
               {checkoutError && (
                 <p className="mt-4 border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">
@@ -322,7 +323,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                 </p>
               )}
               <p className="mt-4 text-xs leading-5 text-steel">
-                Checkout is powered by Stripe. No card data is stored by this site.
+                {c.stripe_note}
               </p>
               <TrustBadges className="mt-4 border-t border-line pt-4" />
             </aside>

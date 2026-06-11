@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
+import { useLanguage } from "@/components/language-provider";
 import { useMyEngine } from "@/components/engine-provider";
 import { equipment } from "@/data/equipment";
 import { models } from "@/data/models";
@@ -11,6 +12,8 @@ import { problems } from "@/data/problems";
 export function PartFinder({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
   const { setMyEngine } = useMyEngine();
+  const { dict } = useLanguage();
+  const f = dict.finder;
   const [equipmentName, setEquipmentName] = useState("");
   const [modelName, setModelName] = useState("");
   const [problemTitle, setProblemTitle] = useState("");
@@ -37,15 +40,13 @@ export function PartFinder({ compact = false }: { compact?: boolean }) {
     <div className={compact ? "" : "border border-line bg-white p-5 shadow-soft"}>
       {!compact && (
         <div className="mb-4">
-          <h2 className="text-xl font-black">Find the right repair kit</h2>
-          <p className="mt-1 text-sm font-bold text-steel">
-            3 steps — or send a photo on WhatsApp and we confirm fitment for free.
-          </p>
+          <h2 className="text-xl font-black">{f.heading}</h2>
+          <p className="mt-1 text-sm font-bold text-steel">{f.subtext}</p>
         </div>
       )}
       <div className="grid gap-3 md:grid-cols-[1fr_1fr_1fr_auto]">
         <label className="grid gap-1 text-xs font-black uppercase text-steel">
-          1 · My equipment
+          {f.step1}
           <select
             value={equipmentName}
             onChange={(event) => {
@@ -54,7 +55,7 @@ export function PartFinder({ compact = false }: { compact?: boolean }) {
             }}
             className="h-11 border border-line bg-white px-3 text-sm font-bold normal-case text-ink outline-none focus:border-navy"
           >
-            <option value="">Any equipment</option>
+            <option value="">{f.any_equipment}</option>
             {equipment.map((item) => (
               <option key={item.slug} value={item.name}>
                 {item.name}
@@ -63,13 +64,13 @@ export function PartFinder({ compact = false }: { compact?: boolean }) {
           </select>
         </label>
         <label className="grid gap-1 text-xs font-black uppercase text-steel">
-          2 · Engine / model
+          {f.step2}
           <select
             value={modelName}
             onChange={(event) => setModelName(event.target.value)}
             className="h-11 border border-line bg-white px-3 text-sm font-bold normal-case text-ink outline-none focus:border-navy"
           >
-            <option value="">Not sure</option>
+            <option value="">{f.not_sure}</option>
             {modelOptions.map((model) => (
               <option key={model.slug} value={model.name}>
                 {model.name}
@@ -78,13 +79,13 @@ export function PartFinder({ compact = false }: { compact?: boolean }) {
           </select>
         </label>
         <label className="grid gap-1 text-xs font-black uppercase text-steel">
-          3 · Problem (optional)
+          {f.step3}
           <select
             value={problemTitle}
             onChange={(event) => setProblemTitle(event.target.value)}
             className="h-11 border border-line bg-white px-3 text-sm font-bold normal-case text-ink outline-none focus:border-navy"
           >
-            <option value="">Any problem</option>
+            <option value="">{f.any_problem}</option>
             {problems.map((problem) => (
               <option key={problem.slug} value={problem.title}>
                 {problem.title}
@@ -97,7 +98,7 @@ export function PartFinder({ compact = false }: { compact?: boolean }) {
           onClick={findParts}
           className="inline-flex h-11 items-center justify-center gap-2 self-end bg-safety px-5 font-black text-ink hover:bg-amber-400"
         >
-          <Search size={17} /> Find parts
+          <Search size={17} /> {f.find_btn}
         </button>
       </div>
     </div>
