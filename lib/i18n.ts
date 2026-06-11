@@ -225,7 +225,9 @@ const en = {
     time_label: "Repair time",
     tools_heading: "Tools you'll need",
     tools_note: "Basic workshop tools — no special equipment unless listed.",
-    best_match: "Best match"
+    best_match: "Best match",
+    video_heading: "Watch the repair video",
+    video_note: "Step-by-step video guide for this repair."
   },
   cancel: {
     badge: "Checkout Canceled",
@@ -462,7 +464,9 @@ const zh: typeof en = {
     time_label: "预计耗时",
     tools_heading: "所需工具",
     tools_note: "基础维修工具即可 — 除特别列出外无需专用设备。",
-    best_match: "最佳匹配"
+    best_match: "最佳匹配",
+    video_heading: "观看维修视频",
+    video_note: "本维修项目的分步视频教程。"
   },
   cancel: {
     badge: "结账已取消",

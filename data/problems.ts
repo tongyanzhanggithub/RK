@@ -8,6 +8,8 @@ export type Problem = {
   difficulty: "easy" | "moderate" | "advanced";
   timeEstimate: string;
   toolsNeeded: string[];
+  /** YouTube watch/share/shorts URL — embedded on the problem detail page. */
+  videoUrl?: string;
 };
 
 export const problems: Problem[] = [

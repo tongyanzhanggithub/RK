@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Gauge, Hammer, MessageCircle, Wrench } from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Gauge, Hammer, MessageCircle, PlayCircle, Wrench } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { problems, getProblem } from "@/data/problems";
 import { whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
 import { getStoreProducts } from "@/lib/product-store";
+import { youtubeEmbedUrl } from "@/lib/video";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     moderate: "bg-amber-100 text-amber-800",
     advanced: "bg-red-100 text-red-800"
   }[problem.difficulty];
+  const embedUrl = problem.videoUrl ? youtubeEmbedUrl(problem.videoUrl) : null;
 
   const products = await getStoreProducts();
   const recommendedBySlug = problem.recommendedProductSlugs
@@ -109,6 +111,25 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 ))}
               </ol>
             </section>
+
+            {embedUrl && (
+              <section className="mt-6 border border-line bg-white p-6">
+                <h2 className="inline-flex items-center gap-2 text-xl font-black">
+                  <PlayCircle className="text-navy" size={22} /> {pr.video_heading}
+                </h2>
+                <p className="mt-1 text-sm text-steel">{pr.video_note}</p>
+                <div className="mt-4 aspect-video">
+                  <iframe
+                    src={embedUrl}
+                    title={`${problem.title} repair video`}
+                    className="h-full w-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+              </section>
+            )}
 
             <section className="mt-6 border border-line bg-white p-6">
               <h2 className="inline-flex items-center gap-2 text-xl font-black">
