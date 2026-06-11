@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, CheckCircle2, CircleAlert, MessageCircle, Wrench } from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Gauge, Hammer, MessageCircle, Wrench } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { problems, getProblem } from "@/data/problems";
 import { whatsappLink } from "@/lib/contact";
+import { getServerDict } from "@/lib/locale";
 import { getStoreProducts } from "@/lib/product-store";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +26,19 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default async function ProblemPage({ params }: { params: { slug: string } }) {
   const problem = getProblem(params.slug);
   if (!problem) notFound();
+
+  const dict = getServerDict();
+  const pr = dict.problems;
+  const difficultyLabel = {
+    easy: pr.difficulty_easy,
+    moderate: pr.difficulty_moderate,
+    advanced: pr.difficulty_advanced
+  }[problem.difficulty];
+  const difficultyColor = {
+    easy: "bg-green-100 text-green-800",
+    moderate: "bg-amber-100 text-amber-800",
+    advanced: "bg-red-100 text-red-800"
+  }[problem.difficulty];
 
   const products = await getStoreProducts();
   const recommendedBySlug = problem.recommendedProductSlugs
@@ -57,6 +71,14 @@ export default async function ProblemPage({ params }: { params: { slug: string }
           <div>
             <p className="font-black uppercase text-safety">Fix by symptom</p>
             <h1 className="mt-1 text-4xl font-black">{problem.title}</h1>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-black ${difficultyColor}`}>
+                <Gauge size={15} /> {pr.difficulty_label}: {difficultyLabel}
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-panel px-3 py-1.5 text-sm font-black text-graphite">
+                <Clock3 size={15} /> {pr.time_label}: {problem.timeEstimate}
+              </span>
+            </div>
             <p className="mt-4 max-w-3xl text-lg leading-8 text-steel">{problem.description}</p>
 
             <section className="mt-8 border border-line bg-white p-6">
@@ -86,6 +108,20 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                   </li>
                 ))}
               </ol>
+            </section>
+
+            <section className="mt-6 border border-line bg-white p-6">
+              <h2 className="inline-flex items-center gap-2 text-xl font-black">
+                <Hammer className="text-navy" size={22} /> {pr.tools_heading}
+              </h2>
+              <p className="mt-1 text-sm text-steel">{pr.tools_note}</p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {problem.toolsNeeded.map((tool) => (
+                  <li key={tool} className="border border-line bg-panel px-3 py-2 text-sm font-bold">
+                    {tool}
+                  </li>
+                ))}
+              </ul>
             </section>
           </div>
 
@@ -127,8 +163,15 @@ export default async function ProblemPage({ params }: { params: { slug: string }
           </div>
           {recommended.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {recommended.map((product) => (
-                <ProductCard key={product.slug} product={product} />
+              {recommended.map((product, index) => (
+                <div key={product.slug} className="relative">
+                  {index === 0 && (
+                    <span className="absolute -top-3 left-4 z-10 bg-safety px-3 py-1 text-xs font-black uppercase text-ink">
+                      {pr.best_match}
+                    </span>
+                  )}
+                  <ProductCard product={product} />
+                </div>
               ))}
             </div>
           ) : (

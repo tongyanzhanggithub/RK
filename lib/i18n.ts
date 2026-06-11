@@ -208,7 +208,15 @@ const en = {
     diagnose: "Diagnose & fix",
     cta_heading: "Symptom not listed, or not sure what you are looking at?",
     cta_sub: "Send us a photo or video on WhatsApp — we diagnose and quote the right kit.",
-    cta_btn: "Ask on WhatsApp"
+    cta_btn: "Ask on WhatsApp",
+    difficulty_label: "Difficulty",
+    difficulty_easy: "Easy",
+    difficulty_moderate: "Moderate",
+    difficulty_advanced: "Advanced",
+    time_label: "Repair time",
+    tools_heading: "Tools you'll need",
+    tools_note: "Basic workshop tools — no special equipment unless listed.",
+    best_match: "Best match"
   },
   cancel: {
     badge: "Checkout Canceled",
@@ -428,7 +436,15 @@ const zh: typeof en = {
     diagnose: "诊断并修复",
     cta_heading: "症状未列出，或不确定问题所在？",
     cta_sub: "通过 WhatsApp 发送照片或视频 — 我们诊断并报价正确的套件。",
-    cta_btn: "WhatsApp 咨询"
+    cta_btn: "WhatsApp 咨询",
+    difficulty_label: "修复难度",
+    difficulty_easy: "简单",
+    difficulty_moderate: "中等",
+    difficulty_advanced: "较难",
+    time_label: "预计耗时",
+    tools_heading: "所需工具",
+    tools_note: "基础维修工具即可 — 除特别列出外无需专用设备。",
+    best_match: "最佳匹配"
   },
   cancel: {
     badge: "结账已取消",
