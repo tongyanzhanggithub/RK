@@ -42,7 +42,7 @@ function SubmitButton({ label }: { label: string }) {
       disabled={pending}
       className="inline-flex h-12 items-center justify-center bg-safety px-5 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
-      {pending ? "Saving..." : label}
+      {pending ? "保存中..." : label}
     </button>
   );
 }
@@ -53,16 +53,16 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
 
   return (
     <form action={formAction} className="grid gap-6">
-      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">Product saved.</p>}
+      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">产品已保存。</p>}
       {state?.error && <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>}
 
-      <Section title="Basic Information">
-        <Field label="Product Name" name="name" required defaultValue={product?.name} />
+      <Section title="基本信息">
+        <Field label="产品名称" name="name" required defaultValue={product?.name} />
         <Field label="Slug" name="slug" required defaultValue={product?.slug} placeholder="168f-standard-repair-kit" />
-        <Field label="Subtitle" name="subtitle" defaultValue={product?.subtitle} />
+        <Field label="副标题" name="subtitle" defaultValue={product?.subtitle} />
         <Field label="SKU" name="sku" required defaultValue={product?.sku} placeholder="SERK-0001" />
         <label className="grid gap-2 text-sm font-bold">
-          Category
+          分类
           <input
             name="category"
             list="admin-product-categories"
@@ -76,79 +76,79 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
             ))}
           </datalist>
         </label>
-        <Field label="Brand" name="brand" defaultValue={product?.brand || "RepairKit Supply"} />
-        <Textarea label="Short Description" name="shortDescription" required defaultValue={product?.shortDescription} />
-        <Textarea label="Detailed Description" name="description" defaultValue={product?.description} />
+        <Field label="品牌" name="brand" defaultValue={product?.brand || "RepairKit Supply"} />
+        <Textarea label="简短描述" name="shortDescription" required defaultValue={product?.shortDescription} />
+        <Textarea label="详细描述" name="description" defaultValue={product?.description} />
         <label className="grid gap-2 text-sm font-bold">
-          Product Status
+          产品状态
           <select name="status" defaultValue={product?.status || "ACTIVE"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
             <option value="ACTIVE">ACTIVE</option>
             <option value="DRAFT">DRAFT</option>
             <option value="ARCHIVED">ARCHIVED</option>
           </select>
         </label>
-        <Checkbox label="Featured" name="isFeatured" defaultChecked={product?.isFeatured} />
-        <Checkbox label="Hot Seller" name="isHotSeller" defaultChecked={product?.isHotSeller} />
-        <Checkbox label="Wholesale Available" name="wholesaleAvailable" defaultChecked={product?.wholesaleAvailable} />
+        <Checkbox label="精选" name="isFeatured" defaultChecked={product?.isFeatured} />
+        <Checkbox label="热销" name="isHotSeller" defaultChecked={product?.isHotSeller} />
+        <Checkbox label="可批发" name="wholesaleAvailable" defaultChecked={product?.wholesaleAvailable} />
       </Section>
 
-      <Section title="Price Information">
-        <Field label="Retail Price USD" name="retailPrice" required type="number" step="0.01" defaultValue={money(product?.priceCents)} />
-        <Field label="Compare-at Price USD" name="compareAtPrice" type="number" step="0.01" defaultValue={money(product?.compareAtPriceCents)} />
-        <Field label="Wholesale Price USD" name="wholesalePrice" type="number" step="0.01" defaultValue={money(product?.wholesalePriceCents)} />
-        <Field label="Cost Price USD" name="costPrice" type="number" step="0.01" defaultValue={money(product?.costPriceCents)} />
+      <Section title="价格信息">
+        <Field label="零售价 USD" name="retailPrice" required type="number" step="0.01" defaultValue={money(product?.priceCents)} />
+        <Field label="划线价 USD" name="compareAtPrice" type="number" step="0.01" defaultValue={money(product?.compareAtPriceCents)} />
+        <Field label="批发价 USD" name="wholesalePrice" type="number" step="0.01" defaultValue={money(product?.wholesalePriceCents)} />
+        <Field label="成本价 USD" name="costPrice" type="number" step="0.01" defaultValue={money(product?.costPriceCents)} />
         <label className="grid gap-2 text-sm font-bold">
-          Currency
+          货币
           <select name="currency" defaultValue="usd" className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
             <option value="usd">USD</option>
           </select>
         </label>
-        <Checkbox label="Allow Coupons" name="allowCoupons" defaultChecked={product?.allowCoupons !== false} />
+        <Checkbox label="允许使用优惠券" name="allowCoupons" defaultChecked={product?.allowCoupons !== false} />
       </Section>
 
-      <Section title="Inventory and Shipping">
-        <Field label="Current Stock" name="stock" required type="number" defaultValue={String(product?.stock ?? 0)} />
-        <Field label="Low Stock Threshold" name="lowStockThreshold" required type="number" defaultValue={String(product?.lowStockThreshold ?? 5)} />
-        <Field label="Weight Grams" name="weightGrams" type="number" defaultValue={String(product?.weightGrams || "")} />
-        <Field label="Length mm" name="lengthMm" type="number" defaultValue={String(product?.lengthMm || "")} />
-        <Field label="Width mm" name="widthMm" type="number" defaultValue={String(product?.widthMm || "")} />
-        <Field label="Height mm" name="heightMm" type="number" defaultValue={String(product?.heightMm || "")} />
+      <Section title="库存与物流">
+        <Field label="当前库存" name="stock" required type="number" defaultValue={String(product?.stock ?? 0)} />
+        <Field label="低库存预警阈值" name="lowStockThreshold" required type="number" defaultValue={String(product?.lowStockThreshold ?? 5)} />
+        <Field label="重量（克）" name="weightGrams" type="number" defaultValue={String(product?.weightGrams || "")} />
+        <Field label="长度（毫米）" name="lengthMm" type="number" defaultValue={String(product?.lengthMm || "")} />
+        <Field label="宽度（毫米）" name="widthMm" type="number" defaultValue={String(product?.widthMm || "")} />
+        <Field label="高度（毫米）" name="heightMm" type="number" defaultValue={String(product?.heightMm || "")} />
       </Section>
 
-      <Section title="Images">
-        <MainImageUpload name="image" label="Main Image" defaultValue={product?.image ?? ""} />
-        <GalleryUpload name="imagesText" label="Gallery Images (one per line: url | alt | primary)" defaultValue={images(product?.images)} />
+      <Section title="图片">
+        <MainImageUpload name="image" label="主图" defaultValue={product?.image ?? ""} />
+        <GalleryUpload name="imagesText" label="相册图片（每行一条：url | alt | primary）" defaultValue={images(product?.images)} />
       </Section>
 
-      <Section title="Kit and Compatibility">
+      <Section title="套件与适配">
         <label className="grid gap-2 text-sm font-bold">
-          Fitment Type
+          适配类型
           <select name="fitmentType" defaultValue={product?.fitmentType || "SPECIFIC"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-            <option value="SPECIFIC">SPECIFIC — must match compatible models</option>
-            <option value="UNIVERSAL">UNIVERSAL — fits all small engines</option>
+            <option value="SPECIFIC">SPECIFIC — 须匹配兼容型号</option>
+            <option value="UNIVERSAL">UNIVERSAL — 适配所有小型发动机</option>
           </select>
         </label>
         <Field
-          label="Fitment Note (shown next to Universal badge)"
+          label="适配说明（显示在 Universal 徽章旁）"
           name="fitmentNote"
           defaultValue={product?.fitmentNote}
-          placeholder="Fits engines using 5.5mm inner-diameter fuel line"
+          placeholder="适配使用 5.5mm 内径油管的发动机"
         />
-        <Textarea label="Tags" name="tagsText" defaultValue={list(product?.tags)} placeholder="Best Seller&#10;For 168F" />
-        <Textarea label="Kit Includes" name="kitIncludesText" defaultValue={list(product?.kitIncludes)} placeholder="Carburetor x1&#10;Spark plug x1" />
-        <Textarea label="Compatible Models" name="compatibleModelsText" defaultValue={list(product?.compatibleModels)} placeholder="168F&#10;GX160" />
-        <Textarea label="Compatible Equipment" name="compatibleEquipmentText" defaultValue={list(product?.compatibleEquipment)} placeholder="Portable generator&#10;Gasoline water pump" />
-        <Textarea label="Problems Solved" name="problemsSolvedText" defaultValue={list(product?.problemsSolved)} placeholder="Engine won't start&#10;Hard starting" />
-        <Textarea label="Not Compatible With" name="notCompatibleWithText" defaultValue={list(product?.notCompatibleWith)} />
-        <Textarea label="Specifications" name="specificationsText" defaultValue={specs(product?.specifications)} placeholder="Material: Metal + Rubber" />
-        <Textarea label="FAQ" name="faqsText" defaultValue={faqs(product?.faqs)} placeholder="Is checkout available? | Yes, Stripe Checkout is available." />
+        <Textarea label="标签" name="tagsText" defaultValue={list(product?.tags)} placeholder="热销&#10;适用于 168F" />
+        <Textarea label="套件包含" name="kitIncludesText" defaultValue={list(product?.kitIncludes)} placeholder="化油器 x1&#10;火花塞 x1" />
+        <Textarea label="兼容型号" name="compatibleModelsText" defaultValue={list(product?.compatibleModels)} placeholder="168F&#10;GX160" />
+        <Textarea label="兼容设备" name="compatibleEquipmentText" defaultValue={list(product?.compatibleEquipment)} placeholder="便携式发电机&#10;汽油水泵" />
+        <Textarea label="可解决的问题" name="problemsSolvedText" defaultValue={list(product?.problemsSolved)} placeholder="发动机无法启动&#10;启动困难" />
+        <Textarea label="不兼容项" name="notCompatibleWithText" defaultValue={list(product?.notCompatibleWith)} />
+        <Textarea label="规格参数" name="specificationsText" defaultValue={specs(product?.specifications)} placeholder="材质: 金属 + 橡胶" />
+        <Textarea label="常见问题" name="faqsText" defaultValue={faqs(product?.faqs)} placeholder="是否支持在线结账？ | 是，支持 Stripe Checkout。" />
       </Section>
 
       <Section title="SEO">
-        <Field label="SEO Title" name="seoTitle" defaultValue={product?.seoTitle} />
-        <Textarea label="SEO Description" name="seoDescription" defaultValue={product?.seoDescription} />
-        <Field label="SEO Keywords" name="seoKeywords" defaultValue={product?.seoKeywords} />
-        <Field label="Open Graph Image" name="ogImage" defaultValue={product?.ogImage} />
+        <Field label="SEO 标题" name="seoTitle" defaultValue={product?.seoTitle} />
+        <Textarea label="SEO 描述" name="seoDescription" defaultValue={product?.seoDescription} />
+        <Field label="SEO 关键词" name="seoKeywords" defaultValue={product?.seoKeywords} />
+        <Field label="Open Graph 图片" name="ogImage" defaultValue={product?.ogImage} />
       </Section>
 
       <div className="sticky bottom-0 flex justify-end border-t border-line bg-white/95 p-4 backdrop-blur">

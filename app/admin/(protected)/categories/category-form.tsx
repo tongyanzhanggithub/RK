@@ -12,7 +12,7 @@ function SubmitButton({ label }: { label: string }) {
       disabled={pending}
       className="inline-flex h-12 items-center justify-center gap-2 bg-safety px-6 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
-      {pending ? "Saving..." : label}
+      {pending ? "保存中…" : label}
     </button>
   );
 }
@@ -32,22 +32,22 @@ export function CategoryForm({
 
   return (
     <form action={formAction} className="grid max-w-2xl gap-5 border border-line bg-white p-6">
-      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">Saved.</p>}
+      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">已保存。</p>}
       {state?.error && <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>}
 
       <label className="grid gap-2 text-sm font-bold">
-        Category Name
+        分类名称
         <input
           name="name"
           defaultValue={category?.name}
           required
           className="h-11 border border-line px-3 font-normal outline-none focus:border-navy"
-          placeholder="e.g. Water Pump Repair Kit"
+          placeholder="例如：水泵维修套件"
         />
       </label>
 
       <label className="grid gap-2 text-sm font-bold">
-        Slug (URL identifier; leave blank to auto-generate from name)
+        Slug（URL 标识，留空则按名称自动生成）
         <input
           name="slug"
           defaultValue={category?.slug}
@@ -57,18 +57,18 @@ export function CategoryForm({
       </label>
 
       <label className="grid gap-2 text-sm font-bold">
-        Description (optional)
+        描述（可选）
         <textarea
           name="description"
           defaultValue={category?.description ?? ""}
           rows={3}
           className="border border-line px-3 py-2 font-normal outline-none focus:border-navy"
-          placeholder="Short description used on the storefront and for SEO."
+          placeholder="分类简介，用于前台展示与 SEO。"
         />
       </label>
 
       <label className="grid gap-2 text-sm font-bold">
-        Sort Order (lower shows first)
+        排序（数字越小越靠前）
         <input
           name="sortOrder"
           type="number"
@@ -80,7 +80,7 @@ export function CategoryForm({
 
       <label className="inline-flex items-center gap-3 text-sm font-bold">
         <input type="checkbox" name="isActive" defaultChecked={category?.isActive ?? true} className="h-4 w-4" />
-        Active (visible on storefront)
+        启用（前台显示）
       </label>
 
       <div>

@@ -3,17 +3,17 @@ import { BarChart3, Boxes, FileText, LayoutDashboard, MessageSquareQuote, Packag
 import { logoutAdmin } from "@/app/admin/auth-actions";
 
 const activeItems = [
-  ["Dashboard", "/admin/dashboard", LayoutDashboard],
-  ["Products", "/admin/products", Package],
-  ["Orders", "/admin/orders", ShoppingBag],
-  ["Inventory", "/admin/inventory", Boxes],
-  ["Customers", "/admin/customers", Users],
-  ["Wholesale", "/admin/wholesale", BarChart3],
-  ["Coupons", "/admin/coupons", Ticket],
-  ["Testimonials", "/admin/testimonials", MessageSquareQuote],
-  ["Categories", "/admin/categories", Tag],
-  ["Repair Guides", "/admin/guides", FileText],
-  ["Settings", "/admin/settings", Settings]
+  ["仪表盘", "/admin/dashboard", LayoutDashboard],
+  ["产品", "/admin/products", Package],
+  ["订单", "/admin/orders", ShoppingBag],
+  ["库存", "/admin/inventory", Boxes],
+  ["客户", "/admin/customers", Users],
+  ["批发", "/admin/wholesale", BarChart3],
+  ["优惠券", "/admin/coupons", Ticket],
+  ["用户评价", "/admin/testimonials", MessageSquareQuote],
+  ["分类", "/admin/categories", Tag],
+  ["维修指南", "/admin/guides", FileText],
+  ["设置", "/admin/settings", Settings]
 ];
 
 const plannedItems: [string, typeof Tag][] = [];
@@ -26,7 +26,7 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
           <Link href="/admin/dashboard" className="flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center bg-safety text-xl font-black text-ink">RK</span>
             <span>
-              <strong className="block text-lg leading-tight">Admin</strong>
+              <strong className="block text-lg leading-tight">管理后台</strong>
               <small className="font-bold uppercase text-white/60">RepairKit Supply</small>
             </span>
           </Link>
@@ -47,7 +47,7 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
                     <Icon size={18} />
                     {label}
                   </span>
-                  <span className="text-[10px] uppercase">Later</span>
+                  <span className="text-[10px] uppercase">即将推出</span>
                 </div>
               ))}
             </>
@@ -58,14 +58,14 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
         <header className="sticky top-0 z-30 border-b border-line bg-white/95 px-4 py-3 backdrop-blur">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-black uppercase text-safety">Phase Admin 5</p>
-              <p className="text-sm text-steel">Wholesale applications and coupon management</p>
+              <p className="text-sm font-black uppercase text-safety">管理后台 第五阶段</p>
+              <p className="text-sm text-steel">批发申请与优惠券管理</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-sm font-bold text-steel">{adminName}</span>
               <form action={logoutAdmin}>
                 <button className="h-10 border border-line px-3 text-sm font-black text-navy hover:bg-panel" type="submit">
-                  Logout
+                  退出登录
                 </button>
               </form>
             </div>

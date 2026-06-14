@@ -16,7 +16,7 @@ const guideSchema = z.object({
     .string()
     .min(2)
     .max(160)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug may only contain lowercase letters, numbers and hyphens."),
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug 只能是小写字母、数字和连字符。"),
   excerpt: z.string().max(300).optional(),
   content: z.string().max(20000).optional(),
   status: z.enum(["DRAFT", "PUBLISHED"]),
@@ -50,7 +50,7 @@ function guideDataFromForm(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message || "Please check the title, slug and status." };
+    return { error: parsed.error.issues[0]?.message || "请检查标题、slug 与状态。" };
   }
 
   const g = parsed.data;
@@ -81,7 +81,7 @@ export async function createGuide(_prev: GuideFormState, formData: FormData): Pr
   try {
     guide = await prisma.repairGuide.create({ data: result.data });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to create guide (slug may already exist)." };
+    return { error: error instanceof Error ? error.message : "无法创建指南（slug 可能已存在）。" };
   }
 
   revalidateGuideRoutes();
@@ -101,7 +101,7 @@ export async function updateGuide(
   try {
     guide = await prisma.repairGuide.update({ where: { id: guideId }, data: result.data });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to update guide." };
+    return { error: error instanceof Error ? error.message : "无法更新指南。" };
   }
 
   revalidateGuideRoutes();

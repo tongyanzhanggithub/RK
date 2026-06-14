@@ -13,7 +13,7 @@ function SubmitButton() {
       className="inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
       <MailQuestion size={18} />
-      {pending ? "Sending..." : "Send Reset Link"}
+      {pending ? "正在发送..." : "发送重置链接"}
     </button>
   );
 }
@@ -30,7 +30,7 @@ export function ForgotPasswordForm() {
         <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>
       )}
       <label className="grid gap-2 text-sm font-bold">
-        Email
+        邮箱
         <input
           type="email"
           name="email"

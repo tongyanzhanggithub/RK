@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ForgotPasswordForm } from "@/app/admin/forgot-password/forgot-password-form";
 
 export const metadata: Metadata = {
-  title: "Forgot Password",
-  description: "Request an admin password reset link."
+  title: "忘记密码",
+  description: "申请管理员密码重置链接。"
 };
 
 export default function ForgotPasswordPage() {
@@ -14,21 +14,21 @@ export default function ForgotPasswordPage() {
         <Link href="/" className="inline-flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center bg-navy text-xl font-black text-white">RK</span>
           <span>
-            <strong className="block text-xl leading-tight">RepairKit Admin</strong>
-            <small className="font-bold uppercase text-steel">Protected management area</small>
+            <strong className="block text-xl leading-tight">RepairKit 管理后台</strong>
+            <small className="font-bold uppercase text-steel">受保护的管理区域</small>
           </span>
         </Link>
         <div className="mt-8">
-          <p className="font-black uppercase text-safety">Password Reset</p>
-          <h1 className="mt-2 text-3xl font-black">Forgot your password?</h1>
+          <p className="font-black uppercase text-safety">密码重置</p>
+          <h1 className="mt-2 text-3xl font-black">忘记密码？</h1>
           <p className="mt-3 text-sm leading-6 text-steel">
-            Enter your admin email and we will send a reset link. The link is valid for 30 minutes.
+            输入您的管理员邮箱，我们将发送重置链接。链接有效期为 30 分钟。
           </p>
         </div>
         <ForgotPasswordForm />
         <p className="mt-6 border-t border-line pt-4 text-sm">
           <Link href="/admin/login" className="font-black text-navy hover:underline">
-            Back to sign in
+            返回登录
           </Link>
         </p>
       </section>

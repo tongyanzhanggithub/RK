@@ -6,8 +6,8 @@ import { CustomerManagementForm } from "@/app/admin/(protected)/customers/custom
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "New Customer",
-  description: "Create a customer profile manually."
+  title: "新增客户",
+  description: "手动创建客户资料。"
 };
 
 export default function AdminNewCustomerPage() {
@@ -15,18 +15,18 @@ export default function AdminNewCustomerPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Customers</p>
-          <h1 className="text-4xl font-black">New Customer</h1>
+          <p className="font-black uppercase text-safety">客户</p>
+          <h1 className="text-4xl font-black">新增客户</h1>
           <p className="mt-3 text-steel">
-            Add buyers who order outside the website — WhatsApp deals, bank transfers, trade-show contacts.
+            添加在网站之外下单的买家——WhatsApp 成交、银行转账、展会联系人。
           </p>
         </div>
         <Link href="/admin/customers" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          Back to Customers
+          返回客户列表
         </Link>
       </div>
       <div className="max-w-3xl">
-        <CustomerManagementForm action={createCustomer} submitLabel="Create Customer" />
+        <CustomerManagementForm action={createCustomer} submitLabel="创建客户" />
       </div>
     </main>
   );

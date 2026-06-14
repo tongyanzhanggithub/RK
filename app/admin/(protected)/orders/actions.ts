@@ -40,7 +40,7 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
   });
 
   if (!parsed.success) {
-    return { error: "Please check order status, fulfillment status, tracking URL and internal note length." };
+    return { error: "请检查订单状态、履约状态、物流链接以及内部备注长度。" };
   }
 
   const shippedAt = parsed.data.shippedAt ? new Date(parsed.data.shippedAt) : null;

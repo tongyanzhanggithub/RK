@@ -8,8 +8,8 @@ import { prisma } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Edit Coupon",
-  description: "Edit a coupon code."
+  title: "编辑优惠券",
+  description: "编辑一个优惠码。"
 };
 
 export default async function EditCouponPage({
@@ -26,18 +26,18 @@ export default async function EditCouponPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Coupons</p>
+          <p className="font-black uppercase text-safety">优惠券</p>
           <h1 className="text-4xl font-black">{coupon.code}</h1>
-          <p className="mt-3 text-steel">Edit coupon status, value, limits and date range.</p>
+          <p className="mt-3 text-steel">编辑优惠券状态、面值、使用限制和有效期。</p>
         </div>
         <Link href="/admin/coupons" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          Back to Coupons
+          返回优惠券列表
         </Link>
       </div>
       <CouponForm
         coupon={coupon}
         action={updateCoupon.bind(null, coupon.id)}
-        submitLabel="Save Coupon"
+        submitLabel="保存优惠券"
         saved={searchParams?.saved === "1"}
       />
     </main>

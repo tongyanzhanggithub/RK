@@ -6,8 +6,8 @@ import { formatMoney } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Customers",
-  description: "Review customer profiles and purchase history."
+  title: "客户管理",
+  description: "查看客户资料与购买历史。"
 };
 
 function readTags(value: string) {
@@ -86,73 +86,73 @@ export default async function AdminCustomersPage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Customers</p>
-          <h1 className="text-4xl font-black">Customer Management</h1>
-          <p className="mt-3 text-steel">Review customer profiles, purchase history, value and internal classification.</p>
+          <p className="font-black uppercase text-safety">客户</p>
+          <h1 className="text-4xl font-black">客户管理</h1>
+          <p className="mt-3 text-steel">查看客户资料、购买历史、消费价值与内部分类。</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <a
             href="/admin/customers/export"
             className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white"
           >
-            Export CSV
+            导出CSV
           </a>
           <Link
             href="/admin/customers/new"
             className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400"
           >
-            + New Customer
+            + 新增客户
           </Link>
         </div>
       </div>
 
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Metric label="Customers" value={String(customers.length)} />
-        <Metric label="Wholesale Customers" value={String(wholesaleCount)} />
-        <Metric label="VIP Customers" value={String(vipCount)} />
-        <Metric label="Blocked Customers" value={String(blockedCount)} />
+        <Metric label="客户" value={String(customers.length)} />
+        <Metric label="批发客户" value={String(wholesaleCount)} />
+        <Metric label="VIP客户" value={String(vipCount)} />
+        <Metric label="已封禁客户" value={String(blockedCount)} />
       </section>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-6">
-        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="Search name, email or phone..." />
+        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="搜索姓名、邮箱或电话..." />
         <select name="country" defaultValue={country} className="border border-line px-3 py-2">
-          <option value="">All countries</option>
+          <option value="">全部国家</option>
           {countries.map((item) => item.country && <option key={item.country} value={item.country}>{item.country}</option>)}
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
-          <option value="">All statuses</option>
+          <option value="">全部状态</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="VIP">VIP</option>
           <option value="BLOCKED">BLOCKED</option>
         </select>
         <select name="role" defaultValue={role} className="border border-line px-3 py-2">
-          <option value="">All roles</option>
+          <option value="">全部角色</option>
           <option value="CUSTOMER">CUSTOMER</option>
           <option value="WHOLESALE">WHOLESALE</option>
         </select>
         <select name="sort" defaultValue={sort} className="border border-line px-3 py-2">
-          <option value="recent">Recent order</option>
-          <option value="spent">Highest spend</option>
-          <option value="orders">Most orders</option>
+          <option value="recent">最近订单</option>
+          <option value="spent">消费最高</option>
+          <option value="orders">订单最多</option>
         </select>
-        <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-6">Apply</button>
+        <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-6">应用</button>
       </form>
 
       <section className="mt-6 overflow-x-auto border border-line bg-white">
         <table className="w-full min-w-[1150px] text-left text-sm">
           <thead className="bg-panel text-xs uppercase text-steel">
             <tr>
-              <th className="p-3">Customer</th>
-              <th className="p-3">Email</th>
-              <th className="p-3">Country</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Role</th>
-              <th className="p-3">Tags</th>
-              <th className="p-3">Orders</th>
-              <th className="p-3">Paid Orders</th>
-              <th className="p-3">Net Spend</th>
-              <th className="p-3">Last Order</th>
-              <th className="p-3">Action</th>
+              <th className="p-3">客户</th>
+              <th className="p-3">邮箱</th>
+              <th className="p-3">国家</th>
+              <th className="p-3">状态</th>
+              <th className="p-3">角色</th>
+              <th className="p-3">标签</th>
+              <th className="p-3">订单数</th>
+              <th className="p-3">已付订单</th>
+              <th className="p-3">净消费</th>
+              <th className="p-3">最近订单</th>
+              <th className="p-3">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -174,13 +174,13 @@ export default async function AdminCustomersPage({
                 <td className="p-3 font-black">{customer.orders.length}</td>
                 <td className="p-3 font-black">{paidOrders}</td>
                 <td className="p-3 font-black">{formatMoney(totalSpent, "usd")}</td>
-                <td className="p-3 text-xs text-steel">{lastOrder ? lastOrder.toLocaleString("en-US") : "-"}</td>
-                <td className="p-3"><Link href={`/admin/customers/${customer.id}`} className="font-black text-navy">View</Link></td>
+                <td className="p-3 text-xs text-steel">{lastOrder ? lastOrder.toLocaleString("zh-CN") : "-"}</td>
+                <td className="p-3"><Link href={`/admin/customers/${customer.id}`} className="font-black text-navy">查看</Link></td>
               </tr>
             ))}
           </tbody>
         </table>
-        {rows.length === 0 && <p className="p-5 text-sm text-steel">No customers match the current filters.</p>}
+        {rows.length === 0 && <p className="p-5 text-sm text-steel">没有符合当前筛选条件的客户。</p>}
       </section>
     </main>
   );

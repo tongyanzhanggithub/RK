@@ -7,8 +7,8 @@ import { formatMoney } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Products",
-  description: "Manage repair kit products."
+  title: "产品管理",
+  description: "管理维修套件产品。"
 };
 
 export default async function AdminProductsPage({
@@ -63,62 +63,62 @@ export default async function AdminProductsPage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Products</p>
-          <h1 className="text-4xl font-black">Product Management</h1>
-          <p className="mt-3 text-steel">Search, filter, edit and archive repair kit products.</p>
+          <p className="font-black uppercase text-safety">产品</p>
+          <h1 className="text-4xl font-black">产品管理</h1>
+          <p className="mt-3 text-steel">搜索、筛选、编辑并归档维修套件产品。</p>
         </div>
         <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-          New Product
+          新增产品
         </Link>
       </div>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-6">
-        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="Search name or SKU..." />
+        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="搜索名称或 SKU..." />
         <select name="category" defaultValue={category} className="border border-line px-3 py-2">
-          <option value="">All categories</option>
+          <option value="">全部分类</option>
           {allCategories.map((item) => (
             <option key={item.category} value={item.category}>{item.category}</option>
           ))}
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
-          <option value="">All statuses</option>
+          <option value="">全部状态</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="DRAFT">DRAFT</option>
           <option value="ARCHIVED">ARCHIVED</option>
         </select>
         <select name="stock" defaultValue={stock} className="border border-line px-3 py-2">
-          <option value="">All stock</option>
-          <option value="low">Low stock</option>
-          <option value="normal">Normal stock</option>
+          <option value="">全部库存</option>
+          <option value="low">低库存</option>
+          <option value="normal">正常库存</option>
         </select>
         <select name="wholesale" defaultValue={wholesale} className="border border-line px-3 py-2">
-          <option value="">Wholesale any</option>
-          <option value="yes">Wholesale yes</option>
-          <option value="no">Wholesale no</option>
+          <option value="">批发不限</option>
+          <option value="yes">可批发</option>
+          <option value="no">不可批发</option>
         </select>
         <select name="sort" defaultValue={sort} className="border border-line px-3 py-2">
-          <option value="created-desc">Newest</option>
-          <option value="price-asc">Price low to high</option>
-          <option value="price-desc">Price high to low</option>
+          <option value="created-desc">最新</option>
+          <option value="price-asc">价格从低到高</option>
+          <option value="price-desc">价格从高到低</option>
         </select>
-        <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-6">Apply</button>
+        <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-6">应用</button>
       </form>
 
       <section className="mt-6 overflow-x-auto border border-line bg-white">
         <table className="w-full min-w-[1100px] text-left text-sm">
           <thead className="bg-panel text-xs uppercase text-steel">
             <tr>
-              <th className="p-3">Image</th>
-              <th className="p-3">Product</th>
+              <th className="p-3">图片</th>
+              <th className="p-3">产品</th>
               <th className="p-3">SKU</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Retail</th>
-              <th className="p-3">Wholesale</th>
-              <th className="p-3">Stock</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Flags</th>
-              <th className="p-3">Created</th>
-              <th className="p-3">Actions</th>
+              <th className="p-3">分类</th>
+              <th className="p-3">零售价</th>
+              <th className="p-3">批发价</th>
+              <th className="p-3">库存</th>
+              <th className="p-3">状态</th>
+              <th className="p-3">标记</th>
+              <th className="p-3">创建时间</th>
+              <th className="p-3">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -141,23 +141,23 @@ export default async function AdminProductsPage({
                   <span className={product.stock <= product.lowStockThreshold ? "font-black text-orange-700" : "font-black text-green-700"}>
                     {product.stock}
                   </span>
-                  <span className="block text-xs text-steel">Low: {product.lowStockThreshold}</span>
+                  <span className="block text-xs text-steel">预警: {product.lowStockThreshold}</span>
                 </td>
                 <td className="p-3"><StatusBadge status={product.status} /></td>
                 <td className="p-3">
                   <div className="flex flex-wrap gap-1">
-                    {product.isFeatured && <SmallFlag label="Featured" />}
-                    {product.isHotSeller && <SmallFlag label="Hot" />}
-                    {product.wholesaleAvailable && <SmallFlag label="Wholesale" />}
+                    {product.isFeatured && <SmallFlag label="精选" />}
+                    {product.isHotSeller && <SmallFlag label="热销" />}
+                    {product.wholesaleAvailable && <SmallFlag label="批发" />}
                   </div>
                 </td>
-                <td className="p-3 text-xs text-steel">{product.createdAt.toLocaleDateString("en-US")}</td>
+                <td className="p-3 text-xs text-steel">{product.createdAt.toLocaleDateString("zh-CN")}</td>
                 <td className="p-3">
                   <div className="flex flex-wrap gap-2">
-                    <Link href={`/admin/products/${product.id}/edit`} className="font-black text-navy">Edit</Link>
+                    <Link href={`/admin/products/${product.id}/edit`} className="font-black text-navy">编辑</Link>
                     {product.status !== "ARCHIVED" && (
                       <form action={archiveProduct.bind(null, product.id)}>
-                        <button className="font-black text-red-700" type="submit">Archive</button>
+                        <button className="font-black text-red-700" type="submit">归档</button>
                       </form>
                     )}
                   </div>
@@ -166,7 +166,7 @@ export default async function AdminProductsPage({
             ))}
           </tbody>
         </table>
-        {filteredProducts.length === 0 && <p className="p-5 text-sm text-steel">No products match the current filters.</p>}
+        {filteredProducts.length === 0 && <p className="p-5 text-sm text-steel">没有符合当前筛选条件的产品。</p>}
       </section>
     </main>
   );

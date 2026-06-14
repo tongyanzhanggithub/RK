@@ -4,8 +4,8 @@ import { createCoupon } from "@/app/admin/(protected)/coupons/actions";
 import { CouponForm } from "@/app/admin/(protected)/coupons/coupon-form";
 
 export const metadata: Metadata = {
-  title: "New Coupon",
-  description: "Create a coupon code."
+  title: "新增优惠券",
+  description: "创建一个优惠码。"
 };
 
 export default function NewCouponPage() {
@@ -13,15 +13,15 @@ export default function NewCouponPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Coupons</p>
-          <h1 className="text-4xl font-black">New Coupon</h1>
-          <p className="mt-3 text-steel">Create a checkout coupon with limits and date controls.</p>
+          <p className="font-black uppercase text-safety">优惠券</p>
+          <h1 className="text-4xl font-black">新增优惠券</h1>
+          <p className="mt-3 text-steel">创建带使用限制和有效期控制的结算优惠券。</p>
         </div>
         <Link href="/admin/coupons" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          Back to Coupons
+          返回优惠券列表
         </Link>
       </div>
-      <CouponForm action={createCoupon} submitLabel="Create Coupon" />
+      <CouponForm action={createCoupon} submitLabel="创建优惠券" />
     </main>
   );
 }

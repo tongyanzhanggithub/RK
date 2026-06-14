@@ -8,8 +8,8 @@ import { prisma } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Edit Repair Guide",
-  description: "Edit repair guide content."
+  title: "编辑维修指南",
+  description: "编辑维修指南内容。"
 };
 
 export default async function EditGuidePage({
@@ -26,25 +26,25 @@ export default async function EditGuidePage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Repair Guides</p>
+          <p className="font-black uppercase text-safety">维修指南</p>
           <h1 className="text-4xl font-black">{guide.title}</h1>
-          <p className="mt-3 text-steel">Edit the title, content, status and SEO.</p>
+          <p className="mt-3 text-steel">编辑标题、正文、状态与 SEO。</p>
         </div>
         <Link href="/admin/guides" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          Back to Guides
+          返回指南列表
         </Link>
       </div>
 
       <GuideForm
         guide={guide}
         action={updateGuide.bind(null, guide.id)}
-        submitLabel="Save Guide"
+        submitLabel="保存指南"
         saved={searchParams?.saved === "1"}
       />
 
       <form action={deleteGuide.bind(null, guide.id)} className="mt-6 max-w-3xl">
         <button className="h-11 border border-red-300 px-4 text-sm font-black text-red-700 hover:bg-red-50" type="submit">
-          Delete this guide
+          删除此指南
         </button>
       </form>
     </main>

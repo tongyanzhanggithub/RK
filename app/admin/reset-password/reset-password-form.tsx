@@ -13,7 +13,7 @@ function SubmitButton() {
       className="inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
       <KeyRound size={18} />
-      {pending ? "Saving..." : "Set New Password"}
+      {pending ? "正在保存..." : "设置新密码"}
     </button>
   );
 }
@@ -28,24 +28,24 @@ export function ResetPasswordForm({ token }: { token: string }) {
       )}
       <input type="hidden" name="token" value={token} />
       <label className="grid gap-2 text-sm font-bold">
-        New Password
+        新密码
         <input
           type="password"
           name="password"
           required
           minLength={8}
-          placeholder="At least 8 characters"
+          placeholder="至少 8 个字符"
           className="h-11 border border-line px-3 font-normal outline-none focus:border-navy"
         />
       </label>
       <label className="grid gap-2 text-sm font-bold">
-        Confirm New Password
+        确认新密码
         <input
           type="password"
           name="confirmPassword"
           required
           minLength={8}
-          placeholder="Repeat the new password"
+          placeholder="再次输入新密码"
           className="h-11 border border-line px-3 font-normal outline-none focus:border-navy"
         />
       </label>

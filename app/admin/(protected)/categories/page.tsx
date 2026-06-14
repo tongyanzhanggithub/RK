@@ -5,8 +5,8 @@ import { prisma } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Categories",
-  description: "Manage product categories."
+  title: "分类管理",
+  description: "管理产品分类。"
 };
 
 export default async function AdminCategoriesPage() {
@@ -22,31 +22,31 @@ export default async function AdminCategoriesPage() {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Categories</p>
-          <h1 className="text-4xl font-black">Category Management</h1>
-          <p className="mt-3 text-steel">Maintain product category names, sort order and visibility for storefront navigation and filters.</p>
+          <p className="font-black uppercase text-safety">分类</p>
+          <h1 className="text-4xl font-black">分类管理</h1>
+          <p className="mt-3 text-steel">维护产品分类的名称、排序与显示状态，用于前台导航与筛选。</p>
         </div>
         <Link href="/admin/categories/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-          New Category
+          新增分类
         </Link>
       </div>
 
       <section className="mt-8 grid gap-4 md:grid-cols-3">
-        <Metric label="Total Categories" value={String(categories.length)} />
-        <Metric label="Active" value={String(activeCount)} />
-        <Metric label="Categories Used by Products" value={String(productGroups.length)} />
+        <Metric label="分类总数" value={String(categories.length)} />
+        <Metric label="已启用" value={String(activeCount)} />
+        <Metric label="产品涉及的分类" value={String(productGroups.length)} />
       </section>
 
       <section className="mt-6 overflow-x-auto border border-line bg-white">
         <table className="w-full min-w-[760px] text-left text-sm">
           <thead className="bg-panel text-xs uppercase text-steel">
             <tr>
-              <th className="p-3">Sort</th>
-              <th className="p-3">Name</th>
+              <th className="p-3">排序</th>
+              <th className="p-3">名称</th>
               <th className="p-3">Slug</th>
-              <th className="p-3">Products</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Action</th>
+              <th className="p-3">关联产品</th>
+              <th className="p-3">状态</th>
+              <th className="p-3">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -58,16 +58,16 @@ export default async function AdminCategoriesPage() {
                 <td className="p-3 font-black">{countByName.get(category.name) ?? 0}</td>
                 <td className="p-3">
                   <span className={`inline-flex px-2 py-1 text-xs font-black ${category.isActive ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-700"}`}>
-                    {category.isActive ? "Active" : "Hidden"}
+                    {category.isActive ? "启用" : "停用"}
                   </span>
                 </td>
-                <td className="p-3"><Link href={`/admin/categories/${category.id}/edit`} className="font-black text-navy">Edit</Link></td>
+                <td className="p-3"><Link href={`/admin/categories/${category.id}/edit`} className="font-black text-navy">编辑</Link></td>
               </tr>
             ))}
           </tbody>
         </table>
         {categories.length === 0 && (
-          <p className="p-5 text-sm text-steel">No categories yet. Click “New Category” to create the first one.</p>
+          <p className="p-5 text-sm text-steel">还没有分类。点击右上角「新增分类」创建第一个。</p>
         )}
       </section>
     </main>

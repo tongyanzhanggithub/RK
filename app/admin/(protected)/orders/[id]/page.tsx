@@ -9,8 +9,8 @@ import { formatMoney } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Order Detail",
-  description: "Review and update order fulfillment details."
+  title: "订单详情",
+  description: "查看并更新订单履约信息。"
 };
 
 export default async function AdminOrderDetailPage({
@@ -31,66 +31,66 @@ export default async function AdminOrderDetailPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Orders</p>
+          <p className="font-black uppercase text-safety">订单</p>
           <h1 className="text-4xl font-black">{order.orderNumber}</h1>
-          <p className="mt-3 text-steel">Created {order.createdAt.toLocaleString("en-US")}</p>
+          <p className="mt-3 text-steel">创建时间 {order.createdAt.toLocaleString("zh-CN")}</p>
         </div>
         <Link href="/admin/orders" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          Back to Orders
+          返回订单列表
         </Link>
       </div>
 
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <div className="grid gap-6">
-          <InfoPanel title="Basic Information">
-            <Info label="Order Number" value={order.orderNumber} />
-            <Info label="Customer Name" value={order.customerName} />
-            <Info label="Email" value={order.customerEmail} />
-            <Info label="Phone" value={order.customerPhone || "-"} />
+          <InfoPanel title="基本信息">
+            <Info label="订单号" value={order.orderNumber} />
+            <Info label="客户姓名" value={order.customerName} />
+            <Info label="邮箱" value={order.customerEmail} />
+            <Info label="电话" value={order.customerPhone || "-"} />
             <Info label="WhatsApp" value={order.customerWhatsapp || "-"} />
-            <Info label="Country" value={order.country} />
+            <Info label="国家" value={order.country} />
             {order.customerId && (
               <div className="border-b border-line py-3 text-sm">
-                <Link href={`/admin/customers/${order.customerId}`} className="font-black text-navy">Open Customer Profile</Link>
+                <Link href={`/admin/customers/${order.customerId}`} className="font-black text-navy">打开客户档案</Link>
               </div>
             )}
           </InfoPanel>
 
-          <InfoPanel title="Payment Information">
-            <Info label="Payment Method" value={order.paymentMethod} />
-            <Info label="Payment Status" value={order.paymentStatus} />
-            <Info label="Stripe Checkout Session" value={order.stripeCheckoutSessionId || "-"} />
-            <Info label="Stripe Payment Intent" value={order.stripePaymentIntentId || "-"} />
-            <Info label="Paid Amount" value={formatMoney(order.totalCents, order.currency)} />
-            <Info label="Refunded Amount" value={formatMoney(order.refundedCents, order.currency)} />
-            <Info label="Paid At" value={order.paidAt ? order.paidAt.toLocaleString("en-US") : "-"} />
-            <Info label="Payment Failure" value={order.paymentFailureMessage || "-"} />
-            <Info label="Last Stripe Event" value={order.stripeLastEventType || "-"} />
-            <Info label="Last Stripe Event ID" value={order.stripeLastEventId || "-"} />
-            <Info label="Last Stripe Sync" value={order.stripeLastSyncedAt ? order.stripeLastSyncedAt.toLocaleString("en-US") : "-"} />
+          <InfoPanel title="支付信息">
+            <Info label="支付方式" value={order.paymentMethod} />
+            <Info label="支付状态" value={order.paymentStatus} />
+            <Info label="Stripe 结账会话" value={order.stripeCheckoutSessionId || "-"} />
+            <Info label="Stripe 支付意图" value={order.stripePaymentIntentId || "-"} />
+            <Info label="已付金额" value={formatMoney(order.totalCents, order.currency)} />
+            <Info label="已退金额" value={formatMoney(order.refundedCents, order.currency)} />
+            <Info label="支付时间" value={order.paidAt ? order.paidAt.toLocaleString("zh-CN") : "-"} />
+            <Info label="支付失败原因" value={order.paymentFailureMessage || "-"} />
+            <Info label="最近 Stripe 事件" value={order.stripeLastEventType || "-"} />
+            <Info label="最近 Stripe 事件 ID" value={order.stripeLastEventId || "-"} />
+            <Info label="最近 Stripe 同步" value={order.stripeLastSyncedAt ? order.stripeLastSyncedAt.toLocaleString("zh-CN") : "-"} />
           </InfoPanel>
 
-          <InfoPanel title="Shipping Address">
-            <Info label="Name" value={order.customerName} />
-            <Info label="Phone" value={order.customerPhone || "-"} />
-            <Info label="Country" value={order.country} />
-            <Info label="City" value={order.city || "-"} />
-            <Info label="Address" value={order.shippingAddress || "-"} />
-            <Info label="Postal Code" value={order.postalCode || "-"} />
+          <InfoPanel title="收货地址">
+            <Info label="姓名" value={order.customerName} />
+            <Info label="电话" value={order.customerPhone || "-"} />
+            <Info label="国家" value={order.country} />
+            <Info label="城市" value={order.city || "-"} />
+            <Info label="地址" value={order.shippingAddress || "-"} />
+            <Info label="邮编" value={order.postalCode || "-"} />
           </InfoPanel>
 
           <section className="overflow-x-auto border border-line bg-white">
             <div className="border-b border-line p-5">
-              <h2 className="text-xl font-black">Order Items</h2>
+              <h2 className="text-xl font-black">订单商品</h2>
             </div>
             <table className="w-full min-w-[760px] text-left text-sm">
               <thead className="bg-panel text-xs uppercase text-steel">
                 <tr>
-                  <th className="p-3">Product</th>
+                  <th className="p-3">商品</th>
                   <th className="p-3">SKU</th>
-                  <th className="p-3">Unit Price</th>
-                  <th className="p-3">Qty</th>
-                  <th className="p-3">Subtotal</th>
+                  <th className="p-3">单价</th>
+                  <th className="p-3">数量</th>
+                  <th className="p-3">小计</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,13 +109,13 @@ export default async function AdminOrderDetailPage({
             </table>
           </section>
 
-          <InfoPanel title="Amount Detail">
-            <Info label="Subtotal" value={formatMoney(order.subtotalCents, order.currency)} />
-            <Info label="Shipping" value={formatMoney(order.shippingCents, order.currency)} />
-            <Info label="Tax Estimate" value={formatMoney(order.taxCents, order.currency)} />
-            <Info label="Coupon" value={order.couponCode ? `${order.couponCode} / ${order.couponType || "-"}` : "-"} />
-            <Info label="Discount" value={`-${formatMoney(order.discountCents, order.currency)}`} />
-            <Info label="Total" value={formatMoney(order.totalCents, order.currency)} strong />
+          <InfoPanel title="金额明细">
+            <Info label="小计" value={formatMoney(order.subtotalCents, order.currency)} />
+            <Info label="运费" value={formatMoney(order.shippingCents, order.currency)} />
+            <Info label="预估税费" value={formatMoney(order.taxCents, order.currency)} />
+            <Info label="优惠券" value={order.couponCode ? `${order.couponCode} / ${order.couponType || "-"}` : "-"} />
+            <Info label="折扣" value={`-${formatMoney(order.discountCents, order.currency)}`} />
+            <Info label="合计" value={formatMoney(order.totalCents, order.currency)} strong />
           </InfoPanel>
         </div>
 
@@ -124,59 +124,59 @@ export default async function AdminOrderDetailPage({
 
           <section className="border border-line bg-white">
             <div className="border-b border-line p-5">
-              <h2 className="text-xl font-black">Customer Emails</h2>
+              <h2 className="text-xl font-black">客户邮件</h2>
             </div>
             <div className="grid gap-4 p-5 text-sm">
               {searchParams?.mail === "confirmation" && (
-                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">Confirmation email re-sent.</p>
+                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">确认邮件已重新发送。</p>
               )}
               {searchParams?.mail === "shipping" && (
-                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">Shipping email re-sent.</p>
+                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">发货邮件已重新发送。</p>
               )}
               {searchParams?.mail === "nosmtp" && (
                 <p className="border border-red-200 bg-red-50 p-3 font-bold text-red-800">
-                  SMTP is not configured — set SMTP_HOST in .env to enable email sending.
+                  未配置 SMTP —— 请在 .env 中设置 SMTP_HOST 以启用邮件发送。
                 </p>
               )}
               <div className="flex items-center justify-between gap-3 border-b border-line pb-3">
                 <div>
-                  <strong className="block">Order Confirmation</strong>
+                  <strong className="block">订单确认</strong>
                   <span className="text-xs text-steel">
                     {order.confirmationEmailSentAt
-                      ? `Sent ${order.confirmationEmailSentAt.toLocaleString("en-US")}`
-                      : "Not sent yet"}
+                      ? `已发送 ${order.confirmationEmailSentAt.toLocaleString("zh-CN")}`
+                      : "尚未发送"}
                   </span>
                 </div>
                 <form action={resendConfirmationEmail.bind(null, order.id)}>
                   <button type="submit" className="font-black text-navy hover:underline" disabled={order.paymentStatus !== "PAID"}>
-                    {order.paymentStatus === "PAID" ? "Resend" : "Requires PAID"}
+                    {order.paymentStatus === "PAID" ? "重新发送" : "需已支付(PAID)"}
                   </button>
                 </form>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <strong className="block">Shipping Notification</strong>
+                  <strong className="block">发货通知</strong>
                   <span className="text-xs text-steel">
                     {order.shippingEmailSentAt
-                      ? `Sent ${order.shippingEmailSentAt.toLocaleString("en-US")}`
-                      : "Not sent yet"}
+                      ? `已发送 ${order.shippingEmailSentAt.toLocaleString("zh-CN")}`
+                      : "尚未发送"}
                   </span>
                 </div>
                 <form action={resendShippingEmail.bind(null, order.id)}>
                   <button type="submit" className="font-black text-navy hover:underline">
-                    Resend
+                    重新发送
                   </button>
                 </form>
               </div>
             </div>
           </section>
-          <InfoPanel title="Logistics Snapshot">
-            <Info label="Order Status" value={order.orderStatus} />
-            <Info label="Fulfillment" value={order.fulfillmentStatus} />
-            <Info label="Carrier" value={order.shippingCarrier || "-"} />
-            <Info label="Tracking Number" value={order.trackingNumber || "-"} />
-            <Info label="Tracking URL" value={order.trackingUrl || "-"} />
-            <Info label="Shipped At" value={order.shippedAt ? order.shippedAt.toLocaleString("en-US") : "-"} />
+          <InfoPanel title="物流概览">
+            <Info label="订单状态" value={order.orderStatus} />
+            <Info label="履约" value={order.fulfillmentStatus} />
+            <Info label="承运商" value={order.shippingCarrier || "-"} />
+            <Info label="物流单号" value={order.trackingNumber || "-"} />
+            <Info label="物流链接" value={order.trackingUrl || "-"} />
+            <Info label="发货时间" value={order.shippedAt ? order.shippedAt.toLocaleString("zh-CN") : "-"} />
           </InfoPanel>
         </aside>
       </section>

@@ -7,8 +7,8 @@ import { prisma } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Testimonials",
-  description: "Manage customer testimonials shown on the storefront."
+  title: "用户评价管理",
+  description: "管理展示在前台的客户评价。"
 };
 
 export default async function AdminTestimonialsPage({ searchParams }: { searchParams?: { saved?: string } }) {
@@ -19,24 +19,24 @@ export default async function AdminTestimonialsPage({ searchParams }: { searchPa
   return (
     <main>
       <div>
-        <p className="font-black uppercase text-safety">Testimonials</p>
-        <h1 className="text-4xl font-black">Customer Testimonials</h1>
+        <p className="font-black uppercase text-safety">用户评价</p>
+        <h1 className="text-4xl font-black">客户评价</h1>
         <p className="mt-3 text-steel">
-          Published testimonials appear on the homepage. Record real buyer feedback from WhatsApp and orders.
+          已发布的评价会显示在首页。记录来自 WhatsApp 和订单的真实买家反馈。
         </p>
       </div>
 
       {searchParams?.saved === "1" && (
-        <p className="mt-6 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">Testimonial saved.</p>
+        <p className="mt-6 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">评价已保存。</p>
       )}
 
       <section className="mt-8 grid gap-8 xl:grid-cols-[1fr_460px]">
         <div className="grid h-fit gap-0 border border-line bg-white">
           <div className="border-b border-line p-5">
-            <h2 className="text-xl font-black">All Testimonials ({testimonials.length})</h2>
+            <h2 className="text-xl font-black">全部评价（{testimonials.length}）</h2>
           </div>
           {testimonials.length === 0 ? (
-            <p className="p-5 text-sm text-steel">No testimonials yet — add the first one with the form.</p>
+            <p className="p-5 text-sm text-steel">还没有评价 — 用右侧表单添加第一条。</p>
           ) : (
             testimonials.map((testimonial) => (
               <article key={testimonial.id} className="grid gap-3 border-b border-line p-5">
@@ -64,12 +64,12 @@ export default async function AdminTestimonialsPage({ searchParams }: { searchPa
                 <div className="flex gap-3">
                   <form action={toggleTestimonialPublished.bind(null, testimonial.id)}>
                     <button type="submit" className="text-sm font-black text-navy hover:underline">
-                      {testimonial.isPublished ? "Unpublish" : "Publish"}
+                      {testimonial.isPublished ? "取消发布" : "发布"}
                     </button>
                   </form>
                   <form action={deleteTestimonial.bind(null, testimonial.id)}>
                     <button type="submit" className="text-sm font-black text-red-700 hover:underline">
-                      Delete
+                      删除
                     </button>
                   </form>
                 </div>

@@ -8,8 +8,8 @@ import { prisma } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Wholesale Application Detail",
-  description: "Review a wholesale application."
+  title: "批发申请详情",
+  description: "审核批发申请。"
 };
 
 export default async function AdminWholesaleDetailPage({
@@ -29,51 +29,51 @@ export default async function AdminWholesaleDetailPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Wholesale Application</p>
+          <p className="font-black uppercase text-safety">批发申请</p>
           <h1 className="text-4xl font-black">{application.companyName}</h1>
           <p className="mt-3 text-steel">{application.contactName} · {application.country}</p>
         </div>
         <Link href="/admin/wholesale" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          Back to Applications
+          返回申请列表
         </Link>
       </div>
 
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <div className="grid gap-6">
-          <InfoPanel title="Business Application">
-            <Info label="Status" value={application.status} />
-            <Info label="Company" value={application.companyName} />
-            <Info label="Contact Person" value={application.contactName} />
-            <Info label="Business Type" value={application.businessType} />
-            <Info label="Country" value={application.country} />
+          <InfoPanel title="企业申请">
+            <Info label="状态" value={application.status} />
+            <Info label="公司" value={application.companyName} />
+            <Info label="联系人" value={application.contactName} />
+            <Info label="业务类型" value={application.businessType} />
+            <Info label="国家" value={application.country} />
             <Info label="WhatsApp" value={application.whatsapp} />
-            <Info label="Email" value={application.email} />
-            <Info label="Estimated Monthly Quantity" value={String(application.estimatedMonthlyQuantity ?? "-")} />
-            <Info label="Products of Interest" value={readInterests(application.productInterest).join(", ")} />
-            <Info label="Message" value={application.message || "-"} />
-            <Info label="Submitted" value={application.createdAt.toLocaleString("en-US")} />
+            <Info label="邮箱" value={application.email} />
+            <Info label="预计月采购量" value={String(application.estimatedMonthlyQuantity ?? "-")} />
+            <Info label="意向产品" value={readInterests(application.productInterest).join(", ")} />
+            <Info label="留言" value={application.message || "-"} />
+            <Info label="提交时间" value={application.createdAt.toLocaleString("zh-CN")} />
           </InfoPanel>
 
-          <InfoPanel title="Review History">
-            <Info label="Reviewed By" value={application.reviewedBy || "-"} />
-            <Info label="Reviewed At" value={application.reviewedAt?.toLocaleString("en-US") || "-"} />
-            <Info label="Notification Status" value={application.notificationStatus} />
-            <Info label="Admin Note" value={application.adminNote || "-"} />
+          <InfoPanel title="审核记录">
+            <Info label="审核人" value={application.reviewedBy || "-"} />
+            <Info label="审核时间" value={application.reviewedAt?.toLocaleString("zh-CN") || "-"} />
+            <Info label="通知状态" value={application.notificationStatus} />
+            <Info label="管理员备注" value={application.adminNote || "-"} />
           </InfoPanel>
         </div>
 
         <aside className="grid h-fit gap-6">
           <section className="border border-line bg-white p-5">
-            <p className="text-xs font-bold uppercase text-steel">Linked Customer</p>
+            <p className="text-xs font-bold uppercase text-steel">关联客户</p>
             {application.customer ? (
               <>
                 <strong className="mt-3 block text-xl">{application.customer.name}</strong>
                 <p className="mt-1 text-sm text-steel">{application.customer.email}</p>
                 <p className="mt-3 text-sm font-black">{application.customer.role} · {application.customer.status}</p>
-                <Link href={`/admin/customers/${application.customer.id}`} className="mt-5 inline-flex font-black text-navy">View Customer</Link>
+                <Link href={`/admin/customers/${application.customer.id}`} className="mt-5 inline-flex font-black text-navy">查看客户</Link>
               </>
             ) : (
-              <p className="mt-3 text-sm leading-6 text-steel">No customer is linked yet. Approval will create or link one by email.</p>
+              <p className="mt-3 text-sm leading-6 text-steel">尚未关联客户。通过审核后将按邮箱创建或关联客户。</p>
             )}
           </section>
 

@@ -6,8 +6,8 @@ import { formatMoney } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Admin dashboard for product catalog and order management."
+  title: "后台仪表盘",
+  description: "用于产品目录与订单管理的后台仪表盘。"
 };
 
 export default async function AdminDashboardPage() {
@@ -72,33 +72,33 @@ export default async function AdminDashboardPage() {
   const todaySales = todayPaidOrders.reduce((total, order) => total + order.totalCents, 0);
   const monthSales = monthPaidOrders.reduce((total, order) => total + order.totalCents, 0);
   const cards = [
-    ["Today Sales", formatMoney(todaySales, "usd")],
-    ["Month Sales", formatMoney(monthSales, "usd")],
-    ["Today Orders", String(todayOrders)],
-    ["Pending Orders", String(pendingOrders)],
-    ["To Ship", String(toShipOrders)],
-    ["Low Stock Products", String(lowStockProducts.length)],
-    ["Total Customers", String(customerCount)],
-    ["New Wholesale Applications", String(pendingWholesaleCount)]
+    ["今日销售额", formatMoney(todaySales, "usd")],
+    ["本月销售额", formatMoney(monthSales, "usd")],
+    ["今日订单", String(todayOrders)],
+    ["待处理订单", String(pendingOrders)],
+    ["待发货", String(toShipOrders)],
+    ["低库存产品", String(lowStockProducts.length)],
+    ["客户总数", String(customerCount)],
+    ["新批发申请", String(pendingWholesaleCount)]
   ];
 
   return (
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Dashboard</p>
-          <h1 className="text-4xl font-black">Admin Overview</h1>
-          <p className="mt-3 text-steel">Phase Admin 5 adds wholesale applications, review decisions and wholesale customer roles.</p>
+          <p className="font-black uppercase text-safety">仪表盘</p>
+          <h1 className="text-4xl font-black">后台总览</h1>
+          <p className="mt-3 text-steel">Admin 第 5 阶段新增了批发申请、审核决策与批发客户角色。</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/admin/orders" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-            View Orders
+            查看订单
           </Link>
           <Link href="/admin/inventory" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-            View Inventory
+            查看库存
           </Link>
           <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-            New Product
+            新增产品
           </Link>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default async function AdminDashboardPage() {
       <section className="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
         <div className="border border-line bg-white">
           <div className="border-b border-line p-5">
-            <h2 className="text-xl font-black">Product Status</h2>
+            <h2 className="text-xl font-black">产品状态</h2>
           </div>
           <div className="grid gap-3 p-5 text-sm">
             <StatusRow label="Active" value={activeCount} />
@@ -126,11 +126,11 @@ export default async function AdminDashboardPage() {
 
         <div className="border border-line bg-white">
           <div className="border-b border-line p-5">
-            <h2 className="text-xl font-black">Low Stock Products</h2>
+            <h2 className="text-xl font-black">低库存产品</h2>
           </div>
           <div className="grid gap-0">
             {lowStockProducts.length === 0 ? (
-              <p className="p-5 text-sm text-steel">No low stock products.</p>
+              <p className="p-5 text-sm text-steel">暂无低库存产品。</p>
             ) : (
               lowStockProducts.map((product) => (
                 <div key={product.id} className="grid grid-cols-[1fr_auto_auto] items-center gap-3 border-b border-line p-4 text-sm">
@@ -140,7 +140,7 @@ export default async function AdminDashboardPage() {
                   </div>
                   <span className="font-black text-orange-700">{product.stock}</span>
                   <Link href={`/admin/inventory/${product.id}`} className="font-black text-navy">
-                    Adjust
+                    调整
                   </Link>
                 </div>
               ))
@@ -152,18 +152,18 @@ export default async function AdminDashboardPage() {
       <section className="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
         <div className="border border-line bg-white">
           <div className="border-b border-line p-5">
-            <h2 className="text-xl font-black">Best Sellers This Month</h2>
+            <h2 className="text-xl font-black">本月热销产品</h2>
           </div>
           <div className="grid gap-0">
             {monthItems.length === 0 ? (
-              <p className="p-5 text-sm text-steel">No paid orders this month yet.</p>
+              <p className="p-5 text-sm text-steel">本月暂无已支付订单。</p>
             ) : (
               monthItems.map((item) => (
                 <div key={item.productSlug} className="grid grid-cols-[1fr_auto_auto] items-center gap-3 border-b border-line p-4 text-sm">
                   <Link href={`/products/${item.productSlug}`} className="font-black text-navy hover:underline">
                     {item.productName}
                   </Link>
-                  <span className="font-black">{item._sum.quantity ?? 0} pcs</span>
+                  <span className="font-black">{item._sum.quantity ?? 0} 件</span>
                   <span className="font-black">{formatMoney(item._sum.subtotalCents ?? 0, "usd")}</span>
                 </div>
               ))
@@ -172,16 +172,16 @@ export default async function AdminDashboardPage() {
         </div>
         <div className="border border-line bg-white">
           <div className="border-b border-line p-5">
-            <h2 className="text-xl font-black">Sales by Country This Month</h2>
+            <h2 className="text-xl font-black">本月各国销售额</h2>
           </div>
           <div className="grid gap-0">
             {monthCountries.length === 0 ? (
-              <p className="p-5 text-sm text-steel">No paid orders this month yet.</p>
+              <p className="p-5 text-sm text-steel">本月暂无已支付订单。</p>
             ) : (
               monthCountries.map((row) => (
                 <div key={row.country} className="grid grid-cols-[1fr_auto_auto] items-center gap-3 border-b border-line p-4 text-sm">
                   <strong>{row.country}</strong>
-                  <span className="font-black">{row._count._all} orders</span>
+                  <span className="font-black">{row._count._all} 笔订单</span>
                   <span className="font-black">{formatMoney(row._sum.totalCents ?? 0, "usd")}</span>
                 </div>
               ))
@@ -193,11 +193,11 @@ export default async function AdminDashboardPage() {
       <section className="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
         <div className="border border-line bg-white">
           <div className="border-b border-line p-5">
-            <h2 className="text-xl font-black">Recent Orders</h2>
+            <h2 className="text-xl font-black">最近订单</h2>
           </div>
           <div className="grid gap-0">
             {recentOrders.length === 0 ? (
-              <p className="p-5 text-sm text-steel">No orders yet.</p>
+              <p className="p-5 text-sm text-steel">暂无订单。</p>
             ) : (
               recentOrders.map((order) => (
                 <div key={order.id} className="grid gap-3 border-b border-line p-4 text-sm md:grid-cols-[1fr_auto_auto] md:items-center">
@@ -207,7 +207,7 @@ export default async function AdminDashboardPage() {
                   </div>
                   <span className="font-black">{formatMoney(order.totalCents, order.currency)}</span>
                   <Link href={`/admin/orders/${order.id}`} className="font-black text-navy">
-                    View
+                    查看
                   </Link>
                 </div>
               ))
@@ -216,12 +216,12 @@ export default async function AdminDashboardPage() {
         </div>
         <div className="border border-line bg-white">
           <div className="flex items-center justify-between gap-3 border-b border-line p-5">
-            <h2 className="text-xl font-black">Recent Wholesale Applications</h2>
-            <Link href="/admin/wholesale" className="text-sm font-black text-navy">View All</Link>
+            <h2 className="text-xl font-black">最近批发申请</h2>
+            <Link href="/admin/wholesale" className="text-sm font-black text-navy">查看全部</Link>
           </div>
           <div className="grid gap-0">
             {recentApplications.length === 0 ? (
-              <p className="p-5 text-sm text-steel">No wholesale applications yet.</p>
+              <p className="p-5 text-sm text-steel">暂无批发申请。</p>
             ) : (
               recentApplications.map((application) => (
                 <div key={application.id} className="grid gap-3 border-b border-line p-4 text-sm md:grid-cols-[1fr_auto_auto] md:items-center">
@@ -230,7 +230,7 @@ export default async function AdminDashboardPage() {
                     <span className="text-steel">{application.country} / {application.businessType}</span>
                   </div>
                   <span className="font-black">{application.status}</span>
-                  <Link href={`/admin/wholesale/${application.id}`} className="font-black text-navy">Review</Link>
+                  <Link href={`/admin/wholesale/${application.id}`} className="font-black text-navy">审核</Link>
                 </div>
               ))
             )}

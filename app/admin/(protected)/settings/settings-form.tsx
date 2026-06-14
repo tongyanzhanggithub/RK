@@ -12,7 +12,7 @@ function SubmitButton() {
       disabled={pending}
       className="inline-flex h-12 items-center justify-center gap-2 bg-safety px-6 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
-      {pending ? "Saving..." : "Save Settings"}
+      {pending ? "保存中…" : "保存设置"}
     </button>
   );
 }
@@ -22,7 +22,7 @@ export function SettingsForm({ values, saved }: { values: Record<string, string>
 
   return (
     <form action={formAction} className="grid max-w-2xl gap-5 border border-line bg-white p-6">
-      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">Settings saved.</p>}
+      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">设置已保存。</p>}
       {state?.error && <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>}
 
       {SETTING_FIELDS.map((field) => (

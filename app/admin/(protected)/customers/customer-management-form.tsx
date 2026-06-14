@@ -29,41 +29,41 @@ function SubmitButton({ label }: { label: string }) {
       disabled={pending}
       className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
-      {pending ? "Saving..." : label}
+      {pending ? "保存中..." : label}
     </button>
   );
 }
 
-export function CustomerManagementForm({ customer, action, saved, submitLabel = "Save Customer" }: Props) {
+export function CustomerManagementForm({ customer, action, saved, submitLabel = "保存客户" }: Props) {
   const [state, formAction] = useFormState(action, {});
 
   return (
     <form action={formAction} className="grid gap-5 border border-line bg-white p-5">
       <div>
-        <h2 className="text-xl font-black">{customer ? "Customer Operations" : "New Customer"}</h2>
+        <h2 className="text-xl font-black">{customer ? "客户操作" : "新增客户"}</h2>
         <p className="mt-2 text-sm leading-6 text-steel">
           {customer
-            ? "Contact fields update automatically from the latest Stripe order — manual edits here may be overwritten by the next paid order."
-            : "Create a profile for buyers who order by WhatsApp or bank transfer, so their history stays in one place."}
+            ? "联系信息会根据最新的 Stripe 订单自动更新——此处的手动修改可能会被下一笔已付订单覆盖。"
+            : "为通过 WhatsApp 或银行转账下单的买家创建资料，让他们的历史记录集中在一处。"}
         </p>
       </div>
-      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">Customer updated.</p>}
+      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">客户已更新。</p>}
       {state?.error && <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Name" name="name" required defaultValue={customer?.name} />
-        <Field label="Email" name="email" type="email" required defaultValue={customer?.email} />
-        <Field label="Phone" name="phone" defaultValue={customer?.phone || ""} />
+        <Field label="姓名" name="name" required defaultValue={customer?.name} />
+        <Field label="邮箱" name="email" type="email" required defaultValue={customer?.email} />
+        <Field label="电话" name="phone" defaultValue={customer?.phone || ""} />
         <Field label="WhatsApp" name="whatsapp" defaultValue={customer?.whatsapp || ""} />
-        <Field label="Country" name="country" defaultValue={customer?.country || ""} />
-        <Field label="City" name="city" defaultValue={customer?.city || ""} />
-        <Field label="Address" name="address" defaultValue={customer?.address || ""} />
-        <Field label="Postal Code" name="postalCode" defaultValue={customer?.postalCode || ""} />
+        <Field label="国家" name="country" defaultValue={customer?.country || ""} />
+        <Field label="城市" name="city" defaultValue={customer?.city || ""} />
+        <Field label="地址" name="address" defaultValue={customer?.address || ""} />
+        <Field label="邮编" name="postalCode" defaultValue={customer?.postalCode || ""} />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2 text-sm font-bold">
-          Customer Status
+          客户状态
           <select name="status" defaultValue={customer?.status || "ACTIVE"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
             <option value="ACTIVE">ACTIVE</option>
             <option value="VIP">VIP</option>
@@ -71,7 +71,7 @@ export function CustomerManagementForm({ customer, action, saved, submitLabel = 
           </select>
         </label>
         <label className="grid gap-2 text-sm font-bold">
-          Role
+          角色
           <select name="role" defaultValue={customer?.role || "CUSTOMER"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
             <option value="CUSTOMER">CUSTOMER</option>
             <option value="WHOLESALE">WHOLESALE</option>
@@ -80,17 +80,17 @@ export function CustomerManagementForm({ customer, action, saved, submitLabel = 
       </div>
 
       <label className="grid gap-2 text-sm font-bold">
-        Tags
+        标签
         <textarea
           name="tags"
           defaultValue={tagsText(customer?.tags)}
           rows={2}
-          placeholder="Retail, Repair Shop, Wholesale Prospect"
+          placeholder="零售、维修店、批发潜在客户"
           className="border border-line px-3 py-2 font-normal leading-6 outline-none focus:border-navy"
         />
       </label>
       <label className="grid gap-2 text-sm font-bold">
-        Internal Note
+        内部备注
         <textarea
           name="internalNote"
           defaultValue={customer?.internalNote || ""}

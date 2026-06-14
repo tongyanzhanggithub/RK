@@ -7,8 +7,8 @@ import { formatMoney } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Coupons",
-  description: "Manage coupon codes and checkout discounts."
+  title: "优惠券管理",
+  description: "管理优惠码与结算折扣。"
 };
 
 export default async function AdminCouponsPage({
@@ -51,52 +51,52 @@ export default async function AdminCouponsPage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Coupons</p>
-          <h1 className="text-4xl font-black">Coupon Management</h1>
-          <p className="mt-3 text-steel">Create and edit checkout coupon codes for retail and wholesale buyers.</p>
+          <p className="font-black uppercase text-safety">优惠券</p>
+          <h1 className="text-4xl font-black">优惠券管理</h1>
+          <p className="mt-3 text-steel">为零售和批发买家创建并编辑结算优惠码。</p>
         </div>
         <Link href="/admin/coupons/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-          New Coupon
+          新增优惠券
         </Link>
       </div>
 
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Metric label="Active Coupons" value={String(activeCount)} />
-        <Metric label="Inactive Coupons" value={String(inactiveCount)} />
-        <Metric label="Expired Coupons" value={String(expiredCount)} />
-        <Metric label="Visible Usage" value={String(totalUsage)} />
+        <Metric label="生效优惠券" value={String(activeCount)} />
+        <Metric label="未生效优惠券" value={String(inactiveCount)} />
+        <Metric label="已过期优惠券" value={String(expiredCount)} />
+        <Metric label="可见使用次数" value={String(totalUsage)} />
       </section>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-5">
-        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="Search coupon code..." />
+        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="搜索优惠码..." />
         <select name="type" defaultValue={type} className="border border-line px-3 py-2">
-          <option value="">All types</option>
+          <option value="">全部类型</option>
           <option value="PERCENTAGE">PERCENTAGE</option>
           <option value="FIXED_AMOUNT">FIXED_AMOUNT</option>
           <option value="FREE_SHIPPING">FREE_SHIPPING</option>
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
-          <option value="">All statuses</option>
+          <option value="">全部状态</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="INACTIVE">INACTIVE</option>
           <option value="EXPIRED">EXPIRED</option>
         </select>
-        <button className="bg-navy px-4 py-2 font-black text-white">Apply</button>
+        <button className="bg-navy px-4 py-2 font-black text-white">应用</button>
       </form>
 
       <section className="mt-6 overflow-x-auto border border-line bg-white">
         <table className="w-full min-w-[1100px] text-left text-sm">
           <thead className="bg-panel text-xs uppercase text-steel">
             <tr>
-              <th className="p-3">Code</th>
-              <th className="p-3">Type</th>
-              <th className="p-3">Discount</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Min Subtotal</th>
-              <th className="p-3">Usage</th>
-              <th className="p-3">Date Range</th>
-              <th className="p-3">Wholesale</th>
-              <th className="p-3">Action</th>
+              <th className="p-3">优惠码</th>
+              <th className="p-3">类型</th>
+              <th className="p-3">折扣</th>
+              <th className="p-3">状态</th>
+              <th className="p-3">最低消费</th>
+              <th className="p-3">使用次数</th>
+              <th className="p-3">有效期</th>
+              <th className="p-3">批发</th>
+              <th className="p-3">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -109,15 +109,15 @@ export default async function AdminCouponsPage({
                 <td className="p-3">{coupon.minSubtotalCents ? formatMoney(coupon.minSubtotalCents, "usd") : "-"}</td>
                 <td className="p-3 font-black">{coupon.usageCount}{coupon.usageLimit ? ` / ${coupon.usageLimit}` : ""}</td>
                 <td className="p-3 text-xs text-steel">
-                  {coupon.startsAt ? coupon.startsAt.toLocaleString("en-US") : "Now"} - {coupon.endsAt ? coupon.endsAt.toLocaleString("en-US") : "No end"}
+                  {coupon.startsAt ? coupon.startsAt.toLocaleString("zh-CN") : "即时"} - {coupon.endsAt ? coupon.endsAt.toLocaleString("zh-CN") : "无截止"}
                 </td>
-                <td className="p-3">{coupon.allowWholesaleCustomers ? "Allowed" : "Retail only"}</td>
-                <td className="p-3"><Link href={`/admin/coupons/${coupon.id}/edit`} className="font-black text-navy">Edit</Link></td>
+                <td className="p-3">{coupon.allowWholesaleCustomers ? "允许" : "仅零售"}</td>
+                <td className="p-3"><Link href={`/admin/coupons/${coupon.id}/edit`} className="font-black text-navy">编辑</Link></td>
               </tr>
             ))}
           </tbody>
         </table>
-        {coupons.length === 0 && <p className="p-5 text-sm text-steel">No coupons match the current filters.</p>}
+        {coupons.length === 0 && <p className="p-5 text-sm text-steel">没有符合当前筛选条件的优惠券。</p>}
       </section>
     </main>
   );

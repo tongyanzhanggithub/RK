@@ -46,7 +46,7 @@ export async function createTestimonial(
   });
 
   if (!parsed.success) {
-    return { error: "Please check the required fields — content needs at least 10 characters." };
+    return { error: "请检查必填项 — 内容至少需要 10 个字符。" };
   }
 
   await prisma.testimonial.create({

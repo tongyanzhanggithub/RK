@@ -9,8 +9,8 @@ import { normalizeProduct } from "@/lib/product-store";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Edit Product",
-  description: "Edit a repair kit product."
+  title: "编辑产品",
+  description: "编辑维修套件产品。"
 };
 
 export default async function EditProductPage({
@@ -36,16 +36,16 @@ export default async function EditProductPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">Products</p>
-          <h1 className="text-4xl font-black">Edit Product</h1>
+          <p className="font-black uppercase text-safety">产品</p>
+          <h1 className="text-4xl font-black">编辑产品</h1>
           <p className="mt-3 text-steel">{product.name}</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href={`/products/${product.slug}`} className="inline-flex h-11 items-center justify-center border border-line px-4 font-black text-navy hover:bg-white">
-            View Storefront
+            查看店铺页面
           </Link>
           <Link href="/admin/products" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-            Back to Products
+            返回产品列表
           </Link>
         </div>
       </div>
@@ -53,7 +53,7 @@ export default async function EditProductPage({
         product={product}
         categories={categories.map((item) => item.category)}
         action={updateProduct.bind(null, product.id)}
-        submitLabel="Save Product"
+        submitLabel="保存产品"
         saved={searchParams?.saved === "1"}
       />
     </main>

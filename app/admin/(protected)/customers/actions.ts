@@ -82,12 +82,12 @@ export async function createCustomer(_prevState: CustomerFormState, formData: Fo
 
   const parsed = parseProfile(formData);
   if (!parsed.success) {
-    return { error: "Please check the required fields (name, valid email) and field lengths." };
+    return { error: "请检查必填项（姓名、有效邮箱）以及各字段长度。" };
   }
 
   const existing = await prisma.customer.findUnique({ where: { email: parsed.data.email } });
   if (existing) {
-    return { error: `A customer with email ${parsed.data.email} already exists.` };
+    return { error: `邮箱为 ${parsed.data.email} 的客户已存在。` };
   }
 
   const customer = await prisma.customer.create({
@@ -110,18 +110,18 @@ export async function updateCustomer(
 
   const parsed = parseProfile(formData);
   if (!parsed.success) {
-    return { error: "Please check the required fields (name, valid email) and field lengths." };
+    return { error: "请检查必填项（姓名、有效邮箱）以及各字段长度。" };
   }
 
   const current = await prisma.customer.findUnique({ where: { id: customerId } });
   if (!current) {
-    return { error: "Customer not found." };
+    return { error: "未找到该客户。" };
   }
 
   if (parsed.data.email !== current.email) {
     const emailTaken = await prisma.customer.findUnique({ where: { email: parsed.data.email } });
     if (emailTaken) {
-      return { error: `Another customer already uses ${parsed.data.email}.` };
+      return { error: `${parsed.data.email} 已被其他客户使用。` };
     }
   }
 

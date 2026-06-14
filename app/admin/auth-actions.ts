@@ -51,18 +51,18 @@ export async function loginAdmin(_prevState: { error?: string }, formData: FormD
   });
 
   if (!parsed.success) {
-    return { error: "Please enter a valid admin email and password." };
+    return { error: "请输入有效的管理员邮箱和密码。" };
   }
 
   const email = parsed.data.email.toLowerCase();
   if (loginLocked(email)) {
-    return { error: "Too many failed attempts. Try again in a few minutes." };
+    return { error: "失败次数过多。请在几分钟后再试。" };
   }
 
   const admin = await prisma.adminUser.findUnique({ where: { email } });
   if (!admin || admin.role !== "ADMIN" || !verifyPassword(parsed.data.password, admin.passwordHash)) {
     recordLoginFailure(email);
-    return { error: "Invalid admin credentials." };
+    return { error: "管理员凭据无效。" };
   }
 
   failedLogins.delete(email);
@@ -83,7 +83,7 @@ const RESET_REQUEST_COOLDOWN_MS = 2 * 60 * 1000;
 const resetRequests = new Map<string, number>();
 
 const GENERIC_RESET_MESSAGE =
-  "If an admin account exists for that email, a reset link has been sent. The link expires in 30 minutes.";
+  "如果该邮箱存在对应的管理员账户，重置链接已发送。链接将在 30 分钟后过期。";
 
 function hashResetToken(token: string) {
   return crypto.createHash("sha256").update(token).digest("hex");
@@ -95,7 +95,7 @@ export async function requestPasswordReset(
 ): Promise<{ error?: string; message?: string }> {
   const parsed = z.string().email().safeParse(String(formData.get("email") || "").trim().toLowerCase());
   if (!parsed.success) {
-    return { error: "Please enter a valid email address." };
+    return { error: "请输入有效的邮箱地址。" };
   }
   const email = parsed.data;
 
@@ -150,7 +150,7 @@ const resetPasswordSchema = z
     confirmPassword: z.string()
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
+    message: "两次输入的密码不一致。",
     path: ["confirmPassword"]
   });
 
@@ -165,7 +165,7 @@ export async function resetPassword(
   });
 
   if (!parsed.success) {
-    return { error: "Passwords must match and be at least 8 characters." };
+    return { error: "两次输入的密码必须一致，且至少为 8 个字符。" };
   }
 
   const admin = await prisma.adminUser.findFirst({
@@ -173,7 +173,7 @@ export async function resetPassword(
   });
 
   if (!admin || !admin.resetTokenExpiresAt || admin.resetTokenExpiresAt < new Date()) {
-    return { error: "This reset link is invalid or has expired. Please request a new one." };
+    return { error: "该重置链接无效或已过期。请重新申请。" };
   }
 
   await prisma.adminUser.update({

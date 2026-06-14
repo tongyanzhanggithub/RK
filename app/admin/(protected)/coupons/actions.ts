@@ -24,13 +24,13 @@ const couponSchema = z
   })
   .superRefine((coupon, context) => {
     if (coupon.type === "PERCENTAGE" && (coupon.discountValue <= 0 || coupon.discountValue > 100)) {
-      context.addIssue({ code: "custom", path: ["discountValue"], message: "Percentage coupons must be between 1 and 100." });
+      context.addIssue({ code: "custom", path: ["discountValue"], message: "百分比优惠券的面值必须在 1 到 100 之间。" });
     }
     if (coupon.type === "FIXED_AMOUNT" && coupon.discountValue <= 0) {
-      context.addIssue({ code: "custom", path: ["discountValue"], message: "Fixed amount coupons require a discount value." });
+      context.addIssue({ code: "custom", path: ["discountValue"], message: "固定金额优惠券需要填写折扣面值。" });
     }
     if (coupon.startsAt && coupon.endsAt && new Date(coupon.endsAt) <= new Date(coupon.startsAt)) {
-      context.addIssue({ code: "custom", path: ["endsAt"], message: "End time must be after start time." });
+      context.addIssue({ code: "custom", path: ["endsAt"], message: "结束时间必须晚于开始时间。" });
     }
   });
 
@@ -63,7 +63,7 @@ function couponDataFromForm(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { error: "Please check coupon code, type, value, limits and valid date range." };
+    return { error: "请检查优惠码、类型、面值、使用限制以及有效期是否填写正确。" };
   }
 
   const coupon = parsed.data;
@@ -104,7 +104,7 @@ export async function createCoupon(_previousState: CouponFormState, formData: Fo
   try {
     coupon = await prisma.coupon.create({ data: result.data });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to create coupon." };
+    return { error: error instanceof Error ? error.message : "无法创建优惠券。" };
   }
 
   revalidateCouponRoutes();
@@ -127,7 +127,7 @@ export async function updateCoupon(
       data: result.data
     });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to update coupon." };
+    return { error: error instanceof Error ? error.message : "无法更新优惠券。" };
   }
 
   revalidateCouponRoutes();

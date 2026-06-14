@@ -35,13 +35,13 @@ export async function adjustInventory(
   });
 
   if (!parsed.success || (parsed.data.type !== "CORRECTION" && parsed.data.quantity === 0)) {
-    return { error: "Enter a valid adjustment type, positive quantity and reason." };
+    return { error: "请输入有效的调整类型、正数数量和原因。" };
   }
 
   try {
     await prisma.$transaction(async (transaction) => {
       const product = await transaction.product.findUnique({ where: { id: productId } });
-      if (!product) throw new Error("Product not found.");
+      if (!product) throw new Error("未找到该商品。");
 
       const quantity = parsed.data.quantity;
       const delta =
@@ -51,7 +51,7 @@ export async function adjustInventory(
             ? quantity
             : -quantity;
       const stockAfter = product.stock + delta;
-      if (stockAfter < 0) throw new Error("Inventory cannot be reduced below zero.");
+      if (stockAfter < 0) throw new Error("库存不能减少到零以下。");
 
       await transaction.product.update({
         where: { id: product.id },
@@ -71,7 +71,7 @@ export async function adjustInventory(
       });
     });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to adjust inventory." };
+    return { error: error instanceof Error ? error.message : "无法调整库存。" };
   }
 
   revalidatePath("/admin/dashboard");

@@ -25,7 +25,7 @@ function SubmitButton() {
       disabled={pending}
       className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
     >
-      {pending ? "Saving..." : "Save Order Updates"}
+      {pending ? "保存中..." : "保存订单更新"}
     </button>
   );
 }
@@ -37,17 +37,17 @@ export function OrderManagementForm({ order, action, saved }: OrderManagementFor
   return (
     <form action={formAction} className="grid gap-5 border border-line bg-white p-5">
       <div>
-        <h2 className="text-xl font-black">Order Operations</h2>
+        <h2 className="text-xl font-black">订单操作</h2>
         <p className="mt-2 text-sm leading-6 text-steel">
-          Payment status is read-only here and is synchronized automatically by Stripe webhook events.
+          此处支付状态为只读，由 Stripe webhook 事件自动同步。
         </p>
       </div>
-      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">Order updated.</p>}
+      {saved && <p className="border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">订单已更新。</p>}
       {state?.error && <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>}
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-bold">
-          Order Status
+          订单状态
           <select name="orderStatus" defaultValue={order.orderStatus} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
             <option value="PROCESSING">PROCESSING</option>
             <option value="SHIPPED">SHIPPED</option>
@@ -56,7 +56,7 @@ export function OrderManagementForm({ order, action, saved }: OrderManagementFor
           </select>
         </label>
         <label className="grid gap-2 text-sm font-bold">
-          Fulfillment Status
+          履约状态
           <select name="fulfillmentStatus" defaultValue={order.fulfillmentStatus} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
             <option value="UNFULFILLED">UNFULFILLED</option>
             <option value="PARTIALLY_FULFILLED">PARTIALLY_FULFILLED</option>
@@ -65,12 +65,12 @@ export function OrderManagementForm({ order, action, saved }: OrderManagementFor
             <option value="CANCELLED">CANCELLED</option>
           </select>
         </label>
-        <Field label="Shipping Carrier" name="shippingCarrier" defaultValue={order.shippingCarrier || ""} />
-        <Field label="Tracking Number" name="trackingNumber" defaultValue={order.trackingNumber || ""} />
-        <Field label="Tracking URL" name="trackingUrl" defaultValue={order.trackingUrl || ""} />
-        <Field label="Shipped At" name="shippedAt" type="datetime-local" defaultValue={datetimeLocal(order.shippedAt)} />
+        <Field label="承运商" name="shippingCarrier" defaultValue={order.shippingCarrier || ""} />
+        <Field label="物流单号" name="trackingNumber" defaultValue={order.trackingNumber || ""} />
+        <Field label="物流链接" name="trackingUrl" defaultValue={order.trackingUrl || ""} />
+        <Field label="发货时间" name="shippedAt" type="datetime-local" defaultValue={datetimeLocal(order.shippedAt)} />
         <label className="grid gap-2 text-sm font-bold md:col-span-2">
-          Internal Note
+          内部备注
           <textarea
             name="internalNote"
             defaultValue={order.internalNote || ""}

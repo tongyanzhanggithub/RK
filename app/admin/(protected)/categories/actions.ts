@@ -16,7 +16,7 @@ const categorySchema = z.object({
     .string()
     .min(2)
     .max(80)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug may only contain lowercase letters, numbers and hyphens."),
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug 只能是小写字母、数字和连字符。"),
   description: z.string().max(300).optional(),
   sortOrder: z.coerce.number().int().min(0).max(9999),
   isActive: z.boolean()
@@ -46,7 +46,7 @@ function categoryDataFromForm(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message || "Please check the category name, slug and sort order." };
+    return { error: parsed.error.issues[0]?.message || "请检查分类名称、slug 与排序值。" };
   }
 
   const c = parsed.data;
@@ -76,7 +76,7 @@ export async function createCategory(_prev: CategoryFormState, formData: FormDat
   try {
     category = await prisma.category.create({ data: result.data });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to create category (slug may already exist)." };
+    return { error: error instanceof Error ? error.message : "无法创建分类（slug 可能已存在）。" };
   }
 
   revalidateCategoryRoutes();
@@ -96,7 +96,7 @@ export async function updateCategory(
   try {
     category = await prisma.category.update({ where: { id: categoryId }, data: result.data });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to update category." };
+    return { error: error instanceof Error ? error.message : "无法更新分类。" };
   }
 
   revalidateCategoryRoutes();

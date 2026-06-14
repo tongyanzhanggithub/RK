@@ -6,8 +6,8 @@ import { formatMoney } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Inventory",
-  description: "Monitor stock levels and inventory value."
+  title: "库存管理",
+  description: "监控库存水平和库存价值。"
 };
 
 export default async function AdminInventoryPage({
@@ -49,53 +49,53 @@ export default async function AdminInventoryPage({
   return (
     <main>
       <div>
-        <p className="font-black uppercase text-safety">Inventory</p>
-        <h1 className="text-4xl font-black">Inventory Management</h1>
-        <p className="mt-3 text-steel">Monitor stock, identify shortages and record every inventory adjustment.</p>
+        <p className="font-black uppercase text-safety">库存</p>
+        <h1 className="text-4xl font-black">库存管理</h1>
+        <p className="mt-3 text-steel">监控库存、识别短缺并记录每一次库存调整。</p>
       </div>
 
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Metric label="Total Units" value={String(totalUnits)} />
-        <Metric label="Low Stock Products" value={String(lowStock)} />
-        <Metric label="Out of Stock" value={String(outOfStock)} />
-        <Metric label="Estimated Cost Value" value={formatMoney(inventoryValue, "usd")} />
+        <Metric label="总库存数量" value={String(totalUnits)} />
+        <Metric label="低库存商品" value={String(lowStock)} />
+        <Metric label="缺货商品" value={String(outOfStock)} />
+        <Metric label="预估成本价值" value={formatMoney(inventoryValue, "usd")} />
       </section>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-5">
-        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="Search product or SKU..." />
+        <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="搜索商品或SKU..." />
         <select name="category" defaultValue={category} className="border border-line px-3 py-2">
-          <option value="">All categories</option>
+          <option value="">全部分类</option>
           {categories.map((item) => <option key={item.category} value={item.category}>{item.category}</option>)}
         </select>
         <select name="level" defaultValue={level} className="border border-line px-3 py-2">
-          <option value="">All stock levels</option>
-          <option value="out">Out of stock</option>
-          <option value="low">Low stock</option>
-          <option value="normal">Normal stock</option>
+          <option value="">全部库存水平</option>
+          <option value="out">缺货</option>
+          <option value="low">低库存</option>
+          <option value="normal">正常库存</option>
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
-          <option value="">All product statuses</option>
+          <option value="">全部商品状态</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="DRAFT">DRAFT</option>
           <option value="ARCHIVED">ARCHIVED</option>
         </select>
-        <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-5">Apply</button>
+        <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-5">筛选</button>
       </form>
 
       <section className="mt-6 overflow-x-auto border border-line bg-white">
         <table className="w-full min-w-[1000px] text-left text-sm">
           <thead className="bg-panel text-xs uppercase text-steel">
             <tr>
-              <th className="p-3">Product</th>
+              <th className="p-3">商品</th>
               <th className="p-3">SKU</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Stock</th>
-              <th className="p-3">Low Threshold</th>
-              <th className="p-3">Stock Level</th>
-              <th className="p-3">Unit Cost</th>
-              <th className="p-3">Cost Value</th>
-              <th className="p-3">Records</th>
-              <th className="p-3">Action</th>
+              <th className="p-3">分类</th>
+              <th className="p-3">库存</th>
+              <th className="p-3">低库存阈值</th>
+              <th className="p-3">库存水平</th>
+              <th className="p-3">单位成本</th>
+              <th className="p-3">成本价值</th>
+              <th className="p-3">记录数</th>
+              <th className="p-3">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -112,13 +112,13 @@ export default async function AdminInventoryPage({
                   <td className="p-3">{formatMoney(unitCost, product.currency)}</td>
                   <td className="p-3 font-black">{formatMoney(unitCost * product.stock, product.currency)}</td>
                   <td className="p-3">{product._count.inventoryAdjustments}</td>
-                  <td className="p-3"><Link href={`/admin/inventory/${product.id}`} className="font-black text-navy">Adjust</Link></td>
+                  <td className="p-3"><Link href={`/admin/inventory/${product.id}`} className="font-black text-navy">调整</Link></td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-        {rows.length === 0 && <p className="p-5 text-sm text-steel">No products match the current filters.</p>}
+        {rows.length === 0 && <p className="p-5 text-sm text-steel">没有符合当前筛选条件的商品。</p>}
       </section>
     </main>
   );

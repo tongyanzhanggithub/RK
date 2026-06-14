@@ -27,10 +27,10 @@ export async function GET() {
   });
 
   const header = [
-    "Order Number", "Created", "Paid At", "Payment Status", "Order Status", "Fulfillment",
-    "Customer", "Email", "Country", "City",
-    "Items", "Subtotal USD", "Shipping USD", "Discount USD", "Refunded USD", "Total USD",
-    "Coupon", "Carrier", "Tracking Number"
+    "订单号", "创建时间", "支付时间", "支付状态", "订单状态", "履约状态",
+    "客户", "邮箱", "国家", "城市",
+    "商品", "小计(USD)", "运费(USD)", "折扣(USD)", "退款(USD)", "合计(USD)",
+    "优惠券", "承运商", "物流单号"
   ].join(",");
 
   const rows = orders.map((order) => {

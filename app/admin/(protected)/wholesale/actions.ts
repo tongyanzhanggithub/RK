@@ -40,11 +40,11 @@ export async function reviewWholesaleApplication(
   });
 
   if (!parsed.success) {
-    return { error: "Please select a valid review status and check the note length." };
+    return { error: "请选择有效的审核状态并检查备注长度。" };
   }
 
   const application = await prisma.wholesaleApplication.findUnique({ where: { id: applicationId } });
-  if (!application) return { error: "Wholesale application not found." };
+  if (!application) return { error: "未找到该批发申请。" };
 
   await prisma.$transaction(async (tx) => {
     let customerId = application.customerId;

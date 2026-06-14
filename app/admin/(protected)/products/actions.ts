@@ -152,7 +152,7 @@ function productDataFromForm(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { error: "Please check required fields, slug format, prices and inventory values." };
+    return { error: "请检查必填项、slug 格式、价格与库存数值。" };
   }
 
   const product = parsed.data;
@@ -245,7 +245,7 @@ export async function createProduct(_prevState: ProductFormState, formData: Form
       return createdProduct;
     });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to create product." };
+    return { error: error instanceof Error ? error.message : "无法创建产品。" };
   }
 
   revalidateProductRoutes(product.slug);
@@ -261,7 +261,7 @@ export async function updateProduct(productId: string, _prevState: ProductFormSt
   try {
     product = await prisma.$transaction(async (transaction) => {
       const existingProduct = await transaction.product.findUnique({ where: { id: productId } });
-      if (!existingProduct) throw new Error("Product not found.");
+      if (!existingProduct) throw new Error("未找到该产品。");
 
       const updatedProduct = await transaction.product.update({
         where: { id: productId },
@@ -287,7 +287,7 @@ export async function updateProduct(productId: string, _prevState: ProductFormSt
       return updatedProduct;
     });
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Unable to update product." };
+    return { error: error instanceof Error ? error.message : "无法更新产品。" };
   }
 
   revalidateProductRoutes(product.slug);
