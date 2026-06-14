@@ -23,6 +23,10 @@ prisma/dev.db.bak
 next-dev*.log
 preview-server.log
 
+# ---- uploaded product images (user content; keep folder, ignore files) ----
+public/uploads/*
+!public/uploads/.gitkeep
+
 # ---- os / editor ----
 .DS_Store
 Thumbs.db
