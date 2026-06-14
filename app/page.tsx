@@ -34,12 +34,19 @@ export default async function HomePage() {
     take: 6
   });
 
-  // Data-driven category grid: grows automatically as new categories are added.
+  // Category grid driven by the managed Category table (active, sorted),
+  // with a fallback to product-derived categories if the table is empty.
   const categoryCounts = new Map<string, number>();
   for (const product of products) {
     categoryCounts.set(product.category, (categoryCounts.get(product.category) || 0) + 1);
   }
-  const categories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]);
+  const managedCategories = await prisma.category.findMany({
+    where: { isActive: true },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }]
+  });
+  const categories: [string, number][] = managedCategories.length
+    ? managedCategories.map((category) => [category.name, categoryCounts.get(category.name) || 0])
+    : [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]);
 
   const supplyAdvantages = [
     [Factory, hp.supply_badge, "Sourced from China's largest motorcycle and small-engine parts cluster — the same ecosystem behind Loncin, Zongshen and Lifan engines."],

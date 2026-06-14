@@ -9,8 +9,11 @@ import { ProductGallery } from "@/components/product-gallery";
 import { QuantityAddToCart } from "@/components/quantity-add-to-cart";
 import { StockStatus } from "@/components/stock-status";
 import { TrustBadges } from "@/components/trust-badges";
+import { getProduct } from "@/data/products";
 import { engineHrefForModelText, problemHrefForTitle } from "@/lib/discovery-links";
+import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
+import { getServerDict } from "@/lib/locale";
 import { getStoreProduct, getStoreProducts } from "@/lib/product-store";
 
 export const dynamic = "force-dynamic";
@@ -27,9 +30,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+  const dict = getServerDict();
   const product = await getStoreProduct(params.slug);
   if (!product) notFound();
   const allProducts = await getStoreProducts();
+
+  const relatedGuideSlugs = getProduct(product.slug)?.relatedGuideSlugs ?? [];
+  const relatedGuides = relatedGuideSlugs.length
+    ? await prisma.repairGuide.findMany({
+        where: { slug: { in: relatedGuideSlugs }, status: "PUBLISHED" },
+        orderBy: { updatedAt: "desc" }
+      })
+    : [];
   const relatedProducts = allProducts
     .filter((item) => item.slug !== product.slug)
     .map((item) => {
@@ -209,6 +221,25 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {relatedProducts.map((item) => (
                 <ProductCard key={item.slug} product={item} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {relatedGuides.length > 0 && (
+          <section className="mt-10">
+            <h2 className="text-2xl font-black">{dict.guides.related_title}</h2>
+            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {relatedGuides.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  href={`/guides/${guide.slug}`}
+                  className="group flex flex-col border border-line bg-white p-6 shadow-sm hover:border-navy"
+                >
+                  <h3 className="text-lg font-black leading-snug">{guide.title}</h3>
+                  {guide.excerpt && <p className="mt-2 text-sm leading-6 text-steel">{guide.excerpt}</p>}
+                  <span className="mt-3 inline-flex items-center gap-1 font-black text-navy">{dict.guides.read_more}</span>
+                </Link>
               ))}
             </div>
           </section>

@@ -215,7 +215,8 @@ const en = {
     read_more: "Read guide",
     empty: "No guides published yet — check back soon.",
     back_to_guides: "All guides",
-    related_help: "Need the parts? Browse the catalog or ask us on WhatsApp."
+    related_help: "Need the parts? Browse the catalog or ask us on WhatsApp.",
+    related_title: "Repair guides for this part"
   },
   problems: {
     heading: "Troubleshooting Guides",
@@ -464,7 +465,8 @@ const zh: typeof en = {
     read_more: "阅读指南",
     empty: "暂无已发布的指南，敬请期待。",
     back_to_guides: "全部指南",
-    related_help: "需要配件？浏览目录或在 WhatsApp 联系我们。"
+    related_help: "需要配件？浏览目录或在 WhatsApp 联系我们。",
+    related_title: "相关维修指南"
   },
   problems: {
     heading: "故障排查指南",
