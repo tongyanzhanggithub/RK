@@ -15,6 +15,7 @@ const en = {
     products: "Products",
     engines: "Shop by Engine",
     problems: "Troubleshooting",
+    guides: "Repair Guides",
     wholesale: "Wholesale / RFQ",
     cart: "Cart"
   },
@@ -207,6 +208,15 @@ const en = {
     used_in: "Used in:",
     view_parts: "View parts"
   },
+  guides: {
+    badge: "Repair guides",
+    main_heading: "Step-by-step repair & troubleshooting guides",
+    main_sub: "Practical fixes for small engines, water pumps and generators — written for repair shops and overseas buyers.",
+    read_more: "Read guide",
+    empty: "No guides published yet — check back soon.",
+    back_to_guides: "All guides",
+    related_help: "Need the parts? Browse the catalog or ask us on WhatsApp."
+  },
   problems: {
     heading: "Troubleshooting Guides",
     subtext: "Select a symptom to find the right repair kit for your engine.",
@@ -262,6 +272,7 @@ const zh: typeof en = {
     products: "产品",
     engines: "按型号选购",
     problems: "故障排查",
+    guides: "维修指南",
     wholesale: "批发询价",
     cart: "购物车"
   },
@@ -445,6 +456,15 @@ const zh: typeof en = {
     main_sub: "每个型号页面列出兼容零件、下单前需确认的事项，以及该平台最常见的故障。",
     used_in: "适用设备：",
     view_parts: "查看零件"
+  },
+  guides: {
+    badge: "维修指南",
+    main_heading: "分步维修与排障指南",
+    main_sub: "针对小型发动机、水泵和发电机的实用维修方法，面向维修店与海外买家。",
+    read_more: "阅读指南",
+    empty: "暂无已发布的指南，敬请期待。",
+    back_to_guides: "全部指南",
+    related_help: "需要配件？浏览目录或在 WhatsApp 联系我们。"
   },
   problems: {
     heading: "故障排查指南",

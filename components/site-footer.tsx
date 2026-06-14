@@ -25,6 +25,7 @@ export function SiteFooter() {
             <Link href="/products">{nav.products}</Link>
             <Link href="/engines">{nav.engines}</Link>
             <Link href="/problems">{nav.problems}</Link>
+            <Link href="/guides">{nav.guides}</Link>
             <Link href="/wholesale">{nav.wholesale}</Link>
             <Link href="/cart">{f.cart_link}</Link>
           </div>

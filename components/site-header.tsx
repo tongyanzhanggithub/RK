@@ -19,6 +19,7 @@ export function SiteHeader() {
     [nav.products, "/products"],
     [nav.engines, "/engines"],
     [nav.problems, "/problems"],
+    [nav.guides, "/guides"],
     [nav.wholesale, "/wholesale"]
   ];
 
