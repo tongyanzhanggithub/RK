@@ -18,19 +18,26 @@
 **前台商城**
 
 - 产品目录与详情页（兼容机型、适用设备、解决的故障、套件清单、规格、FAQ）
+- **维修指南**：公开页 `/guides` 与详情 `/guides/[slug]`，产品详情页关联展示相关指南
+- **首页分类导航由 Category 表驱动**（启用、按排序），可在后台维护
+- **中英文切换**（EN / 中文，整站 i18n）
 - 购物车（localStorage 持久化）+ Stripe Checkout 在线支付
 - 优惠券（百分比 / 固定金额 / 免运费），下单前实时校验
 - 批发 / RFQ 申请表单，WhatsApp 浮窗询盘
 - SEO：sitemap、robots、每个产品独立的 SEO 字段
 
-**后台管理（`/admin`）**
+**后台管理（`/admin`，中文界面）**
 
 - 仪表盘：营收、订单、库存预警概览
-- 产品管理：创建 / 编辑 / 归档，零售价、批发价、成本价
+- 产品管理：创建 / 编辑 / 归档，零售价、批发价、成本价；**产品图片本地上传**（存 `public/uploads/`）
 - 库存管理：入库 / 退货 / 损耗 / 盘点，完整调整流水
 - 订单管理：支付状态、发货与物流单号
 - 优惠券管理：有效期、使用上限、最低消费
-- 客户管理与批发申请审核
+- 客户管理与批发申请审核、用户评价管理
+- **分类管理**：产品分类的增删改、排序、启停（驱动前台分类导航）
+- **维修指南管理**：撰写 / 发布排障指南（草稿 / 已发布）
+- **站点设置**：店名、联系邮箱、WhatsApp、币种、公告栏
+- 状态徽章中文显示（枚举值与逻辑保持英文）
 - 独立的管理员账号体系（PBKDF2 密码哈希 + HMAC 签名会话 Cookie）
 
 **Stripe 集成**
@@ -58,7 +65,10 @@ npm run db:generate
 # 5. 创建管理员账号
 $env:ADMIN_EMAIL='admin@example.com'; $env:ADMIN_PASSWORD='你的密码'; npm run admin:create
 
-# 6. 启动开发服务器（http://127.0.0.1:4173）
+# 6. 填充分类与维修指南（从现有产品派生，幂等）
+node scripts/seed-taxonomy.js
+
+# 7. 启动开发服务器（http://127.0.0.1:4173）
 npm run dev
 ```
 
@@ -92,19 +102,25 @@ Stripe Webhook 的本地调试与生产配置见 [STRIPE_WEBHOOK_SETUP.md](STRIP
 app/
   page.tsx                  # 首页
   products/                 # 产品列表与详情
+  guides/                   # 维修指南（列表 + 详情）
   cart/                     # 购物车
   checkout/                 # 支付成功 / 取消页
   wholesale/                # 批发申请
   admin/                    # 后台（login + (protected) 受保护路由组）
   api/
+    admin/upload/           # 后台图片上传（鉴权，存 public/uploads/）
     checkout/               # 创建 Stripe Checkout Session
     coupons/validate/       # 优惠券实时校验
     stripe/webhook/         # Stripe 事件回调
-components/                 # 共享组件（购物车 Provider、产品卡、后台壳等）
-lib/                        # 核心逻辑（认证、优惠券计算、Stripe 订单同步、Prisma 实例）
+components/                 # 共享组件（购物车 Provider、产品卡、后台壳、图片上传等）
+lib/                        # 核心逻辑（认证、i18n、优惠券计算、Stripe 同步、状态映射、Prisma 实例）
 prisma/                     # schema 与种子脚本
+public/uploads/             # 后台上传的产品图片（git 忽略，仅保留目录）
 data/                       # 静态内容（机型、设备、故障场景）
+scripts/                    # create-admin.js、seed-taxonomy.js
 ```
+
+版本变更记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 注意事项
 
