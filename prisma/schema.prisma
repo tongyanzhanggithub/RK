@@ -1,0 +1,272 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id                   String                @id @default(cuid())
+  slug                 String                @unique
+  name                 String
+  subtitle             String?
+  sku                  String                @unique
+  category             String
+  brand                String?
+  shortDescription     String
+  description          String?
+  status               String                @default("ACTIVE")
+  priceRange           String
+  priceCents           Int
+  currency             String                @default("usd")
+  compareAtPriceCents  Int?
+  wholesalePriceCents  Int?
+  costPriceCents       Int?
+  allowCoupons         Boolean               @default(true)
+  stock                Int                   @default(0)
+  lowStockThreshold    Int                   @default(5)
+  weightGrams          Int?
+  lengthMm             Int?
+  widthMm              Int?
+  heightMm             Int?
+  wholesaleAvailable   Boolean               @default(false)
+  isFeatured           Boolean               @default(false)
+  isHotSeller          Boolean               @default(false)
+  tags                 String
+  compatibleModels     String
+  compatibleEquipment  String
+  problemsSolved       String
+  kitIncludes          String
+  notCompatibleWith    String?
+  specifications       String?
+  faqs                 String?
+  images               String?
+  image                String?
+  seoTitle             String?
+  seoDescription       String?
+  seoKeywords          String?
+  ogImage              String?
+  inventoryAdjustments InventoryAdjustment[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+}
+
+model Customer {
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  name                  String
+  phone                 String?
+  whatsapp              String?
+  country               String?
+  city                  String?
+  address               String?
+  postalCode            String?
+  status                String                 @default("ACTIVE")
+  role                  String                 @default("CUSTOMER")
+  tags                  String                 @default("[]")
+  internalNote          String?
+  wholesaleApprovedAt   DateTime?
+  orders                Order[]
+  wholesaleApplications WholesaleApplication[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+}
+
+model WholesaleApplication {
+  id                       String    @id @default(cuid())
+  customerId               String?
+  customer                 Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  companyName              String
+  contactName              String
+  country                  String
+  whatsapp                 String
+  email                    String
+  businessType             String
+  productInterest          String
+  estimatedMonthlyQuantity Int?
+  message                  String?
+  status                   String    @default("PENDING")
+  adminNote                String?
+  reviewedBy               String?
+  reviewedAt               DateTime?
+  notificationStatus       String    @default("NOT_SENT")
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Order {
+  id                      String      @id @default(cuid())
+  orderNumber             String      @unique
+  customerId              String?
+  customer                Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  couponId                String?
+  coupon                  Coupon?     @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  couponCode              String?
+  couponType              String?
+  couponValue             Int?
+  couponUsageRecorded     Boolean     @default(false)
+  inventoryReduced        Boolean     @default(false)
+  customerName            String
+  customerEmail           String
+  customerPhone           String?
+  customerWhatsapp        String?
+  country                 String
+  city                    String?
+  shippingAddress         String?
+  postalCode              String?
+  currency                String      @default("usd")
+  subtotalCents           Int
+  shippingCents           Int         @default(0)
+  taxCents                Int         @default(0)
+  discountCents           Int         @default(0)
+  refundedCents           Int         @default(0)
+  totalCents              Int
+  paymentMethod           String      @default("stripe")
+  paymentStatus           String      @default("PENDING")
+  paymentFailureMessage   String?
+  orderStatus             String      @default("PROCESSING")
+  fulfillmentStatus       String      @default("UNFULFILLED")
+  stripeCheckoutSessionId String?
+  stripePaymentIntentId   String?
+  stripeLastEventId       String?
+  stripeLastEventType     String?
+  stripeLastSyncedAt      DateTime?
+  paidAt                  DateTime?
+  shippingCarrier         String?
+  trackingNumber          String?
+  trackingUrl             String?
+  shippedAt               DateTime?
+  internalNote            String?
+  items                   OrderItem[]
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+}
+
+model Coupon {
+  id                      String    @id @default(cuid())
+  code                    String    @unique
+  type                    String
+  value                   Int
+  isActive                Boolean   @default(true)
+  minSubtotalCents        Int?
+  usageLimit              Int?
+  usageCount              Int       @default(0)
+  perCustomerLimit        Int?
+  startsAt                DateTime?
+  endsAt                  DateTime?
+  allowWholesaleCustomers Boolean   @default(false)
+  orders                  Order[]
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+  @@index([startsAt])
+  @@index([endsAt])
+}
+
+model InventoryAdjustment {
+  id            String   @id @default(cuid())
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type          String
+  quantityDelta Int
+  stockBefore   Int
+  stockAfter    Int
+  reason        String?
+  reference     String?
+  createdBy     String?
+  createdAt     DateTime @default(now())
+}
+
+model OrderItem {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      String?
+  productName    String
+  productSlug    String
+  sku            String
+  unitPriceCents Int
+  quantity       Int
+  subtotalCents  Int
+  image          String?
+  createdAt      DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Problem {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model Equipment {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model EngineModel {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  description       String
+  compatibilityNote String
+  createdAt         DateTime @default(now())
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model RepairGuide {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  excerpt        String?
+  content        String?
+  status         String   @default("DRAFT")
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
