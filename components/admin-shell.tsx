@@ -10,14 +10,13 @@ const activeItems = [
   ["Customers", "/admin/customers", Users],
   ["Wholesale", "/admin/wholesale", BarChart3],
   ["Coupons", "/admin/coupons", Ticket],
-  ["Testimonials", "/admin/testimonials", MessageSquareQuote]
+  ["Testimonials", "/admin/testimonials", MessageSquareQuote],
+  ["Categories", "/admin/categories", Tag],
+  ["Repair Guides", "/admin/guides", FileText],
+  ["Settings", "/admin/settings", Settings]
 ];
 
-const plannedItems = [
-  ["Categories", Tag],
-  ["Repair Guides", FileText],
-  ["Settings", Settings]
-];
+const plannedItems: [string, typeof Tag][] = [];
 
 export function AdminShell({ children, adminName }: { children: React.ReactNode; adminName: string }) {
   return (
@@ -39,16 +38,20 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
               {label as string}
             </Link>
           ))}
-          <div className="my-3 border-t border-white/10" />
-          {plannedItems.map(([label, Icon]) => (
-            <div key={label as string} className="flex items-center justify-between gap-3 px-3 py-3 text-sm font-bold text-white/35">
-              <span className="inline-flex items-center gap-3">
-                <Icon size={18} />
-                {label as string}
-              </span>
-              <span className="text-[10px] uppercase">Later</span>
-            </div>
-          ))}
+          {plannedItems.length > 0 && (
+            <>
+              <div className="my-3 border-t border-white/10" />
+              {plannedItems.map(([label, Icon]) => (
+                <div key={label} className="flex items-center justify-between gap-3 px-3 py-3 text-sm font-bold text-white/35">
+                  <span className="inline-flex items-center gap-3">
+                    <Icon size={18} />
+                    {label}
+                  </span>
+                  <span className="text-[10px] uppercase">Later</span>
+                </div>
+              ))}
+            </>
+          )}
         </nav>
       </aside>
       <div className="min-w-0">

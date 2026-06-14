@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
+import { GalleryUpload, MainImageUpload } from "@/components/admin-image-upload";
 import type { ProductFormState } from "@/app/admin/(protected)/products/actions";
 import type { Product } from "@/data/products";
 
@@ -115,13 +116,8 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
       </Section>
 
       <Section title="Images">
-        <Field label="Main Image URL" name="image" defaultValue={product?.image} />
-        <Textarea
-          label="Gallery Images"
-          name="imagesText"
-          defaultValue={images(product?.images)}
-          placeholder="https://example.com/image.jpg | Alt text | primary"
-        />
+        <MainImageUpload name="image" label="Main Image" defaultValue={product?.image ?? ""} />
+        <GalleryUpload name="imagesText" label="Gallery Images (one per line: url | alt | primary)" defaultValue={images(product?.images)} />
       </Section>
 
       <Section title="Kit and Compatibility">

@@ -18,3 +18,7 @@ dev.db.bak
 
 # logs
 *.log
+
+# uploaded product images (user content; keep folder, ignore files)
+public/uploads/*
+!public/uploads/.gitkeep
