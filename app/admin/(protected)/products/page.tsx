@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { archiveProduct } from "@/app/admin/(protected)/products/actions";
+import { zhLabel, PRODUCT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -82,9 +83,9 @@ export default async function AdminProductsPage({
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
           <option value="">全部状态</option>
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="DRAFT">DRAFT</option>
-          <option value="ARCHIVED">ARCHIVED</option>
+          <option value="ACTIVE">{zhLabel(PRODUCT_STATUS, "ACTIVE")}</option>
+          <option value="DRAFT">{zhLabel(PRODUCT_STATUS, "DRAFT")}</option>
+          <option value="ARCHIVED">{zhLabel(PRODUCT_STATUS, "ARCHIVED")}</option>
         </select>
         <select name="stock" defaultValue={stock} className="border border-line px-3 py-2">
           <option value="">全部库存</option>
@@ -179,7 +180,7 @@ function StatusBadge({ status }: { status: string }) {
       : status === "DRAFT"
         ? "bg-gray-100 text-gray-700"
         : "bg-red-100 text-red-800";
-  return <span className={`inline-flex px-2 py-1 text-xs font-black ${className}`}>{status}</span>;
+  return <span className={`inline-flex px-2 py-1 text-xs font-black ${className}`}>{zhLabel(PRODUCT_STATUS, status)}</span>;
 }
 
 function SmallFlag({ label }: { label: string }) {

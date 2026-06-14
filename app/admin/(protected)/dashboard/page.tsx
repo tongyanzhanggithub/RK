@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { zhLabel, WHOLESALE_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -118,9 +119,9 @@ export default async function AdminDashboardPage() {
             <h2 className="text-xl font-black">产品状态</h2>
           </div>
           <div className="grid gap-3 p-5 text-sm">
-            <StatusRow label="Active" value={activeCount} />
-            <StatusRow label="Draft" value={draftCount} />
-            <StatusRow label="Archived" value={archivedCount} />
+            <StatusRow label="在售" value={activeCount} />
+            <StatusRow label="草稿" value={draftCount} />
+            <StatusRow label="已归档" value={archivedCount} />
           </div>
         </div>
 
@@ -229,7 +230,7 @@ export default async function AdminDashboardPage() {
                     <strong className="block">{application.companyName}</strong>
                     <span className="text-steel">{application.country} / {application.businessType}</span>
                   </div>
-                  <span className="font-black">{application.status}</span>
+                  <span className="font-black">{zhLabel(WHOLESALE_STATUS, application.status)}</span>
                   <Link href={`/admin/wholesale/${application.id}`} className="font-black text-navy">审核</Link>
                 </div>
               ))

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { zhLabel, CUSTOMER_STATUS, CUSTOMER_ROLE } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -121,14 +122,14 @@ export default async function AdminCustomersPage({
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
           <option value="">全部状态</option>
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="VIP">VIP</option>
-          <option value="BLOCKED">BLOCKED</option>
+          <option value="ACTIVE">{zhLabel(CUSTOMER_STATUS, "ACTIVE")}</option>
+          <option value="VIP">{zhLabel(CUSTOMER_STATUS, "VIP")}</option>
+          <option value="BLOCKED">{zhLabel(CUSTOMER_STATUS, "BLOCKED")}</option>
         </select>
         <select name="role" defaultValue={role} className="border border-line px-3 py-2">
           <option value="">全部角色</option>
-          <option value="CUSTOMER">CUSTOMER</option>
-          <option value="WHOLESALE">WHOLESALE</option>
+          <option value="CUSTOMER">{zhLabel(CUSTOMER_ROLE, "CUSTOMER")}</option>
+          <option value="WHOLESALE">{zhLabel(CUSTOMER_ROLE, "WHOLESALE")}</option>
         </select>
         <select name="sort" defaultValue={sort} className="border border-line px-3 py-2">
           <option value="recent">最近订单</option>
@@ -192,10 +193,10 @@ function Metric({ label, value }: { label: string; value: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const color = status === "VIP" ? "bg-safety/25 text-ink" : status === "BLOCKED" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800";
-  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{status}</span>;
+  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(CUSTOMER_STATUS, status)}</span>;
 }
 
 function RoleBadge({ role }: { role: string }) {
   const color = role === "WHOLESALE" ? "bg-navy text-white" : "bg-panel text-steel";
-  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{role}</span>;
+  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(CUSTOMER_ROLE, role)}</span>;
 }

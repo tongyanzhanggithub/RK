@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { adjustInventory } from "@/app/admin/(protected)/inventory/actions";
 import { InventoryAdjustmentForm } from "@/app/admin/(protected)/inventory/inventory-adjustment-form";
+import { zhLabel, INVENTORY_TYPE } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -70,7 +71,7 @@ export default async function AdminInventoryDetailPage({
                 {product.inventoryAdjustments.map((adjustment) => (
                   <tr key={adjustment.id} className="border-t border-line align-top">
                     <td className="p-3 text-xs text-steel">{adjustment.createdAt.toLocaleString("zh-CN")}</td>
-                    <td className="p-3 font-black">{adjustment.type}</td>
+                    <td className="p-3 font-black">{zhLabel(INVENTORY_TYPE, adjustment.type)}</td>
                     <td className={`p-3 font-black ${adjustment.quantityDelta < 0 ? "text-red-700" : "text-green-700"}`}>
                       {adjustment.quantityDelta > 0 ? "+" : ""}{adjustment.quantityDelta}
                     </td>

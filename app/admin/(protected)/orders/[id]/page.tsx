@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { resendConfirmationEmail, resendShippingEmail, updateOrder } from "@/app/admin/(protected)/orders/actions";
 import { OrderManagementForm } from "@/app/admin/(protected)/orders/order-management-form";
+import { zhLabel, ORDER_PAYMENT_STATUS, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -58,7 +59,7 @@ export default async function AdminOrderDetailPage({
 
           <InfoPanel title="支付信息">
             <Info label="支付方式" value={order.paymentMethod} />
-            <Info label="支付状态" value={order.paymentStatus} />
+            <Info label="支付状态" value={zhLabel(ORDER_PAYMENT_STATUS, order.paymentStatus)} />
             <Info label="Stripe 结账会话" value={order.stripeCheckoutSessionId || "-"} />
             <Info label="Stripe 支付意图" value={order.stripePaymentIntentId || "-"} />
             <Info label="已付金额" value={formatMoney(order.totalCents, order.currency)} />
@@ -171,8 +172,8 @@ export default async function AdminOrderDetailPage({
             </div>
           </section>
           <InfoPanel title="物流概览">
-            <Info label="订单状态" value={order.orderStatus} />
-            <Info label="履约" value={order.fulfillmentStatus} />
+            <Info label="订单状态" value={zhLabel(ORDER_STATUS, order.orderStatus)} />
+            <Info label="履约" value={zhLabel(FULFILLMENT_STATUS, order.fulfillmentStatus)} />
             <Info label="承运商" value={order.shippingCarrier || "-"} />
             <Info label="物流单号" value={order.trackingNumber || "-"} />
             <Info label="物流链接" value={order.trackingUrl || "-"} />

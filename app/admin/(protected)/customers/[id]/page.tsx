@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { updateCustomer } from "@/app/admin/(protected)/customers/actions";
 import { CustomerManagementForm } from "@/app/admin/(protected)/customers/customer-management-form";
+import { zhLabel, CUSTOMER_STATUS, CUSTOMER_ROLE, ORDER_PAYMENT_STATUS, FULFILLMENT_STATUS, WHOLESALE_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -48,8 +49,8 @@ export default async function AdminCustomerDetailPage({
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <div className="grid gap-6">
           <InfoPanel title="客户资料">
-            <Info label="状态" value={customer.status} />
-            <Info label="客户角色" value={customer.role} />
+            <Info label="状态" value={zhLabel(CUSTOMER_STATUS, customer.status)} />
+            <Info label="客户角色" value={zhLabel(CUSTOMER_ROLE, customer.role)} />
             <Info label="批发通过时间" value={customer.wholesaleApprovedAt?.toLocaleString("zh-CN") || "-"} />
             <Info label="邮箱" value={customer.email} />
             <Info label="电话" value={customer.phone || "-"} />
@@ -79,7 +80,7 @@ export default async function AdminCustomerDetailPage({
                     <tr key={application.id} className="border-t border-line">
                       <td className="p-3 font-black">{application.companyName}</td>
                       <td className="p-3">{application.businessType}</td>
-                      <td className="p-3 font-black">{application.status}</td>
+                      <td className="p-3 font-black">{zhLabel(WHOLESALE_STATUS, application.status)}</td>
                       <td className="p-3 text-xs text-steel">{application.createdAt.toLocaleString("zh-CN")}</td>
                       <td className="p-3"><Link href={`/admin/wholesale/${application.id}`} className="font-black text-navy">查看</Link></td>
                     </tr>
@@ -107,8 +108,8 @@ export default async function AdminCustomerDetailPage({
                   <tr key={order.id} className="border-t border-line">
                     <td className="p-3 font-black">{order.orderNumber}</td>
                     <td className="p-3 font-black">{formatMoney(order.totalCents, order.currency)}</td>
-                    <td className="p-3">{order.paymentStatus}</td>
-                    <td className="p-3">{order.fulfillmentStatus}</td>
+                    <td className="p-3">{zhLabel(ORDER_PAYMENT_STATUS, order.paymentStatus)}</td>
+                    <td className="p-3">{zhLabel(FULFILLMENT_STATUS, order.fulfillmentStatus)}</td>
                     <td className="p-3 text-xs text-steel">{order.createdAt.toLocaleString("zh-CN")}</td>
                     <td className="p-3"><Link href={`/admin/orders/${order.id}`} className="font-black text-navy">查看</Link></td>
                   </tr>

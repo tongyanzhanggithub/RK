@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { zhLabel, ORDER_PAYMENT_STATUS, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 
@@ -92,25 +93,25 @@ export default async function AdminOrdersPage({
         </select>
         <select name="paymentStatus" defaultValue={paymentStatus} className="border border-line px-3 py-2">
           <option value="">支付状态（全部）</option>
-          <option value="PENDING">PENDING</option>
-          <option value="PAID">PAID</option>
-          <option value="FAILED">FAILED</option>
-          <option value="REFUNDED">REFUNDED</option>
+          <option value="PENDING">{zhLabel(ORDER_PAYMENT_STATUS, "PENDING")}</option>
+          <option value="PAID">{zhLabel(ORDER_PAYMENT_STATUS, "PAID")}</option>
+          <option value="FAILED">{zhLabel(ORDER_PAYMENT_STATUS, "FAILED")}</option>
+          <option value="REFUNDED">{zhLabel(ORDER_PAYMENT_STATUS, "REFUNDED")}</option>
         </select>
         <select name="orderStatus" defaultValue={orderStatus} className="border border-line px-3 py-2">
           <option value="">订单状态（全部）</option>
-          <option value="PROCESSING">PROCESSING</option>
-          <option value="SHIPPED">SHIPPED</option>
-          <option value="COMPLETED">COMPLETED</option>
-          <option value="CANCELLED">CANCELLED</option>
+          <option value="PROCESSING">{zhLabel(ORDER_STATUS, "PROCESSING")}</option>
+          <option value="SHIPPED">{zhLabel(ORDER_STATUS, "SHIPPED")}</option>
+          <option value="COMPLETED">{zhLabel(ORDER_STATUS, "COMPLETED")}</option>
+          <option value="CANCELLED">{zhLabel(ORDER_STATUS, "CANCELLED")}</option>
         </select>
         <select name="fulfillmentStatus" defaultValue={fulfillmentStatus} className="border border-line px-3 py-2">
           <option value="">履约状态（全部）</option>
-          <option value="UNFULFILLED">UNFULFILLED</option>
-          <option value="PARTIALLY_FULFILLED">PARTIALLY_FULFILLED</option>
-          <option value="SHIPPED">SHIPPED</option>
-          <option value="FULFILLED">FULFILLED</option>
-          <option value="CANCELLED">CANCELLED</option>
+          <option value="UNFULFILLED">{zhLabel(FULFILLMENT_STATUS, "UNFULFILLED")}</option>
+          <option value="PARTIALLY_FULFILLED">{zhLabel(FULFILLMENT_STATUS, "PARTIALLY_FULFILLED")}</option>
+          <option value="SHIPPED">{zhLabel(FULFILLMENT_STATUS, "SHIPPED")}</option>
+          <option value="FULFILLED">{zhLabel(FULFILLMENT_STATUS, "FULFILLED")}</option>
+          <option value="CANCELLED">{zhLabel(FULFILLMENT_STATUS, "CANCELLED")}</option>
         </select>
         <button className="bg-navy px-4 py-2 font-black text-white">筛选</button>
         <input name="from" type="date" defaultValue={from} className="border border-line px-3 py-2" />
@@ -169,5 +170,6 @@ function StatusBadge({ status, type }: { status: string; type: "payment" | "orde
           : status === "FAILED" || status === "CANCELLED"
             ? "bg-red-100 text-red-800"
             : "bg-gray-100 text-gray-700";
-  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{status}</span>;
+  const map = type === "payment" ? ORDER_PAYMENT_STATUS : type === "order" ? ORDER_STATUS : FULFILLMENT_STATUS;
+  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(map, status)}</span>;
 }

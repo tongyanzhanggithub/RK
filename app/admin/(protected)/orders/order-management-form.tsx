@@ -3,6 +3,7 @@
 import { useFormState, useFormStatus } from "react-dom";
 import type { Order } from "@prisma/client";
 import type { OrderFormState } from "@/app/admin/(protected)/orders/actions";
+import { zhLabel, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 
 type OrderManagementFormProps = {
   order: Order;
@@ -49,20 +50,20 @@ export function OrderManagementForm({ order, action, saved }: OrderManagementFor
         <label className="grid gap-2 text-sm font-bold">
           订单状态
           <select name="orderStatus" defaultValue={order.orderStatus} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-            <option value="PROCESSING">PROCESSING</option>
-            <option value="SHIPPED">SHIPPED</option>
-            <option value="COMPLETED">COMPLETED</option>
-            <option value="CANCELLED">CANCELLED</option>
+            <option value="PROCESSING">{zhLabel(ORDER_STATUS, "PROCESSING")}</option>
+            <option value="SHIPPED">{zhLabel(ORDER_STATUS, "SHIPPED")}</option>
+            <option value="COMPLETED">{zhLabel(ORDER_STATUS, "COMPLETED")}</option>
+            <option value="CANCELLED">{zhLabel(ORDER_STATUS, "CANCELLED")}</option>
           </select>
         </label>
         <label className="grid gap-2 text-sm font-bold">
           履约状态
           <select name="fulfillmentStatus" defaultValue={order.fulfillmentStatus} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-            <option value="UNFULFILLED">UNFULFILLED</option>
-            <option value="PARTIALLY_FULFILLED">PARTIALLY_FULFILLED</option>
-            <option value="SHIPPED">SHIPPED</option>
-            <option value="FULFILLED">FULFILLED</option>
-            <option value="CANCELLED">CANCELLED</option>
+            <option value="UNFULFILLED">{zhLabel(FULFILLMENT_STATUS, "UNFULFILLED")}</option>
+            <option value="PARTIALLY_FULFILLED">{zhLabel(FULFILLMENT_STATUS, "PARTIALLY_FULFILLED")}</option>
+            <option value="SHIPPED">{zhLabel(FULFILLMENT_STATUS, "SHIPPED")}</option>
+            <option value="FULFILLED">{zhLabel(FULFILLMENT_STATUS, "FULFILLED")}</option>
+            <option value="CANCELLED">{zhLabel(FULFILLMENT_STATUS, "CANCELLED")}</option>
           </select>
         </label>
         <Field label="承运商" name="shippingCarrier" defaultValue={order.shippingCarrier || ""} />

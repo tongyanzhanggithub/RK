@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { zhLabel, COUPON_TYPE, COUPON_STATUS } from "@/lib/admin-status";
 import { couponDisplayValue } from "@/lib/coupons";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -71,15 +72,15 @@ export default async function AdminCouponsPage({
         <input name="q" defaultValue={q} className="border border-line px-3 py-2 lg:col-span-2" placeholder="搜索优惠码..." />
         <select name="type" defaultValue={type} className="border border-line px-3 py-2">
           <option value="">全部类型</option>
-          <option value="PERCENTAGE">PERCENTAGE</option>
-          <option value="FIXED_AMOUNT">FIXED_AMOUNT</option>
-          <option value="FREE_SHIPPING">FREE_SHIPPING</option>
+          <option value="PERCENTAGE">{zhLabel(COUPON_TYPE, "PERCENTAGE")}</option>
+          <option value="FIXED_AMOUNT">{zhLabel(COUPON_TYPE, "FIXED_AMOUNT")}</option>
+          <option value="FREE_SHIPPING">{zhLabel(COUPON_TYPE, "FREE_SHIPPING")}</option>
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
           <option value="">全部状态</option>
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="INACTIVE">INACTIVE</option>
-          <option value="EXPIRED">EXPIRED</option>
+          <option value="ACTIVE">{zhLabel(COUPON_STATUS, "ACTIVE")}</option>
+          <option value="INACTIVE">{zhLabel(COUPON_STATUS, "INACTIVE")}</option>
+          <option value="EXPIRED">{zhLabel(COUPON_STATUS, "EXPIRED")}</option>
         </select>
         <button className="bg-navy px-4 py-2 font-black text-white">应用</button>
       </form>
@@ -103,7 +104,7 @@ export default async function AdminCouponsPage({
             {coupons.map((coupon) => (
               <tr key={coupon.id} className="border-t border-line align-top">
                 <td className="p-3 font-black">{coupon.code}</td>
-                <td className="p-3">{coupon.type}</td>
+                <td className="p-3">{zhLabel(COUPON_TYPE, coupon.type)}</td>
                 <td className="p-3 font-black">{couponDisplayValue(coupon)}</td>
                 <td className="p-3"><StatusBadge coupon={coupon} now={now} /></td>
                 <td className="p-3">{coupon.minSubtotalCents ? formatMoney(coupon.minSubtotalCents, "usd") : "-"}</td>
@@ -130,5 +131,5 @@ function Metric({ label, value }: { label: string; value: string }) {
 function StatusBadge({ coupon, now }: { coupon: { isActive: boolean; startsAt: Date | null; endsAt: Date | null }; now: Date }) {
   const label = !coupon.isActive ? "INACTIVE" : coupon.endsAt && coupon.endsAt < now ? "EXPIRED" : coupon.startsAt && coupon.startsAt > now ? "SCHEDULED" : "ACTIVE";
   const color = label === "ACTIVE" ? "bg-green-100 text-green-800" : label === "SCHEDULED" ? "bg-blue-100 text-blue-800" : label === "EXPIRED" ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-700";
-  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{label}</span>;
+  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(COUPON_STATUS, label)}</span>;
 }

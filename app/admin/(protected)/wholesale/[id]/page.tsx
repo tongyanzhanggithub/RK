@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { reviewWholesaleApplication } from "@/app/admin/(protected)/wholesale/actions";
 import { WholesaleReviewForm } from "@/app/admin/(protected)/wholesale/wholesale-review-form";
+import { zhLabel, WHOLESALE_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +42,7 @@ export default async function AdminWholesaleDetailPage({
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <div className="grid gap-6">
           <InfoPanel title="企业申请">
-            <Info label="状态" value={application.status} />
+            <Info label="状态" value={zhLabel(WHOLESALE_STATUS, application.status)} />
             <Info label="公司" value={application.companyName} />
             <Info label="联系人" value={application.contactName} />
             <Info label="业务类型" value={application.businessType} />

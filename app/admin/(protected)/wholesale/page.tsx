@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { zhLabel, WHOLESALE_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -81,9 +82,9 @@ export default async function AdminWholesalePage({
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
           <option value="">全部状态</option>
-          <option value="PENDING">PENDING</option>
-          <option value="APPROVED">APPROVED</option>
-          <option value="REJECTED">REJECTED</option>
+          <option value="PENDING">{zhLabel(WHOLESALE_STATUS, "PENDING")}</option>
+          <option value="APPROVED">{zhLabel(WHOLESALE_STATUS, "APPROVED")}</option>
+          <option value="REJECTED">{zhLabel(WHOLESALE_STATUS, "REJECTED")}</option>
         </select>
         <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-5">应用</button>
       </form>
@@ -144,5 +145,5 @@ function Metric({ label, value }: { label: string; value: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const color = status === "APPROVED" ? "bg-green-100 text-green-800" : status === "REJECTED" ? "bg-red-100 text-red-800" : "bg-safety/25 text-ink";
-  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{status}</span>;
+  return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(WHOLESALE_STATUS, status)}</span>;
 }
