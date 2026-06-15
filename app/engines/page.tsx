@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, Cog } from "lucide-react";
+import { EnginePicker } from "@/components/engine-picker";
 import { models } from "@/data/models";
 import { getServerDict } from "@/lib/locale";
 
@@ -22,24 +21,19 @@ export default function EnginesPage() {
         <p className="font-black uppercase text-safety">{e.badge}</p>
         <h1 className="mt-1 text-4xl font-black">{e.main_heading}</h1>
         <p className="mt-3 max-w-3xl text-steel">{e.main_sub}</p>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {models.map((model) => (
-            <Link
-              key={model.slug}
-              href={`/engines/${model.slug}`}
-              className="group border border-line bg-white p-6 shadow-sm hover:border-navy"
-            >
-              <Cog className="mb-4 text-navy" size={28} />
-              <h2 className="text-lg font-black leading-snug">{model.name}</h2>
-              <p className="mt-2 text-sm leading-6 text-steel">{model.description}</p>
-              <p className="mt-3 text-sm font-bold text-steel">
-                {e.used_in} {model.commonEquipment.slice(0, 3).join(" · ")}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-2 font-black text-navy">
-                {e.view_parts} <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-              </span>
-            </Link>
-          ))}
+        <div className="mt-8">
+          <EnginePicker
+            models={models}
+            strings={{
+              used_in: e.used_in,
+              view_parts: e.view_parts,
+              search_placeholder: e.search_placeholder,
+              all_equipment: e.all_equipment,
+              result_count: e.result_count,
+              no_results: e.no_results,
+              no_results_sub: e.no_results_sub
+            }}
+          />
         </div>
       </div>
     </main>

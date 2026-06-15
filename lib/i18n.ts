@@ -206,7 +206,12 @@ const en = {
     main_heading: "Pick your engine or machine",
     main_sub: "Every model page lists the parts that fit, what to double-check before ordering, and the most common failures for that platform.",
     used_in: "Used in:",
-    view_parts: "View parts"
+    view_parts: "View parts",
+    search_placeholder: "Type your engine model, e.g. 168F, GX160, water pump...",
+    all_equipment: "All equipment",
+    result_count: "{n} models",
+    no_results: "No engine matches \"{q}\".",
+    no_results_sub: "Try a shorter model number, or send us a photo on WhatsApp — we'll identify it for you."
   },
   guides: {
     badge: "Repair guides",
@@ -456,7 +461,12 @@ const zh: typeof en = {
     main_heading: "选择您的发动机或机器",
     main_sub: "每个型号页面列出兼容零件、下单前需确认的事项，以及该平台最常见的故障。",
     used_in: "适用设备：",
-    view_parts: "查看零件"
+    view_parts: "查看零件",
+    search_placeholder: "输入您的发动机型号，例如 168F、GX160、水泵...",
+    all_equipment: "全部设备",
+    result_count: "{n} 个型号",
+    no_results: "没有匹配「{q}」的型号。",
+    no_results_sub: "试试更短的型号编号，或通过 WhatsApp 发张照片给我们 —— 我们帮您辨认。"
   },
   guides: {
     badge: "维修指南",
