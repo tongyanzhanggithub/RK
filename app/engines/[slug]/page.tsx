@@ -5,9 +5,9 @@ import { ArrowRight, CircleAlert, MessageCircle } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { SetMyEngineButton } from "@/components/set-my-engine-button";
 import { models, getModel } from "@/data/models";
-import { problems } from "@/data/problems";
 import { whatsappLink } from "@/lib/contact";
 import { getStoreProducts } from "@/lib/product-store";
+import { getTroubleshooting } from "@/lib/troubleshooting";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +38,7 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
   );
   const universalParts = products.filter((product) => product.fitmentType === "UNIVERSAL");
 
+  const problems = await getTroubleshooting();
   const relatedProblems = problems.filter(
     (problem) =>
       problem.affectedModels?.includes(model.slug) ||

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, Boxes, FileText, LayoutDashboard, MessageSquareQuote, Package, Settings, ShoppingBag, Tag, Ticket, Users } from "lucide-react";
+import { BarChart3, Boxes, FileText, LayoutDashboard, MessageSquareQuote, Package, Settings, ShoppingBag, Stethoscope, Tag, Ticket, Users } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/auth-actions";
 
 const activeItems = [
@@ -12,6 +12,7 @@ const activeItems = [
   ["优惠券", "/admin/coupons", Ticket],
   ["用户评价", "/admin/testimonials", MessageSquareQuote],
   ["分类", "/admin/categories", Tag],
+  ["故障排查", "/admin/problems", Stethoscope],
   ["维修指南", "/admin/guides", FileText],
   ["设置", "/admin/settings", Settings]
 ];

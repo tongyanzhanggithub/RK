@@ -231,11 +231,27 @@ model Testimonial {
 }
 
 model Problem {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  description String
-  createdAt   DateTime @default(now())
+  id                      String   @id @default(cuid())
+  slug                    String   @unique
+  title                   String
+  description             String
+  difficulty              String   @default("moderate")
+  timeEstimate            String   @default("")
+  videoUrl                String?
+  // JSON-encoded string arrays / object (SQLite has no native JSON):
+  commonCauses            String   @default("[]")
+  checkSteps              String   @default("[]")
+  toolsNeeded             String   @default("[]")
+  recommendedProductSlugs String   @default("[]")
+  affectedModels          String   @default("[]")
+  decisionTree            String?
+  status                  String   @default("PUBLISHED")
+  sortOrder               Int      @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @default(now()) @updatedAt
+
+  @@index([status])
+  @@index([sortOrder])
 }
 
 model Equipment {

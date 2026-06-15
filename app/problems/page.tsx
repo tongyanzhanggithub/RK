@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { MessageCircle } from "lucide-react";
 import { ProblemsList } from "@/components/problems-list";
-import { problems } from "@/data/problems";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
+import { getTroubleshooting } from "@/lib/troubleshooting";
 
 export const dynamic = "force-dynamic";
 
@@ -13,9 +13,10 @@ export const metadata: Metadata = {
     "Diagnose common small engine problems — engine won't start, pull starter broken, water pump leaking — and find the exact repair kit that fixes it."
 };
 
-export default function ProblemsPage() {
+export default async function ProblemsPage() {
   const dict = getServerDict();
   const pr = dict.problems;
+  const problems = await getTroubleshooting();
 
   return (
     <main className="px-4 py-10">

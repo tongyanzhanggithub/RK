@@ -5,11 +5,12 @@ import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Cog, Gauge, Hammer, Mess
 import { DiagnosticTree } from "@/components/diagnostic-tree";
 import { ProblemFeedback } from "@/components/problem-feedback";
 import { ProductCard } from "@/components/product-card";
-import { problems, getProblem } from "@/data/problems";
+import { problems } from "@/data/problems";
 import { getModel } from "@/data/models";
 import { whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
 import { getStoreProducts } from "@/lib/product-store";
+import { getTroubleshooting, getTroubleshootingGuide } from "@/lib/troubleshooting";
 import { youtubeEmbedUrl } from "@/lib/video";
 
 export const dynamic = "force-dynamic";
@@ -18,8 +19,8 @@ export function generateStaticParams() {
   return problems.map((problem) => ({ slug: problem.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const problem = getProblem(params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const problem = await getTroubleshootingGuide(params.slug);
   if (!problem) return {};
   return {
     title: `${problem.title} — Causes, Checks & Repair Kits`,
@@ -28,7 +29,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 }
 
 export default async function ProblemPage({ params }: { params: { slug: string } }) {
-  const problem = getProblem(params.slug);
+  const problem = await getTroubleshootingGuide(params.slug);
   if (!problem) notFound();
 
   const dict = getServerDict();
@@ -65,7 +66,8 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     .map((slug) => getModel(slug))
     .filter(Boolean) as NonNullable<ReturnType<typeof getModel>>[];
 
-  const otherProblems = problems.filter((item) => item.slug !== problem.slug).slice(0, 3);
+  const allProblems = await getTroubleshooting();
+  const otherProblems = allProblems.filter((item) => item.slug !== problem.slug).slice(0, 3);
   const inquiry = whatsappLink(
     `Hello, my machine has this problem: ${problem.title}. Can you help me find the right repair kit? I can send photos.`
   );
