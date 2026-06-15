@@ -38,8 +38,28 @@ export async function POST(request: Request) {
 
   const bytes = Buffer.from(await file.arrayBuffer());
   const filename = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}.${ext}`;
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
 
+  // Production (Vercel): persist to Vercel Blob when the token is configured.
+  // The local filesystem on serverless platforms is read-only / ephemeral.
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const { put } = await import("@vercel/blob");
+      const blob = await put(`uploads/${filename}`, bytes, {
+        access: "public",
+        contentType: file.type,
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      });
+      return NextResponse.json({ url: blob.url });
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Failed to upload to cloud storage." },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Local development fallback: write to public/uploads.
+  const uploadDir = path.join(process.cwd(), "public", "uploads");
   try {
     await mkdir(uploadDir, { recursive: true });
     await writeFile(path.join(uploadDir, filename), bytes);
