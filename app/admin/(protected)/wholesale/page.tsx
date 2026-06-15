@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { zhLabel, WHOLESALE_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
+import { scoreLead, TIER_CLASS, TIER_LABEL } from "@/lib/lead-score";
 
 export const dynamic = "force-dynamic";
 
@@ -99,6 +100,7 @@ export default async function AdminWholesalePage({
               <th className="p-3">WhatsApp</th>
               <th className="p-3">邮箱</th>
               <th className="p-3">业务类型</th>
+              <th className="p-3">资质评分</th>
               <th className="p-3">意向产品</th>
               <th className="p-3">月采购量</th>
               <th className="p-3">状态</th>
@@ -115,6 +117,16 @@ export default async function AdminWholesalePage({
                 <td className="p-3">{application.whatsapp}</td>
                 <td className="p-3">{application.email}</td>
                 <td className="p-3">{application.businessType}</td>
+                <td className="p-3">
+                  {(() => {
+                    const lead = scoreLead(application);
+                    return (
+                      <span className={`inline-flex px-2 py-1 text-xs font-black ${TIER_CLASS[lead.tier]}`}>
+                        {TIER_LABEL[lead.tier]} {lead.score}
+                      </span>
+                    );
+                  })()}
+                </td>
                 <td className="max-w-xs p-3 text-steel">{readInterests(application.productInterest).join(", ")}</td>
                 <td className="p-3 font-black">{application.estimatedMonthlyQuantity ?? "-"}</td>
                 <td className="p-3"><StatusBadge status={application.status} /></td>

@@ -18,6 +18,9 @@ const applicationSchema = z.object({
   businessType: z.enum(["Repair Shop", "Distributor", "Retailer", "Online Seller", "Fleet or Rental", "Other"]),
   productInterest: z.string().min(3).max(1000),
   estimatedMonthlyQuantity: z.coerce.number().int().positive().max(100000).optional(),
+  website: z.string().max(300).optional(),
+  businessAddress: z.string().max(500).optional(),
+  salesChannel: z.string().max(500).optional(),
   message: z.string().max(3000).optional()
 });
 
@@ -47,6 +50,9 @@ export async function submitWholesaleApplication(
     businessType: text(formData, "businessType"),
     productInterest: text(formData, "productInterest"),
     estimatedMonthlyQuantity: quantityText ? quantityText : undefined,
+    website: text(formData, "website") || undefined,
+    businessAddress: text(formData, "businessAddress") || undefined,
+    salesChannel: text(formData, "salesChannel") || undefined,
     message: text(formData, "message") || undefined
   });
 
@@ -67,6 +73,9 @@ export async function submitWholesaleApplication(
       businessType: parsed.data.businessType,
       productInterest: JSON.stringify(productInterests(parsed.data.productInterest)),
       estimatedMonthlyQuantity: parsed.data.estimatedMonthlyQuantity,
+      website: parsed.data.website || null,
+      businessAddress: parsed.data.businessAddress || null,
+      salesChannel: parsed.data.salesChannel || null,
       message: parsed.data.message || null
     }
   });
@@ -86,6 +95,9 @@ export async function submitWholesaleApplication(
         `Email: ${parsed.data.email}`,
         `Products: ${parsed.data.productInterest}`,
         `Est. monthly qty: ${qty}`,
+        parsed.data.website ? `Website: ${parsed.data.website}` : "",
+        parsed.data.businessAddress ? `Address: ${parsed.data.businessAddress}` : "",
+        parsed.data.salesChannel ? `Sales channel: ${parsed.data.salesChannel}` : "",
         parsed.data.message ? `Message: ${parsed.data.message}` : ""
       ]
         .filter(Boolean)

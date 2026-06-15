@@ -66,6 +66,25 @@ export function WholesaleApplicationForm() {
         placeholder="Example: 100"
       />
 
+      <div className="border border-line bg-panel p-4">
+        <p className="text-sm font-black">Business verification <span className="font-bold text-steel">(optional — speeds up approval & free samples)</span></p>
+        <p className="mt-1 text-xs leading-5 text-steel">
+          Genuine resellers who add these get approved faster and qualify for free samples. We only ship free samples after a quick verification.
+        </p>
+        <div className="mt-4 grid gap-5 md:grid-cols-2">
+          <Field label="Company website or store page" name="website" placeholder="https:// or your shop / marketplace link" />
+          <Field label="Sales channel / market" name="salesChannel" placeholder="e.g. repair shop in Dubai, Lazada store, B2B distributor" />
+          <label className="grid gap-2 text-sm font-bold md:col-span-2">
+            Physical business address
+            <input
+              name="businessAddress"
+              placeholder="Street, city, country — where your shop or warehouse is"
+              className="h-12 border border-line bg-white px-3 font-normal outline-none focus:border-navy"
+            />
+          </label>
+        </div>
+      </div>
+
       <label className="grid gap-2 text-sm font-bold">
         Message
         <textarea

@@ -5,6 +5,7 @@ import { reviewWholesaleApplication } from "@/app/admin/(protected)/wholesale/ac
 import { WholesaleReviewForm } from "@/app/admin/(protected)/wholesale/wholesale-review-form";
 import { zhLabel, WHOLESALE_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
+import { scoreLead, TIER_CLASS, TIER_LABEL } from "@/lib/lead-score";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,8 @@ export default async function AdminWholesaleDetailPage({
     include: { customer: true }
   });
   if (!application) notFound();
+
+  const lead = scoreLead(application);
 
   return (
     <main>
@@ -50,6 +53,9 @@ export default async function AdminWholesaleDetailPage({
             <Info label="WhatsApp" value={application.whatsapp} />
             <Info label="邮箱" value={application.email} />
             <Info label="预计月采购量" value={String(application.estimatedMonthlyQuantity ?? "-")} />
+            <Info label="公司网站" value={application.website || "-"} />
+            <Info label="实体经营地址" value={application.businessAddress || "-"} />
+            <Info label="销售渠道/市场" value={application.salesChannel || "-"} />
             <Info label="意向产品" value={readInterests(application.productInterest).join(", ")} />
             <Info label="留言" value={application.message || "-"} />
             <Info label="提交时间" value={application.createdAt.toLocaleString("zh-CN")} />
@@ -64,6 +70,26 @@ export default async function AdminWholesaleDetailPage({
         </div>
 
         <aside className="grid h-fit gap-6">
+          <section className="border border-line bg-white p-5">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-bold uppercase text-steel">资质可信度评分</p>
+              <span className={`inline-flex px-2 py-1 text-xs font-black ${TIER_CLASS[lead.tier]}`}>
+                {TIER_LABEL[lead.tier]} · {lead.score}/100
+              </span>
+            </div>
+            <p className="mt-3 text-xs leading-5 text-steel">
+              用于人工审核参考 —— 分数越高越可能是真实企业。寄样前建议要求「可疑」级别的申请补充公司网站或营业执照。
+            </p>
+            <ul className="mt-4 grid gap-2 text-sm">
+              {lead.signals.map((signal) => (
+                <li key={signal.label} className="flex items-start gap-2">
+                  <span className={signal.positive ? "text-green-700" : "text-red-600"}>{signal.positive ? "✓" : "✕"}</span>
+                  <span className="font-bold">{signal.label}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
           <section className="border border-line bg-white p-5">
             <p className="text-xs font-bold uppercase text-steel">关联客户</p>
             {application.customer ? (

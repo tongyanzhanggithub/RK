@@ -51,17 +51,29 @@ export default function WholesalePage({ searchParams }: { searchParams?: { submi
       </section>
 
       <section className="border-b border-line bg-panel px-4 py-10">
-        <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
-          {[
-            ["1. Send your list", "Share engine models, part numbers or equipment types plus target quantities — by WhatsApp or the form below."],
-            ["2. Get a quote", "We confirm compatibility and reply with wholesale pricing, MOQ, carton plan and freight to your port."],
-            ["3. Sample & order", "Start with a small trial order, then scale to bulk cartons or containers with T/T terms."]
-          ].map(([title, copy]) => (
-            <div key={title} className="border border-line bg-white p-6">
-              <strong className="block text-lg">{title}</strong>
-              <p className="mt-2 text-sm leading-6 text-steel">{copy}</p>
-            </div>
-          ))}
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-6 md:grid-cols-4">
+            {[
+              ["1. Send your list", "Share engine models, part numbers or equipment types plus target quantities — by WhatsApp or the form below."],
+              ["2. Quick verification", "We confirm you're a real reseller (a website, shop page or business address is enough). This keeps pricing fair for genuine buyers."],
+              ["3. Free sample", "Once verified, we ship a free sample so you can check the quality before committing to a bulk order."],
+              ["4. Bulk order", "Approve the sample, then scale to cartons or containers with wholesale pricing and T/T terms."]
+            ].map(([title, copy]) => (
+              <div key={title} className="border border-line bg-white p-6">
+                <strong className="block text-lg">{title}</strong>
+                <p className="mt-2 text-sm leading-6 text-steel">{copy}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex items-start gap-3 border border-navy bg-white p-5">
+            <span className="mt-0.5 shrink-0 bg-safety px-2 py-1 text-xs font-black uppercase text-ink">Sample policy</span>
+            <p className="text-sm font-bold leading-6">
+              We offer <strong>free samples to verified resellers</strong>. To keep this fair and fast, we confirm your business
+              first — a company website, online store, or shop address is all we need. Not a reseller yet?{" "}
+              <a href="/products" className="text-navy underline">Place a small trial order by card</a> instead — it ships immediately, no verification needed.
+            </p>
+          </div>
         </div>
       </section>
 

@@ -88,6 +88,9 @@ model WholesaleApplication {
   businessType             String
   productInterest          String
   estimatedMonthlyQuantity Int?
+  website                  String?
+  businessAddress          String?
+  salesChannel             String?
   message                  String?
   status                   String    @default("PENDING")
   adminNote                String?
