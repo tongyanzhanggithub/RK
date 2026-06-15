@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Gauge, Hammer, MessageCircle, PlayCircle, Wrench } from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Cog, Gauge, Hammer, MessageCircle, PlayCircle, Wrench } from "lucide-react";
+import { DiagnosticTree } from "@/components/diagnostic-tree";
+import { ProblemFeedback } from "@/components/problem-feedback";
 import { ProductCard } from "@/components/product-card";
 import { problems, getProblem } from "@/data/problems";
+import { getModel } from "@/data/models";
 import { whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
 import { getStoreProducts } from "@/lib/product-store";
@@ -55,6 +58,13 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     (typeof recommendedBySlug)[number]
   >[];
 
+  const productNames: Record<string, string> = {};
+  for (const product of products) productNames[product.slug] = product.name;
+
+  const affectedModels = (problem.affectedModels || [])
+    .map((slug) => getModel(slug))
+    .filter(Boolean) as NonNullable<ReturnType<typeof getModel>>[];
+
   const otherProblems = problems.filter((item) => item.slug !== problem.slug).slice(0, 3);
   const inquiry = whatsappLink(
     `Hello, my machine has this problem: ${problem.title}. Can you help me find the right repair kit? I can send photos.`
@@ -83,7 +93,46 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             </div>
             <p className="mt-4 max-w-3xl text-lg leading-8 text-steel">{problem.description}</p>
 
-            <section className="mt-8 border border-line bg-white p-6">
+            {problem.decisionTree && (
+              <div className="mt-8">
+                <DiagnosticTree
+                  tree={problem.decisionTree}
+                  productNames={productNames}
+                  strings={{
+                    heading: pr.diagnose_heading,
+                    intro: pr.diagnose_intro,
+                    start: pr.diagnose_start,
+                    restart: pr.diagnose_restart,
+                    back: pr.diagnose_back,
+                    result_cause: pr.diagnose_result_cause,
+                    result_action: pr.diagnose_result_action,
+                    result_parts: pr.diagnose_result_parts
+                  }}
+                />
+              </div>
+            )}
+
+            {affectedModels.length > 0 && (
+              <section className="mt-6 border border-line bg-white p-6">
+                <h2 className="inline-flex items-center gap-2 text-xl font-black">
+                  <Cog className="text-navy" size={22} /> {pr.affected_heading}
+                </h2>
+                <p className="mt-1 text-sm text-steel">{pr.affected_sub}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {affectedModels.map((model) => (
+                    <Link
+                      key={model.slug}
+                      href={`/engines/${model.slug}`}
+                      className="inline-flex items-center gap-1.5 border border-line bg-panel px-3 py-2 text-sm font-black hover:border-navy"
+                    >
+                      {model.name} <ArrowRight size={14} className="text-navy" />
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <section className="mt-6 border border-line bg-white p-6">
               <h2 className="inline-flex items-center gap-2 text-xl font-black">
                 <CircleAlert className="text-safety" size={22} /> Common causes
               </h2>
@@ -144,6 +193,16 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 ))}
               </ul>
             </section>
+
+            <ProblemFeedback
+              strings={{
+                question: pr.feedback_q,
+                yes: pr.feedback_yes,
+                no: pr.feedback_no,
+                thanks_yes: pr.feedback_thanks_yes,
+                thanks_no: pr.feedback_thanks_no
+              }}
+            />
           </div>
 
           <aside className="h-fit border border-line bg-panel p-6">

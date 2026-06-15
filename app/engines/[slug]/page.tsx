@@ -38,8 +38,10 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
   );
   const universalParts = products.filter((product) => product.fitmentType === "UNIVERSAL");
 
-  const relatedProblems = problems.filter((problem) =>
-    model.commonProblems.some((title) => title.toLowerCase() === problem.title.toLowerCase())
+  const relatedProblems = problems.filter(
+    (problem) =>
+      problem.affectedModels?.includes(model.slug) ||
+      model.commonProblems.some((title) => title.toLowerCase() === problem.title.toLowerCase())
   );
 
   const inquiry = whatsappLink(
