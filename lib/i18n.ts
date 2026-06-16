@@ -112,7 +112,8 @@ const en = {
     engine_model_col: "Engine Model",
     compatible_equipment_col: "Compatible Equipment",
     inquiry: "Inquire on WhatsApp",
-    save_pct: "Save {n}%"
+    save_pct: "Save {n}%",
+    recently_viewed: "Recently viewed"
   },
   cart: {
     badge: "Secure checkout",
@@ -395,7 +396,8 @@ const zh: typeof en = {
     engine_model_col: "发动机型号",
     compatible_equipment_col: "兼容设备",
     inquiry: "WhatsApp 询价",
-    save_pct: "节省 {n}%"
+    save_pct: "节省 {n}%",
+    recently_viewed: "最近浏览"
   },
   cart: {
     badge: "安全结账",

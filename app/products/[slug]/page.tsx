@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { FitmentChecker } from "@/components/fitment-checker";
+import { RecentlyViewed } from "@/components/recently-viewed";
 import { InquiryButton } from "@/components/inquiry-button";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
@@ -248,6 +249,17 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             </div>
           </section>
         )}
+
+        <RecentlyViewed
+          heading={dict.product.recently_viewed}
+          current={{
+            slug: product.slug,
+            name: product.name,
+            image: productImage || null,
+            priceCents: product.priceCents,
+            currency: product.currency
+          }}
+        />
       </div>
     </main>
   );
