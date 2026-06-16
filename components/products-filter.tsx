@@ -6,14 +6,14 @@ import { useLanguage } from "@/components/language-provider";
 
 type ProductsFilterProps = {
   categories: string[];
-  models: string[];
   equipmentOptions: string[];
   problems: string[];
 };
 
-const FILTER_KEYS = ["q", "category", "model", "equipment", "problem", "sort"] as const;
+// "model" is owned by the prominent FitmentBar, not this filter row.
+const FILTER_KEYS = ["q", "category", "equipment", "problem", "sort"] as const;
 
-export function ProductsFilter({ categories, models, equipmentOptions, problems }: ProductsFilterProps) {
+export function ProductsFilter({ categories, equipmentOptions, problems }: ProductsFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { dict } = useLanguage();
@@ -37,7 +37,7 @@ export function ProductsFilter({ categories, models, equipmentOptions, problems 
 
   return (
     <div className="border border-line bg-white p-4">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <input
           defaultValue={currentValue("q")}
           onKeyDown={(event) => {
@@ -52,7 +52,6 @@ export function ProductsFilter({ categories, models, equipmentOptions, problems 
           placeholder="Search kits..."
         />
         <FilterSelect label={p.filter_categories} value={currentValue("category")} options={categories} onChange={(value) => apply("category", value)} />
-        <FilterSelect label={p.filter_models} value={currentValue("model")} options={models} onChange={(value) => apply("model", value)} />
         <FilterSelect label={p.filter_equipment} value={currentValue("equipment")} options={equipmentOptions} onChange={(value) => apply("equipment", value)} />
         <FilterSelect label={p.filter_problems} value={currentValue("problem")} options={problems} onChange={(value) => apply("problem", value)} />
         <select

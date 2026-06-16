@@ -93,7 +93,14 @@ const en = {
     filter_equipment: "All equipment",
     filter_problems: "All problems",
     active_filters: "Active filters:",
-    clear_all: "Clear all"
+    clear_all: "Clear all",
+    fitment_title: "Find parts for your engine",
+    fitment_sub: "Select your engine to see only parts confirmed to fit — universal parts are shown last.",
+    fitment_select: "Select your engine / machine...",
+    fitment_garage: "Your garage:",
+    fitment_showing: "Showing parts that fit",
+    fitment_show_all: "Show all parts",
+    fitment_add_hint: "Saved to your garage for one-click filtering across the site."
   },
   product: {
     retail_label: "Retail reference",
@@ -378,7 +385,14 @@ const zh: typeof en = {
     filter_equipment: "全部设备",
     filter_problems: "全部故障",
     active_filters: "已选筛选：",
-    clear_all: "清除全部"
+    clear_all: "清除全部",
+    fitment_title: "查找适配您发动机的零件",
+    fitment_sub: "选择您的发动机，只看确认适配的零件 —— 通用件排在最后。",
+    fitment_select: "选择您的发动机 / 设备...",
+    fitment_garage: "我的车库：",
+    fitment_showing: "正在显示适配",
+    fitment_show_all: "显示全部零件",
+    fitment_add_hint: "已存入车库，全站一键按它筛选。"
   },
   product: {
     retail_label: "零售参考价",

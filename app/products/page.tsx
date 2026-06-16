@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { FitmentBar } from "@/components/fitment-bar";
 import { ProductCard } from "@/components/product-card";
 import { ProductsFilter } from "@/components/products-filter";
 import { getStoreProducts } from "@/lib/product-store";
@@ -44,7 +45,6 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
   const sort = searchParams?.sort || "";
 
   const categories = [...new Set(products.map((product) => product.category))];
-  const models = [...new Set(products.flatMap((product) => product.compatibleModels))];
   const equipmentOptions = [...new Set(products.flatMap((product) => product.compatibleEquipment))];
   const problems = [...new Set(products.flatMap((product) => product.problemsSolved))];
 
@@ -94,7 +94,12 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
         <p className="mt-3 max-w-3xl text-steel">{p.subtext}</p>
         <div className="mt-8">
           <Suspense>
-            <ProductsFilter categories={categories} models={models} equipmentOptions={equipmentOptions} problems={problems} />
+            <FitmentBar />
+          </Suspense>
+        </div>
+        <div className="mt-4">
+          <Suspense>
+            <ProductsFilter categories={categories} equipmentOptions={equipmentOptions} problems={problems} />
           </Suspense>
         </div>
         <p className="mt-6 text-sm font-black uppercase text-steel">
