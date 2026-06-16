@@ -2,6 +2,7 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { GalleryUpload, MainImageUpload } from "@/components/admin-image-upload";
+import { FitmentModelPicker } from "@/components/fitment-model-picker";
 import type { ProductFormState } from "@/app/admin/(protected)/products/actions";
 import type { Product } from "@/data/products";
 
@@ -136,7 +137,7 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
         />
         <Textarea label="标签" name="tagsText" defaultValue={list(product?.tags)} placeholder="热销&#10;适用于 168F" />
         <Textarea label="套件包含" name="kitIncludesText" defaultValue={list(product?.kitIncludes)} placeholder="化油器 x1&#10;火花塞 x1" />
-        <Textarea label="兼容型号" name="compatibleModelsText" defaultValue={list(product?.compatibleModels)} placeholder="168F&#10;GX160" />
+        <FitmentModelPicker defaultModels={product?.compatibleModels ?? []} />
         <Textarea label="兼容设备" name="compatibleEquipmentText" defaultValue={list(product?.compatibleEquipment)} placeholder="便携式发电机&#10;汽油水泵" />
         <Textarea label="可解决的问题" name="problemsSolvedText" defaultValue={list(product?.problemsSolved)} placeholder="发动机无法启动&#10;启动困难" />
         <Textarea label="不兼容项" name="notCompatibleWithText" defaultValue={list(product?.notCompatibleWith)} />
