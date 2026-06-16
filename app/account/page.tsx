@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LogOut, MapPin, Package, ShoppingBag } from "lucide-react";
+import { ArrowRight, LogOut, MapPin, Package, ShoppingBag } from "lucide-react";
 import { logoutCustomer } from "@/app/account/actions";
 import { requireCustomer } from "@/lib/customer-auth";
 import { prisma } from "@/lib/db";
@@ -80,17 +80,17 @@ export default async function AccountPage() {
               {orders.map((order) => {
                 const badge = PAYMENT_LABEL[order.paymentStatus] || PAYMENT_LABEL.PENDING;
                 return (
-                  <article key={order.id} className="border border-line bg-white p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
+                  <article key={order.id} className="border border-line bg-white p-5 transition-colors hover:border-navy">
+                    <Link href={`/account/orders/${order.id}`} className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <strong className="text-lg">{order.orderNumber}</strong>
+                        <strong className="text-lg text-navy underline-offset-2 hover:underline">{order.orderNumber}</strong>
                         <p className="text-sm text-steel">{order.createdAt.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className={`inline-flex px-2 py-1 text-xs font-black ${badge.cls}`}>{badge.label}</span>
                         <strong>{formatMoney(order.totalCents, order.currency)}</strong>
                       </div>
-                    </div>
+                    </Link>
                     <ul className="mt-4 grid gap-1 border-t border-line pt-3 text-sm text-steel">
                       {order.items.map((item) => (
                         <li key={item.id} className="flex items-center justify-between gap-3">
@@ -104,6 +104,9 @@ export default async function AccountPage() {
                         Tracking: {order.shippingCarrier ? `${order.shippingCarrier} · ` : ""}{order.trackingNumber}
                       </p>
                     )}
+                    <Link href={`/account/orders/${order.id}`} className="mt-3 inline-flex items-center gap-1 text-sm font-black text-navy hover:underline">
+                      View details <ArrowRight size={15} />
+                    </Link>
                   </article>
                 );
               })}
