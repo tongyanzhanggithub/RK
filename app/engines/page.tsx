@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { EnginePicker } from "@/components/engine-picker";
 import { models } from "@/data/models";
 import { getServerDict } from "@/lib/locale";
+import { getStoreProducts } from "@/lib/product-store";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +12,24 @@ export const metadata: Metadata = {
     "Find repair kits and spare parts for 168F, 170F, 188F, GX160 and GX200 style engines, water pumps and generators. Fitment notes included for every model."
 };
 
-export default function EnginesPage() {
+export default async function EnginesPage() {
   const dict = getServerDict();
   const e = dict.engines;
+
+  // Count compatible parts per engine (specific + universal) for the coverage badge.
+  const products = await getStoreProducts();
+  const universalCount = products.filter((product) => product.fitmentType === "UNIVERSAL").length;
+  const counts: Record<string, number> = {};
+  for (const model of models) {
+    const needle = model.name.toLowerCase();
+    const specific = products.filter(
+      (product) =>
+        product.fitmentType !== "UNIVERSAL" &&
+        (product.compatibleModels.some((item) => item.toLowerCase().includes(needle)) ||
+          product.compatibleEquipment.some((item) => item.toLowerCase().includes(needle)))
+    ).length;
+    counts[model.slug] = specific + universalCount;
+  }
 
   return (
     <main className="px-4 py-10">
@@ -24,6 +40,7 @@ export default function EnginesPage() {
         <div className="mt-8">
           <EnginePicker
             models={models}
+            counts={counts}
             strings={{
               used_in: e.used_in,
               view_parts: e.view_parts,
@@ -31,7 +48,8 @@ export default function EnginesPage() {
               all_equipment: e.all_equipment,
               result_count: e.result_count,
               no_results: e.no_results,
-              no_results_sub: e.no_results_sub
+              no_results_sub: e.no_results_sub,
+              parts_count: e.parts_count
             }}
           />
         </div>

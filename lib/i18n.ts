@@ -219,7 +219,8 @@ const en = {
     all_equipment: "All equipment",
     result_count: "{n} models",
     no_results: "No engine matches \"{q}\".",
-    no_results_sub: "Try a shorter model number, or send us a photo on WhatsApp — we'll identify it for you."
+    no_results_sub: "Try a shorter model number, or send us a photo on WhatsApp — we'll identify it for you.",
+    parts_count: "{n} parts"
   },
   guides: {
     badge: "Repair guides",
@@ -504,7 +505,8 @@ const zh: typeof en = {
     all_equipment: "全部设备",
     result_count: "{n} 个型号",
     no_results: "没有匹配「{q}」的型号。",
-    no_results_sub: "试试更短的型号编号，或通过 WhatsApp 发张照片给我们 —— 我们帮您辨认。"
+    no_results_sub: "试试更短的型号编号，或通过 WhatsApp 发张照片给我们 —— 我们帮您辨认。",
+    parts_count: "{n} 款零件"
   },
   guides: {
     badge: "维修指南",

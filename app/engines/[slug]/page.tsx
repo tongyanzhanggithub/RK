@@ -15,12 +15,25 @@ export function generateStaticParams() {
   return models.map((model) => ({ slug: model.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+function specificPartsFor(products: Awaited<ReturnType<typeof getStoreProducts>>, modelName: string) {
+  const needle = modelName.toLowerCase();
+  return products.filter(
+    (product) =>
+      product.fitmentType !== "UNIVERSAL" &&
+      (product.compatibleModels.some((item) => item.toLowerCase().includes(needle)) ||
+        product.compatibleEquipment.some((item) => item.toLowerCase().includes(needle)))
+  );
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const model = getModel(params.slug);
   if (!model) return {};
+  const products = await getStoreProducts();
+  const count = specificPartsFor(products, model.name).length;
+  const countText = count > 0 ? `${count} compatible repair kits & spare parts in stock. ` : "";
   return {
-    title: `${model.name} Parts & Repair Kits`,
-    description: `${model.description} Browse compatible repair kits with fitment notes before you order.`
+    title: `${model.name} Parts & Repair Kits${count > 0 ? ` (${count} in stock)` : ""}`,
+    description: `${countText}${model.description} Factory-direct, wholesale pricing, fitment confirmed before you order.`
   };
 }
 
@@ -29,13 +42,7 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
   if (!model) notFound();
 
   const products = await getStoreProducts();
-  const needle = model.name.toLowerCase();
-  const specificParts = products.filter(
-    (product) =>
-      product.fitmentType !== "UNIVERSAL" &&
-      (product.compatibleModels.some((item) => item.toLowerCase().includes(needle)) ||
-        product.compatibleEquipment.some((item) => item.toLowerCase().includes(needle)))
-  );
+  const specificParts = specificPartsFor(products, model.name);
   const universalParts = products.filter((product) => product.fitmentType === "UNIVERSAL");
 
   const problems = await getTroubleshooting();
@@ -70,6 +77,12 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
           <SetMyEngineButton modelName={model.name} />
         </div>
 
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <StatCard value={specificParts.length} label={`parts confirmed for ${model.name}`} tone="navy" />
+          <StatCard value={universalParts.length} label="universal parts that also fit" tone="plain" />
+          <StatCard value={specificParts.length + universalParts.length} label="total parts available" tone="plain" />
+        </div>
+
         <div className="mt-6 flex items-start gap-3 border border-safety/60 bg-safety/10 p-4">
           <CircleAlert className="mt-0.5 shrink-0 text-ink" size={20} />
           <p className="font-bold leading-6">
@@ -85,7 +98,7 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
           {specificParts.length > 0 ? (
             <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {specificParts.map((product) => (
-                <ProductCard key={product.slug} product={product} />
+                <ProductCard key={product.slug} product={product} activeModel={model.name} />
               ))}
             </div>
           ) : (
@@ -151,5 +164,14 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
         </section>
       </div>
     </main>
+  );
+}
+
+function StatCard({ value, label, tone }: { value: number; label: string; tone: "navy" | "plain" }) {
+  return (
+    <div className={`border p-4 ${tone === "navy" ? "border-navy bg-navy text-white" : "border-line bg-white"}`}>
+      <strong className="block text-3xl font-black leading-none">{value}</strong>
+      <span className={`mt-1 block text-sm font-bold ${tone === "navy" ? "text-white/80" : "text-steel"}`}>{label}</span>
+    </div>
   );
 }

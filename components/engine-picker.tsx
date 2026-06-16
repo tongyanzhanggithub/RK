@@ -13,6 +13,7 @@ type PickerStrings = {
   result_count: string;
   no_results: string;
   no_results_sub: string;
+  parts_count: string;
 };
 
 // Tolerant match: "gx 160" / "GX-160" / "168" all hit the right model.
@@ -20,7 +21,15 @@ function normalize(value: string) {
   return value.toLowerCase().replace(/[\s\-_./]+/g, "");
 }
 
-export function EnginePicker({ models, strings }: { models: EngineModel[]; strings: PickerStrings }) {
+export function EnginePicker({
+  models,
+  strings,
+  counts = {}
+}: {
+  models: EngineModel[];
+  strings: PickerStrings;
+  counts?: Record<string, number>;
+}) {
   const [query, setQuery] = useState("");
   const [equipment, setEquipment] = useState("");
 
@@ -94,7 +103,14 @@ export function EnginePicker({ models, strings }: { models: EngineModel[]; strin
               href={`/engines/${model.slug}`}
               className="group border border-line bg-white p-6 shadow-sm hover:border-navy"
             >
-              <Cog className="mb-4 text-navy" size={28} />
+              <div className="mb-4 flex items-center justify-between">
+                <Cog className="text-navy" size={28} />
+                {counts[model.slug] > 0 && (
+                  <span className="bg-navy px-2 py-1 text-xs font-black text-white">
+                    {strings.parts_count.replace("{n}", String(counts[model.slug]))}
+                  </span>
+                )}
+              </div>
               <h2 className="text-lg font-black leading-snug">{model.name}</h2>
               <p className="mt-2 text-sm leading-6 text-steel">{model.description}</p>
               <p className="mt-3 text-sm font-bold text-steel">
