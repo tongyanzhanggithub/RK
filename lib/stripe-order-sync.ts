@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import { prisma } from "@/lib/db";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
+import { sendLowStockAlert, type LowStockItem } from "@/lib/stock-alert";
 
 type StripeEventReference = {
   id: string;
@@ -110,6 +111,8 @@ async function syncCustomerFromOrder(order: CustomerOrderData) {
 }
 
 async function reduceInventoryForOrder(orderId: string) {
+  const lowStock: LowStockItem[] = [];
+
   await prisma.$transaction(async (tx) => {
     const order = await tx.order.findUnique({
       where: { id: orderId },
@@ -130,6 +133,12 @@ async function reduceInventoryForOrder(orderId: string) {
       const stockAfter = Math.max(0, product.stock - item.quantity);
       const delta = stockAfter - product.stock;
       if (delta === 0) continue;
+
+      // Alert when stock newly crosses to/below its low threshold.
+      const threshold = product.lowStockThreshold ?? 5;
+      if (product.stock > threshold && stockAfter <= threshold) {
+        lowStock.push({ name: product.name, sku: product.sku, stockAfter, threshold });
+      }
 
       await tx.product.update({
         where: { id: product.id },
@@ -163,6 +172,8 @@ async function reduceInventoryForOrder(orderId: string) {
       }
     });
   });
+
+  await sendLowStockAlert(lowStock);
 }
 
 export async function syncCheckoutSession(
