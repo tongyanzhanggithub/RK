@@ -1,18 +1,31 @@
 "use client";
 
-import { CheckCircle2, Globe } from "lucide-react";
+import { CheckCircle2, CircleSlash, Globe } from "lucide-react";
 import { engineMatchesModels, matchInGarage, useMyEngine } from "@/components/engine-provider";
 
 type FitBadgeProps = {
   fitmentType?: "SPECIFIC" | "UNIVERSAL";
   fitmentNote?: string;
   compatibleModels: string[];
+  notCompatibleWith?: string[];
   /** Active fitment filter on the listing — shows a confirmed-fit badge even before a garage is saved. */
   activeModel?: string;
 };
 
-export function FitBadge({ fitmentType, fitmentNote, compatibleModels, activeModel }: FitBadgeProps) {
+export function FitBadge({ fitmentType, fitmentNote, compatibleModels, notCompatibleWith, activeModel }: FitBadgeProps) {
   const { garage } = useMyEngine();
+
+  // Explicit incompatibility with an engine the buyer cares about — warn first.
+  const blockedBy =
+    (activeModel && notCompatibleWith && engineMatchesModels(activeModel, notCompatibleWith) && activeModel) ||
+    (notCompatibleWith ? matchInGarage(garage, notCompatibleWith) : null);
+  if (blockedBy) {
+    return (
+      <p className="inline-flex items-center gap-1.5 border border-red-300 bg-red-50 px-2 py-1 text-xs font-black text-red-700">
+        <CircleSlash size={14} className="shrink-0" /> Not for your {blockedBy}
+      </p>
+    );
+  }
 
   if (fitmentType === "UNIVERSAL") {
     return (

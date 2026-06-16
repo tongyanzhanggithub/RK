@@ -100,7 +100,9 @@ const en = {
     fitment_garage: "Your garage:",
     fitment_showing: "Showing parts that fit",
     fitment_show_all: "Show all parts",
-    fitment_add_hint: "Saved to your garage for one-click filtering across the site."
+    fitment_add_hint: "Saved to your garage for one-click filtering across the site.",
+    fitment_my_garage: "Fits my garage",
+    fitment_showing_garage: "Showing parts for your garage"
   },
   product: {
     retail_label: "Retail reference",
@@ -393,7 +395,9 @@ const zh: typeof en = {
     fitment_garage: "我的车库：",
     fitment_showing: "正在显示适配",
     fitment_show_all: "显示全部零件",
-    fitment_add_hint: "已存入车库，全站一键按它筛选。"
+    fitment_add_hint: "已存入车库，全站一键按它筛选。",
+    fitment_my_garage: "适配我的车库",
+    fitment_showing_garage: "正在显示适配车库的零件"
   },
   product: {
     retail_label: "零售参考价",

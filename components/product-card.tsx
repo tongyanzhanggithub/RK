@@ -42,6 +42,7 @@ export function ProductCard({ product, activeModel }: { product: Product; active
           fitmentType={product.fitmentType}
           fitmentNote={product.fitmentNote}
           compatibleModels={product.compatibleModels}
+          notCompatibleWith={product.notCompatibleWith}
           activeModel={activeModel}
         />
         {product.compatibleModels.length > 0 && (

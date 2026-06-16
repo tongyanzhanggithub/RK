@@ -14,9 +14,11 @@ export function FitmentBar() {
   const { garage, addEngine } = useMyEngine();
 
   const activeModel = searchParams.get("model") || "";
+  const fitsActive = Boolean(searchParams.get("fits"));
 
   function apply(model: string) {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete("fits");
     if (model) {
       params.set("model", model);
       addEngine(model); // remember it in the garage, eBay-style
@@ -24,6 +26,40 @@ export function FitmentBar() {
       params.delete("model");
     }
     router.push(params.size > 0 ? `/products?${params.toString()}` : "/products");
+  }
+
+  function applyGarage() {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("model");
+    params.set("fits", garage.join(";"));
+    router.push(`/products?${params.toString()}`);
+  }
+
+  function clearFits() {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("fits");
+    router.push(params.size > 0 ? `/products?${params.toString()}` : "/products");
+  }
+
+  // Garage-wide active state.
+  if (fitsActive) {
+    return (
+      <div className="flex flex-wrap items-center justify-between gap-3 border-2 border-green-600 bg-green-50 p-4">
+        <p className="inline-flex flex-wrap items-center gap-2 text-lg font-black text-green-800">
+          <CheckCircle2 size={22} /> {p.fitment_showing_garage}
+          {garage.map((engine) => (
+            <span key={engine} className="bg-green-600 px-2 py-0.5 text-sm text-white">{engine}</span>
+          ))}
+        </p>
+        <button
+          type="button"
+          onClick={clearFits}
+          className="inline-flex h-10 items-center gap-1 border border-green-700 bg-white px-3 text-sm font-black text-green-800 hover:bg-green-100"
+        >
+          <X size={15} /> {p.fitment_show_all}
+        </button>
+      </div>
+    );
   }
 
   // Active state: clearly show "showing parts that fit X".
@@ -95,6 +131,15 @@ export function FitmentBar() {
               {engine}
             </button>
           ))}
+          {garage.length >= 2 && (
+            <button
+              type="button"
+              onClick={applyGarage}
+              className="inline-flex items-center gap-1 border border-green-700 bg-green-600 px-3 py-1.5 text-sm font-black text-white hover:bg-green-700"
+            >
+              <CheckCircle2 size={14} /> {p.fitment_my_garage}
+            </button>
+          )}
         </div>
       )}
     </div>

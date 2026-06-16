@@ -21,6 +21,7 @@ type ProductsSearchParams = {
   equipment?: string;
   problem?: string;
   sort?: string;
+  fits?: string;
 };
 
 function fuzzyIncludes(values: string[], needle: string) {
@@ -33,6 +34,12 @@ function matchesModel(product: Product, model: string) {
   return fuzzyIncludes(product.compatibleModels, model);
 }
 
+// "fits my garage": product fits ANY of the buyer's saved engines (or is universal).
+function matchesGarage(product: Product, engines: string[]) {
+  if (product.fitmentType === "UNIVERSAL") return true;
+  return engines.some((engine) => fuzzyIncludes(product.compatibleModels, engine));
+}
+
 export default async function ProductsPage({ searchParams }: { searchParams?: ProductsSearchParams }) {
   const dict = getServerDict();
   const p = dict.products;
@@ -43,6 +50,7 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
   const equipmentFilter = searchParams?.equipment || "";
   const problem = searchParams?.problem || "";
   const sort = searchParams?.sort || "";
+  const fitsEngines = (searchParams?.fits || "").split(";").map((s) => s.trim()).filter(Boolean);
 
   const categories = [...new Set(products.map((product) => product.category))];
   const equipmentOptions = [...new Set(products.flatMap((product) => product.compatibleEquipment))];
@@ -65,12 +73,13 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
       (!q || text.includes(q)) &&
       (!category || product.category === category) &&
       (!model || matchesModel(product, model)) &&
+      (fitsEngines.length === 0 || matchesGarage(product, fitsEngines)) &&
       (!equipmentFilter || fuzzyIncludes(product.compatibleEquipment, equipmentFilter)) &&
       (!problem || fuzzyIncludes(product.problemsSolved, problem))
     );
   });
 
-  const universalLast = model
+  const universalLast = (model || fitsEngines.length > 0)
     ? [...filtered].sort((a, b) => {
         const aUniversal = a.fitmentType === "UNIVERSAL" ? 1 : 0;
         const bUniversal = b.fitmentType === "UNIVERSAL" ? 1 : 0;
