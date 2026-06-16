@@ -335,6 +335,7 @@ function createTables() {
       role TEXT NOT NULL DEFAULT 'CUSTOMER',
       tags TEXT NOT NULL DEFAULT '[]',
       internalNote TEXT,
+      passwordHash TEXT,
       wholesaleApprovedAt DATETIME,
       createdAt DATETIME NOT NULL,
       updatedAt DATETIME NOT NULL

@@ -17,7 +17,8 @@ const en = {
     problems: "Troubleshooting",
     guides: "Repair Guides",
     wholesale: "Wholesale / RFQ",
-    cart: "Cart"
+    cart: "Cart",
+    account: "Account"
   },
   footer: {
     description:
@@ -328,7 +329,8 @@ const zh: typeof en = {
     problems: "故障排查",
     guides: "维修指南",
     wholesale: "批发询价",
-    cart: "购物车"
+    cart: "购物车",
+    account: "账户"
   },
   footer: {
     description:

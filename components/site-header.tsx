@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, User } from "lucide-react";
 import { CartNavLink } from "@/components/cart-nav-link";
 import { QuoteNavLink } from "@/components/quote-nav-link";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -41,24 +41,32 @@ export function SiteHeader() {
           </span>
         </Link>
         <SearchBox />
-        <a
-          href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-12 items-center justify-center gap-2 bg-safety px-5 font-black text-ink"
-        >
-          <MessageCircle size={18} /> {h.quote}
-        </a>
+        <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+          <Link
+            href="/account"
+            className="inline-flex h-11 items-center gap-2 px-3 text-sm font-black text-graphite hover:bg-panel"
+          >
+            <User size={18} /> {nav.account}
+          </Link>
+          <QuoteNavLink />
+          <CartNavLink />
+          <a
+            href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-11 items-center justify-center gap-2 bg-safety px-4 font-black text-ink"
+          >
+            <MessageCircle size={18} /> {h.quote}
+          </a>
+        </div>
       </div>
       <nav className="border-t border-line bg-panel">
-        <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4">
+        <div className="mx-auto flex max-w-7xl items-center gap-1 overflow-x-auto px-4">
           {navItems.map(([label, href]) => (
             <Link key={href} href={href} className="shrink-0 px-4 py-3 text-sm font-black text-graphite hover:bg-white">
               {label}
             </Link>
           ))}
-          <QuoteNavLink />
-          <CartNavLink />
           <MyEngineChip />
         </div>
       </nav>

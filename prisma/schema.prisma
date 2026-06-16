@@ -69,6 +69,7 @@ model Customer {
   role                  String                 @default("CUSTOMER")
   tags                  String                 @default("[]")
   internalNote          String?
+  passwordHash          String?
   wholesaleApprovedAt   DateTime?
   orders                Order[]
   wholesaleApplications WholesaleApplication[]
