@@ -52,6 +52,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
     })
     .filter(Boolean) as { product: Product; quantity: number; lineTotal: number }[];
   const subtotal = lines.reduce((total, line) => total + line.lineTotal, 0);
+  const guaranteedCount = lines.filter((line) => line.product.fitmentGuaranteed).length;
   const shippingCents = SHIPPING_CENTS;
   const discountCents = appliedCoupon?.discountCents || 0;
   const estimatedTotal = subtotal + shippingCents - discountCents;
@@ -172,6 +173,14 @@ export function CartPageClient({ products }: CartPageClientProps) {
                       <p className="mt-3 text-sm">
                         <strong>{c.unit_price}</strong> {formatMoney(product.priceCents, product.currency)}
                       </p>
+                      {product.fitmentGuaranteed && (
+                        <Link
+                          href="/guaranteed-fit"
+                          className="mt-2 inline-flex items-center gap-1.5 border border-green-600 bg-green-50 px-2 py-1 text-xs font-black text-green-800 hover:bg-green-100"
+                        >
+                          <ShieldCheck size={14} /> {c.gfit_item}
+                        </Link>
+                      )}
                     </div>
                     <div className="grid gap-4 md:min-w-44 md:justify-items-end">
                       <div className="inline-grid grid-cols-[40px_56px_40px] border border-line">
@@ -304,6 +313,15 @@ export function CartPageClient({ products }: CartPageClientProps) {
                   <dd className="font-black">{formatMoney(estimatedTotal, "usd")}</dd>
                 </div>
               </dl>
+              {guaranteedCount > 0 && (
+                <Link
+                  href="/guaranteed-fit"
+                  className="mt-5 flex items-start gap-2 border border-green-600 bg-green-50 p-3 text-sm font-bold leading-5 text-green-800 hover:bg-green-100"
+                >
+                  <ShieldCheck size={18} className="mt-0.5 shrink-0" />
+                  {c.gfit_summary.replace("{n}", String(guaranteedCount))}
+                </Link>
+              )}
               <button
                 type="button"
                 onClick={handleCheckout}

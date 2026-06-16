@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { X } from "lucide-react";
+import { ShieldCheck, X } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 
 type ProductsFilterProps = {
@@ -64,6 +64,20 @@ export function ProductsFilter({ categories, equipmentOptions, problems }: Produ
           <option value="price-desc">{p.sort_price_desc}</option>
           <option value="name-asc">{p.sort_name_asc}</option>
         </select>
+      </div>
+      <div className="mt-3">
+        <button
+          type="button"
+          onClick={() => apply("guaranteed", currentValue("guaranteed") === "1" ? "" : "1")}
+          aria-pressed={currentValue("guaranteed") === "1"}
+          className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-sm font-black ${
+            currentValue("guaranteed") === "1"
+              ? "border-green-700 bg-green-600 text-white"
+              : "border-line bg-white text-steel hover:border-navy hover:text-navy"
+          }`}
+        >
+          <ShieldCheck size={16} /> {p.guaranteed_only}
+        </button>
       </div>
       {activeFilters.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3">

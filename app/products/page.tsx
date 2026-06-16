@@ -25,6 +25,7 @@ type ProductsSearchParams = {
   problem?: string;
   sort?: string;
   fits?: string;
+  guaranteed?: string;
 };
 
 function fuzzyIncludes(values: string[], needle: string) {
@@ -54,6 +55,7 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
   const problem = searchParams?.problem || "";
   const sort = searchParams?.sort || "";
   const fitsEngines = (searchParams?.fits || "").split(";").map((s) => s.trim()).filter(Boolean);
+  const guaranteedOnly = searchParams?.guaranteed === "1";
 
   const categories = [...new Set(products.map((product) => product.category))];
   const equipmentOptions = [...new Set(products.flatMap((product) => product.compatibleEquipment))];
@@ -76,6 +78,7 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
       (!q || text.includes(q)) &&
       (!category || product.category === category) &&
       (!model || matchesModel(product, model)) &&
+      (!guaranteedOnly || product.fitmentGuaranteed) &&
       (fitsEngines.length === 0 || matchesGarage(product, fitsEngines)) &&
       (!equipmentFilter || fuzzyIncludes(product.compatibleEquipment, equipmentFilter)) &&
       (!problem || fuzzyIncludes(product.problemsSolved, problem))

@@ -110,6 +110,7 @@ const en = {
     filter_problems: "All problems",
     active_filters: "Active filters:",
     clear_all: "Clear all",
+    guaranteed_only: "Guaranteed Fit only",
     fitment_title: "Find parts for your engine",
     fitment_sub: "Select your engine to see only parts confirmed to fit — universal parts are shown last.",
     fitment_select: "Select your engine / machine...",
@@ -164,7 +165,9 @@ const en = {
     checkout_btn: "Proceed to Stripe Checkout",
     checking_out: "Creating Checkout...",
     clear_cart: "Clear Cart",
-    stripe_note: "Checkout is powered by Stripe. No card data is stored by this site."
+    stripe_note: "Checkout is powered by Stripe. No card data is stored by this site.",
+    gfit_item: "Guaranteed Fit",
+    gfit_summary: "{n} item(s) here are Guaranteed Fit — free 30-day returns if it doesn't fit your engine."
   },
   wholesale: {
     badge: "Wholesale & RFQ",
@@ -436,6 +439,7 @@ const zh: typeof en = {
     filter_problems: "全部故障",
     active_filters: "已选筛选：",
     clear_all: "清除全部",
+    guaranteed_only: "只看保证适配",
     fitment_title: "查找适配您发动机的零件",
     fitment_sub: "选择您的发动机，只看确认适配的零件 —— 通用件排在最后。",
     fitment_select: "选择您的发动机 / 设备...",
@@ -489,7 +493,9 @@ const zh: typeof en = {
     checkout_btn: "前往 Stripe 结账",
     checking_out: "创建结账中...",
     clear_cart: "清空购物车",
-    stripe_note: "结账由 Stripe 提供支持，本站不存储任何银行卡信息。"
+    stripe_note: "结账由 Stripe 提供支持，本站不存储任何银行卡信息。",
+    gfit_item: "保证适配",
+    gfit_summary: "其中 {n} 件为保证适配 —— 装不上你的发动机 30 天内免费退货。"
   },
   wholesale: {
     badge: "批发 & 询价",
