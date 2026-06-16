@@ -68,9 +68,17 @@ export default async function AdminProductsPage({
           <h1 className="text-4xl font-black">产品管理</h1>
           <p className="mt-3 text-steel">搜索、筛选、编辑并归档维修套件产品。</p>
         </div>
-        <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
-          新增产品
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <a href="/admin/products/export" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
+            导出 CSV
+          </a>
+          <Link href="/admin/products/import" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
+            批量导入
+          </Link>
+          <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+            新增产品
+          </Link>
+        </div>
       </div>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-6">
