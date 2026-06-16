@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, MessageCircle, PlayCircle } from "lucide-react";
+import { JsonLd } from "@/components/json-ld";
 import { whatsappLink } from "@/lib/contact";
 import { prisma } from "@/lib/db";
 import { getServerDict } from "@/lib/locale";
+import { breadcrumbLd } from "@/lib/seo";
 import { youtubeEmbedUrl } from "@/lib/video";
 
 export const dynamic = "force-dynamic";
@@ -39,8 +41,26 @@ export default async function GuidePage({ params }: { params: { slug: string } }
   const inquiry = whatsappLink(`Hello, I read your guide "${guide.title}" and need the parts. Can you send a quote?`);
   const embedUrl = guide.videoUrl ? youtubeEmbedUrl(guide.videoUrl) : null;
 
+  const breadcrumb = breadcrumbLd([
+    { name: "Home", path: "/" },
+    { name: g.back_to_guides, path: "/guides" },
+    { name: guide.title, path: `/guides/${guide.slug}` }
+  ]);
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.excerpt || undefined,
+    datePublished: guide.createdAt.toISOString(),
+    dateModified: guide.updatedAt.toISOString(),
+    author: { "@type": "Organization", name: "RepairKit Supply" },
+    publisher: { "@type": "Organization", name: "RepairKit Supply" }
+  };
+
   return (
     <main className="px-4 py-10">
+      <JsonLd data={breadcrumb} />
+      <JsonLd data={articleLd} />
       <article className="mx-auto max-w-3xl">
         <nav className="text-sm font-bold text-steel">
           <Link href="/guides" className="hover:text-navy">

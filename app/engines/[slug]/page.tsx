@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, CircleAlert, MessageCircle } from "lucide-react";
+import { JsonLd } from "@/components/json-ld";
 import { ProductCard } from "@/components/product-card";
 import { SetMyEngineButton } from "@/components/set-my-engine-button";
+import { absoluteUrl, breadcrumbLd } from "@/lib/seo";
 import { models, getModel } from "@/data/models";
 import { whatsappLink } from "@/lib/contact";
 import { getStoreProducts } from "@/lib/product-store";
@@ -56,8 +58,28 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
     `Hello, I need parts for a ${model.name}. Can you confirm fitment and send a quote? I can share photos of the machine.`
   );
 
+  const breadcrumb = breadcrumbLd([
+    { name: "Home", path: "/" },
+    { name: "Shop by Engine", path: "/engines" },
+    { name: model.name, path: `/engines/${model.slug}` }
+  ]);
+  const itemList = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${model.name} compatible parts`,
+    numberOfItems: specificParts.length,
+    itemListElement: specificParts.slice(0, 30).map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: absoluteUrl(`/products/${product.slug}`),
+      name: product.name
+    }))
+  };
+
   return (
     <main className="px-4 py-10">
+      <JsonLd data={breadcrumb} />
+      {specificParts.length > 0 && <JsonLd data={itemList} />}
       <div className="mx-auto max-w-7xl">
         <nav className="text-sm font-bold text-steel">
           <Link href="/engines" className="hover:text-navy">Engines</Link>

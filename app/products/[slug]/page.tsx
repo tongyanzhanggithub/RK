@@ -13,10 +13,12 @@ import { StockStatus } from "@/components/stock-status";
 import { TrustBadges } from "@/components/trust-badges";
 import { getProduct } from "@/data/products";
 import { engineHrefForModelText, problemHrefForTitle } from "@/lib/discovery-links";
+import { JsonLd } from "@/components/json-ld";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 import { getServerDict } from "@/lib/locale";
 import { getStoreProduct, getStoreProducts } from "@/lib/product-store";
+import { breadcrumbLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -80,10 +82,29 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       itemCondition: "https://schema.org/NewCondition"
     }
   };
+  const breadcrumb = breadcrumbLd([
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: product.name, path: `/products/${product.slug}` }
+  ]);
+  const faqLd =
+    product.faqs && product.faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: product.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer }
+          }))
+        }
+      : null;
 
   return (
     <main className="px-4 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={breadcrumb} />
+      {faqLd && <JsonLd data={faqLd} />}
       <div className="mx-auto max-w-7xl">
         <Link href="/products" className="font-bold text-navy">Back to products</Link>
         <div className="mt-5 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">

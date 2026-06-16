@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, CheckCircle2, CircleAlert, Clock3, Cog, Gauge, Hammer, MessageCircle, PlayCircle, Wrench } from "lucide-react";
 import { DiagnosticTree } from "@/components/diagnostic-tree";
+import { JsonLd } from "@/components/json-ld";
 import { ProblemFeedback } from "@/components/problem-feedback";
 import { ProductCard } from "@/components/product-card";
 import { problems } from "@/data/problems";
@@ -10,6 +11,7 @@ import { getModel } from "@/data/models";
 import { whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
 import { getStoreProducts } from "@/lib/product-store";
+import { breadcrumbLd } from "@/lib/seo";
 import { getTroubleshooting, getTroubleshootingGuide } from "@/lib/troubleshooting";
 import { youtubeEmbedUrl } from "@/lib/video";
 
@@ -72,8 +74,30 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     `Hello, my machine has this problem: ${problem.title}. Can you help me find the right repair kit? I can send photos.`
   );
 
+  const breadcrumb = breadcrumbLd([
+    { name: "Home", path: "/" },
+    { name: "Troubleshooting", path: "/problems" },
+    { name: problem.title, path: `/problems/${problem.slug}` }
+  ]);
+  const howTo = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to diagnose: ${problem.title}`,
+    description: problem.description,
+    ...(problem.toolsNeeded.length > 0
+      ? { tool: problem.toolsNeeded.map((tool) => ({ "@type": "HowToTool", name: tool })) }
+      : {}),
+    step: problem.checkSteps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      text: step
+    }))
+  };
+
   return (
     <main className="px-4 py-10">
+      <JsonLd data={breadcrumb} />
+      {problem.checkSteps.length > 0 && <JsonLd data={howTo} />}
       <div className="mx-auto max-w-7xl">
         <nav className="text-sm font-bold text-steel">
           <Link href="/problems" className="hover:text-navy">Troubleshooting</Link>
