@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { BarChart3, Boxes, FileText, LayoutDashboard, MessageSquareQuote, Package, Settings, ShoppingBag, Stethoscope, Tag, Ticket, Users } from "lucide-react";
+import { BarChart3, Boxes, FileText, LayoutDashboard, MessageSquareQuote, Package, Settings, ShoppingBag, Stethoscope, Tag, Target, Ticket, Users } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/auth-actions";
 
 const activeItems = [
   ["仪表盘", "/admin/dashboard", LayoutDashboard],
   ["产品", "/admin/products", Package],
+  ["适配健康度", "/admin/fitment", Target],
   ["订单", "/admin/orders", ShoppingBag],
   ["库存", "/admin/inventory", Boxes],
   ["客户", "/admin/customers", Users],
