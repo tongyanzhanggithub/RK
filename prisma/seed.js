@@ -336,6 +336,8 @@ function createTables() {
       tags TEXT NOT NULL DEFAULT '[]',
       internalNote TEXT,
       passwordHash TEXT,
+      resetTokenHash TEXT,
+      resetTokenExpiresAt DATETIME,
       wholesaleApprovedAt DATETIME,
       createdAt DATETIME NOT NULL,
       updatedAt DATETIME NOT NULL

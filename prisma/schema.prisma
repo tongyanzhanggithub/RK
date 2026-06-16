@@ -70,6 +70,8 @@ model Customer {
   tags                  String                 @default("[]")
   internalNote          String?
   passwordHash          String?
+  resetTokenHash        String?
+  resetTokenExpiresAt   DateTime?
   wholesaleApprovedAt   DateTime?
   orders                Order[]
   wholesaleApplications WholesaleApplication[]

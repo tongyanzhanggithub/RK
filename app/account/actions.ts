@@ -1,10 +1,12 @@
 "use server";
 
+import crypto from "crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { hashPassword, verifyPassword } from "@/lib/admin-auth";
 import { clearCustomerSessionCookie, createCustomerToken, setCustomerSessionCookie } from "@/lib/customer-auth";
 import { prisma } from "@/lib/db";
+import { sendMail } from "@/lib/mailer";
 
 export type AuthState = { error?: string };
 
@@ -109,4 +111,92 @@ export async function loginCustomer(_prev: AuthState, formData: FormData): Promi
 export async function logoutCustomer() {
   clearCustomerSessionCookie();
   redirect("/account/login");
+}
+
+// ---- Password reset ----
+
+const RESET_TTL_MS = 30 * 60 * 1000;
+const RESET_COOLDOWN_MS = 2 * 60 * 1000;
+const resetRequests = new Map<string, number>();
+const GENERIC_RESET =
+  "If an account exists for that email, a reset link has been sent. The link expires in 30 minutes.";
+
+function hashResetToken(token: string) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+export async function requestCustomerReset(
+  _prev: { error?: string; message?: string },
+  formData: FormData
+): Promise<{ error?: string; message?: string }> {
+  const parsed = z.string().email().safeParse(text(formData, "email").toLowerCase());
+  if (!parsed.success) return { error: "Please enter a valid email address." };
+  const email = parsed.data;
+
+  const last = resetRequests.get(email) || 0;
+  if (Date.now() - last < RESET_COOLDOWN_MS) return { message: GENERIC_RESET };
+  resetRequests.set(email, Date.now());
+
+  const customer = await prisma.customer.findUnique({ where: { email } });
+  if (customer && customer.passwordHash) {
+    const token = crypto.randomBytes(32).toString("base64url");
+    await prisma.customer.update({
+      where: { id: customer.id },
+      data: { resetTokenHash: hashResetToken(token), resetTokenExpiresAt: new Date(Date.now() + RESET_TTL_MS) }
+    });
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
+    const resetUrl = `${siteUrl}/account/reset-password?token=${token}`;
+    if (process.env.SMTP_HOST) {
+      await sendMail({
+        to: email,
+        subject: "Reset your RepairKit Supply password",
+        text: [
+          "A password reset was requested for your account.",
+          "",
+          `Reset link (valid for 30 minutes): ${resetUrl}`,
+          "",
+          "If you didn't request this, you can ignore this email."
+        ].join("\n")
+      }).catch(() => {});
+    } else if (process.env.NODE_ENV !== "production") {
+      console.log(`[customer-reset] ${email}: ${resetUrl}`);
+    }
+  }
+
+  return { message: GENERIC_RESET };
+}
+
+const resetSchema = z
+  .object({
+    token: z.string().min(20).max(200),
+    password: z.string().min(8).max(200),
+    confirmPassword: z.string()
+  })
+  .refine((d) => d.password === d.confirmPassword, { message: "Passwords do not match.", path: ["confirmPassword"] });
+
+export async function resetCustomerPassword(_prev: AuthState, formData: FormData): Promise<AuthState> {
+  const parsed = resetSchema.safeParse({
+    token: text(formData, "token"),
+    password: text(formData, "password"),
+    confirmPassword: text(formData, "confirmPassword")
+  });
+  if (!parsed.success) return { error: "Passwords must match and be at least 8 characters." };
+
+  const customer = await prisma.customer.findFirst({
+    where: { resetTokenHash: hashResetToken(parsed.data.token) }
+  });
+  if (!customer || !customer.resetTokenExpiresAt || customer.resetTokenExpiresAt < new Date()) {
+    return { error: "This reset link is invalid or has expired. Please request a new one." };
+  }
+
+  await prisma.customer.update({
+    where: { id: customer.id },
+    data: {
+      passwordHash: hashPassword(parsed.data.password),
+      resetTokenHash: null,
+      resetTokenExpiresAt: null
+    }
+  });
+  fails.delete(customer.email);
+  redirect("/account/login?reset=1");
 }

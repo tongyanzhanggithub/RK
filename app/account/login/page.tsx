@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Sign in to track and manage your orders."
 };
 
-export default async function AccountLoginPage({ searchParams }: { searchParams?: { registered?: string } }) {
+export default async function AccountLoginPage({ searchParams }: { searchParams?: { registered?: string; reset?: string } }) {
   if (await getCurrentCustomer()) redirect("/account");
 
   return (
@@ -29,7 +29,15 @@ export default async function AccountLoginPage({ searchParams }: { searchParams?
             Account created — please sign in.
           </p>
         )}
+        {searchParams?.reset === "1" && (
+          <p className="mt-5 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">
+            Password updated — please sign in with your new password.
+          </p>
+        )}
         <AccountAuthForm action={loginCustomer} mode="login" />
+        <p className="mt-5 text-sm">
+          <Link href="/account/forgot-password" className="font-black text-navy hover:underline">Forgot your password?</Link>
+        </p>
       </section>
     </main>
   );
