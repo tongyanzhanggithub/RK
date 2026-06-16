@@ -2,6 +2,40 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.0] - 2026-06-16
+
+本次迭代围绕 **eBay 式适配（Fitment）体系、B2B 询价、客户账户、SEO/细节打磨、首页改版** 展开。
+
+### 新增 Added
+- **客户账户系统**（前台，独立于管理后台）：
+  - 注册 / 登录 / 登出（`/account/login`、`/account/register`），邮箱为唯一标识，PBKDF2 + HMAC 会话（30 天）。
+  - 个人中心 `/account`：按邮箱聚合订单历史（含历史访客订单）、状态 / 明细 / 物流、资料、登出。
+  - 忘记密码找回：`/account/forgot-password` + `/account/reset-password`（32 字节令牌、SHA-256 存储、30 分钟有效、一次性、防账号探测、限流）。
+  - 用下过单的邮箱注册可“认领”历史访客订单；游客刷卡结账保持免登录。
+  - 模型新增 `Customer.passwordHash / resetTokenHash / resetTokenExpiresAt`；`lib/customer-auth.ts`。
+- **批量询价车（Bulk RFQ）**：`/quote` 多产品+数量一次询价，WhatsApp 整单消息 + 表单提交留存；
+  后台 `/admin/quotes` 集中报价跟进。模型 `QuoteRequest`。
+- **eBay 式适配体系**：
+  - 产品列表置顶 **适配栏**（选发动机→只看适配件，联动 My Garage，持续显示“正在显示适配 X”）。
+  - **My Garage** 多设备车库（替代单台 My Engine）；“适配我的车库”跨多发动机一键筛选。
+  - 产品卡 **Confirmed fit / Not for your X** 徽章；详情页适配模块前置到价格上方。
+  - 后台 **适配健康度看板** `/admin/fitment`（覆盖率、数据质量警告、各发动机零件覆盖）；
+    产品表单 **勾选式型号录入**（受控词表）；型号落地页显示收录数量（SEO + 信任）。
+  - 后台 **故障排查管理** `/admin/problems`（含交互式诊断树 JSON）；前台诊断树、难度/工具/视频、症状↔型号互链。
+- **运营工具**：库存预警邮件（付款后跌破阈值）、产品 CSV 批量导入/导出、订单 CSV 导出、
+  后台重发确认/发货邮件、最近浏览产品、客户 CSV 导出与手动建档、批发风险评分。
+- **首页**：自动轮播 Hero（3 张幻灯片）、产品优先重排、深色“按型号选购”聚焦区。
+
+### 变更 Changed
+- **购物车 / 询价 / 账户** 移至头部右上角（标准电商位置）。
+- **SEO/细节打磨**：型号/故障/指南/产品页结构化数据（Breadcrumb / ItemList / HowTo / Article / FAQPage）、
+  OG/Twitter 社交预览、自定义 404、键盘焦点样式、减少动效偏好、路由骨架屏、统一微交互、产品图改用 `next/image`。
+
+### 说明 Notes
+- 客户会话密钥 `CUSTOMER_SESSION_SECRET`（未设则回退 `ADMIN_SESSION_SECRET`），已写入 `.env.example`。
+- 邮件功能（订单/发货/库存/密码重置）依赖 SMTP；未配置时静默跳过，开发环境重置链接打印到控制台。
+- 动态 OG 默认图因 `@vercel/og` 在含中文路径的 Windows 本地有字体加载 bug 而未启用，生产（Linux）不受影响。
+
 ## [0.3.0] - 2026-06-15
 
 本次迭代在主线（邮件通知、CSV 导出、找件器、产品图库、GA4、评价管理、密码重置、
