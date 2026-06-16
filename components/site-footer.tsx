@@ -34,6 +34,9 @@ export function SiteFooter() {
             <Link href="/guaranteed-fit">{dict.gfit.title}</Link>
             <Link href="/shipping">{f.shipping}</Link>
             <Link href="/returns">{f.returns}</Link>
+            <Link href="/terms">{f.terms}</Link>
+            <Link href="/privacy">{f.privacy}</Link>
+            <Link href="/contact">{f.contact}</Link>
             <Link href="/about">{f.about}</Link>
           </div>
         </div>

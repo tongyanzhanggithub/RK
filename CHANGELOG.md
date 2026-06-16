@@ -2,6 +2,19 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.5] - 2026-06-16
+
+### 新增 Added
+- **合规页面**（支付网关 / 广告平台审核所需）：新增《条款与条件》`/terms`、《隐私政策》`/privacy`、
+  《联系我们》`/contact`（均中英双语）；连同已有的《配送政策》`/shipping`、《退换及保修》`/returns`
+  一并加入页脚「政策」栏。
+- 公司信息集中到 `lib/contact.ts`（`COMPANY_NAME / COMPANY_ADDRESS / COMPANY_PHONE / COMPANY_HOURS`，
+  可经 `.env` 配置）；联系页读取真实邮箱/WhatsApp，未填的电话/地址自动隐藏。
+
+### 说明 Notes
+- ⚠️ 上线/送审前必须在 `.env` 填入**真实**的 `NEXT_PUBLIC_COMPANY_NAME/ADDRESS/PHONE` 与 `NEXT_PUBLIC_WHATSAPP_NUMBER`，
+  否则 Stripe / Google / Meta 审核可能因联系方式/主体信息不实而拒绝。
+
 ## [0.4.4] - 2026-06-16
 
 ### 新增 Added

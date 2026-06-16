@@ -5,6 +5,13 @@
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "sales@repairkit-supply.com";
 
+// ⚠️ Fill these with your REAL registered business details before submitting the
+// site to Stripe / Google / Meta for review. Set them via .env (no code change).
+export const COMPANY_NAME = process.env.NEXT_PUBLIC_COMPANY_NAME || "RepairKit Supply";
+export const COMPANY_ADDRESS = process.env.NEXT_PUBLIC_COMPANY_ADDRESS || ""; // e.g. full registered address
+export const COMPANY_PHONE = process.env.NEXT_PUBLIC_COMPANY_PHONE || ""; // e.g. +86 23 0000 0000
+export const COMPANY_HOURS = process.env.NEXT_PUBLIC_COMPANY_HOURS || "Mon–Sat, 09:00–18:00 (GMT+8)";
+
 export function whatsappLink(message: string) {
   const text = encodeURIComponent(message);
   if (WHATSAPP_NUMBER) {
