@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2, Globe } from "lucide-react";
-import { engineMatchesModels, useMyEngine } from "@/components/engine-provider";
+import { matchInGarage, useMyEngine } from "@/components/engine-provider";
 
 type FitBadgeProps = {
   fitmentType?: "SPECIFIC" | "UNIVERSAL";
@@ -10,7 +10,7 @@ type FitBadgeProps = {
 };
 
 export function FitBadge({ fitmentType, fitmentNote, compatibleModels }: FitBadgeProps) {
-  const { myEngine } = useMyEngine();
+  const { garage } = useMyEngine();
 
   if (fitmentType === "UNIVERSAL") {
     return (
@@ -21,10 +21,11 @@ export function FitBadge({ fitmentType, fitmentNote, compatibleModels }: FitBadg
     );
   }
 
-  if (myEngine && engineMatchesModels(myEngine, compatibleModels)) {
+  const fitsEngine = matchInGarage(garage, compatibleModels);
+  if (fitsEngine) {
     return (
       <p className="inline-flex items-center gap-1.5 bg-green-100 px-2 py-1 text-xs font-black text-green-800">
-        <CheckCircle2 size={14} className="shrink-0" /> Fits your {myEngine}
+        <CheckCircle2 size={14} className="shrink-0" /> Fits your {fitsEngine}
       </p>
     );
   }
