@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { CartNavLink } from "@/components/cart-nav-link";
+import { QuoteNavLink } from "@/components/quote-nav-link";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useLanguage } from "@/components/language-provider";
 import { MyEngineChip } from "@/components/my-engine-chip";
@@ -56,6 +57,7 @@ export function SiteHeader() {
               {label}
             </Link>
           ))}
+          <QuoteNavLink />
           <CartNavLink />
           <MyEngineChip />
         </div>

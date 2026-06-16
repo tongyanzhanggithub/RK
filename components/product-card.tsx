@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { FitBadge } from "@/components/fit-badge";
 import { InquiryButton } from "@/components/inquiry-button";
 import { StockStatus } from "@/components/stock-status";
@@ -79,12 +80,14 @@ export function ProductCard({ product }: { product: Product }) {
         url={`${SITE_URL}/products/${product.slug}`}
         className="mt-3 w-full"
       />
-      <AddToCartButton
-        slug={product.slug}
-        name={product.name}
-        className="mt-2 w-full"
-        outOfStock={(product.stock ?? 0) <= 0}
-      />
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <AddToCartButton
+          slug={product.slug}
+          name={product.name}
+          outOfStock={(product.stock ?? 0) <= 0}
+        />
+        <AddToQuoteButton slug={product.slug} name={product.name} />
+      </div>
     </article>
   );
 }

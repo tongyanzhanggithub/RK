@@ -4,6 +4,7 @@ import { Analytics } from "@/components/analytics";
 import { CartProvider } from "@/components/cart-provider";
 import { EngineProvider } from "@/components/engine-provider";
 import { LanguageProvider } from "@/components/language-provider";
+import { QuoteProvider } from "@/components/quote-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
@@ -24,10 +25,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           <EngineProvider>
             <CartProvider>
-              <SiteHeader />
-              {children}
-              <SiteFooter />
-              <WhatsAppFloat />
+              <QuoteProvider>
+                <SiteHeader />
+                {children}
+                <SiteFooter />
+                <WhatsAppFloat />
+              </QuoteProvider>
             </CartProvider>
           </EngineProvider>
         </LanguageProvider>

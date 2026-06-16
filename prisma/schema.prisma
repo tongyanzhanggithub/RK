@@ -76,6 +76,27 @@ model Customer {
   updatedAt             DateTime               @updatedAt
 }
 
+model QuoteRequest {
+  id            String   @id @default(cuid())
+  contactName   String
+  company       String?
+  country       String
+  email         String
+  whatsapp      String?
+  // JSON: [{ slug, name, sku, quantity }]
+  items         String
+  itemCount     Int      @default(0)
+  totalQuantity Int      @default(0)
+  message       String?
+  status        String   @default("NEW")
+  adminNote     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
 model WholesaleApplication {
   id                       String    @id @default(cuid())
   customerId               String?

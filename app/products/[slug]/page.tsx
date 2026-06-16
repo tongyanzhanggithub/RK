@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { FitmentChecker } from "@/components/fitment-checker";
 import { InquiryButton } from "@/components/inquiry-button";
@@ -129,7 +130,10 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 outOfStock={outOfStock}
                 maxQuantity={product.stock ?? 99}
               />
-              <InquiryButton name={product.name} sku={product.sku} url={productUrl} className="min-w-52 justify-self-start" />
+              <div className="flex flex-wrap gap-3">
+                <AddToQuoteButton slug={product.slug} name={product.name} className="min-w-52 justify-self-start" />
+                <InquiryButton name={product.name} sku={product.sku} url={productUrl} className="min-w-52 justify-self-start" />
+              </div>
             </div>
             <p className="mt-3 text-sm font-bold text-steel">
               Wholesale buyers: chat on WhatsApp for MOQ, carton plan and T/T pricing. The cart is for small trial orders by card.
