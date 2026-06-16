@@ -71,6 +71,28 @@ button:not(:disabled):active,
   transform: translateY(1px);
 }
 
+/* Carousel slide fade-in. */
+@keyframes rk-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: rk-fade 0.45s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade {
+    animation: none;
+  }
+}
+
 /* Skeleton loading shimmer. */
 @keyframes rk-shimmer {
   100% {

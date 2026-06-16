@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BadgeCheck,
   Boxes,
-  CheckCircle2,
   Cog,
   Factory,
   Globe2,
@@ -12,6 +11,7 @@ import {
   Star,
   Stethoscope
 } from "lucide-react";
+import { HeroCarousel, type HeroSlide } from "@/components/hero-carousel";
 import { PartFinder } from "@/components/part-finder";
 import { ProductCard } from "@/components/product-card";
 import { models } from "@/data/models";
@@ -53,47 +53,40 @@ export default async function HomePage() {
     [Ship, "Export-ready logistics", "Sea LCL/FCL and China–Central Asia rail. Full export documentation, T/T payment terms for reviewed buyers."]
   ];
 
-  const whyItems = [hp.why_1, hp.why_2, hp.why_3, hp.why_4];
+  const heroSlides: HeroSlide[] = [
+    {
+      badge: hp.badge,
+      title: hp.headline,
+      subtitle: hp.subtext,
+      primary: { label: hp.cta_quote, href: whatsappLink(GENERAL_INQUIRY_MESSAGE), external: true, whatsapp: true },
+      secondary: { label: hp.cta_distributor, href: "/wholesale" },
+      panelTitle: hp.why_title,
+      bullets: [hp.why_1, hp.why_2, hp.why_3, hp.why_4]
+    },
+    {
+      badge: hp.slide2_badge,
+      title: hp.slide2_title,
+      subtitle: hp.slide2_sub,
+      primary: { label: hp.slide2_cta, href: "/products" },
+      secondary: { label: hp.engine_view_all, href: "/engines" },
+      panelTitle: hp.slide2_panel,
+      bullets: [hp.slide2_b1, hp.slide2_b2, hp.slide2_b3]
+    },
+    {
+      badge: hp.slide3_badge,
+      title: hp.slide3_title,
+      subtitle: hp.slide3_sub,
+      primary: { label: hp.cta_distributor, href: "/wholesale" },
+      secondary: { label: hp.cta_browse, href: "/products" },
+      panelTitle: hp.slide3_panel,
+      bullets: [hp.slide3_b1, hp.slide3_b2, hp.slide3_b3]
+    }
+  ];
 
   return (
     <main>
-      {/* 1 — Hero */}
-      <section className="industrial-grid border-b border-line bg-panel px-4 py-16">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_440px] lg:items-center">
-          <div>
-            <p className="mb-4 font-black uppercase text-safety">{hp.badge}</p>
-            <h1 className="max-w-4xl text-4xl font-black leading-[1.04] text-ink md:text-6xl">{hp.headline}</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-steel">{hp.subtext}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
-              >
-                <MessageCircle size={18} /> {hp.cta_quote}
-              </a>
-              <Link href="/wholesale" className="inline-flex h-12 items-center gap-2 border border-navy px-5 font-black text-navy hover:bg-white">
-                {hp.cta_distributor} <ArrowRight size={18} />
-              </Link>
-              <Link href="/products" className="inline-flex h-12 items-center gap-2 px-5 font-black text-navy">
-                {hp.cta_browse} <ArrowRight size={18} />
-              </Link>
-            </div>
-          </div>
-          <div className="border border-line bg-white p-5 shadow-soft">
-            <h2 className="text-xl font-black">{hp.why_title}</h2>
-            <div className="mt-5 grid gap-3">
-              {whyItems.map((item) => (
-                <div key={item} className="flex items-start gap-3 border border-line p-4 font-bold">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-safety" size={18} />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 1 — Hero carousel */}
+      <HeroCarousel slides={heroSlides} />
 
       {/* 2 — Find the right part */}
       <section className="border-b border-line bg-white px-4 py-8">
