@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LogOut, Package, ShoppingBag } from "lucide-react";
+import { LogOut, MapPin, Package, ShoppingBag } from "lucide-react";
 import { logoutCustomer } from "@/app/account/actions";
 import { requireCustomer } from "@/lib/customer-auth";
 import { prisma } from "@/lib/db";
@@ -41,11 +41,16 @@ export default async function AccountPage() {
             <h1 className="text-4xl font-black">Welcome, {customer.name.split(" ")[0]}</h1>
             <p className="mt-2 text-steel">{customer.email}</p>
           </div>
-          <form action={logoutCustomer}>
-            <button type="submit" className="inline-flex h-11 items-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel">
-              <LogOut size={17} /> Sign out
-            </button>
-          </form>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/account/addresses" className="inline-flex h-11 items-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel">
+              <MapPin size={17} /> Shipping addresses
+            </Link>
+            <form action={logoutCustomer}>
+              <button type="submit" className="inline-flex h-11 items-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel">
+                <LogOut size={17} /> Sign out
+              </button>
+            </form>
+          </div>
         </div>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-3">

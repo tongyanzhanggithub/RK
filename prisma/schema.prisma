@@ -75,6 +75,7 @@ model Customer {
   wholesaleApprovedAt   DateTime?
   orders                Order[]
   wholesaleApplications WholesaleApplication[]
+  addresses             CustomerAddress[]
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
 }
@@ -333,4 +334,21 @@ model Setting {
   key       String   @unique
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model CustomerAddress {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  recipient  String
+  phone      String?
+  country    String
+  city       String?
+  line1      String
+  postalCode String?
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([customerId])
 }

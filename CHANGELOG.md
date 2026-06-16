@@ -2,6 +2,12 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.1] - 2026-06-16
+
+### 新增 Added
+- **客户收货地址簿**（前台账户）：`/account/addresses` 增删改、设默认地址；首个地址自动设为默认，
+  删除默认后自动顺延。新增 Prisma 模型 `CustomerAddress`；个人中心新增「Shipping addresses」入口。
+
 ## [0.4.0] - 2026-06-16
 
 本次迭代围绕 **eBay 式适配（Fitment）体系、B2B 询价、客户账户、SEO/细节打磨、首页改版** 展开。
