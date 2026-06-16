@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, activeModel }: { product: Product; activeModel?: string }) {
   return (
     <article className="grid min-h-[360px] border border-line bg-white p-5 shadow-sm">
       <div>
@@ -42,6 +42,7 @@ export function ProductCard({ product }: { product: Product }) {
           fitmentType={product.fitmentType}
           fitmentNote={product.fitmentNote}
           compatibleModels={product.compatibleModels}
+          activeModel={activeModel}
         />
         {product.compatibleModels.length > 0 && (
           <p>

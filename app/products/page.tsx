@@ -108,7 +108,7 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
         {sorted.length > 0 ? (
           <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sorted.map((product) => (
-              <ProductCard key={product.slug} product={product} />
+              <ProductCard key={product.slug} product={product} activeModel={model || undefined} />
             ))}
           </div>
         ) : (

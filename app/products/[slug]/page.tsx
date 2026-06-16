@@ -96,6 +96,17 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
               {product.tags.map((tag) => <span key={tag} className="bg-safety/15 px-3 py-1 text-sm font-black">{tag}</span>)}
             </div>
             <div className="mt-6">
+              <FitmentChecker
+                productName={product.name}
+                sku={product.sku}
+                productUrl={productUrl}
+                compatibleModels={product.compatibleModels}
+                notCompatibleWith={product.notCompatibleWith}
+                fitmentType={product.fitmentType}
+                fitmentNote={product.fitmentNote}
+              />
+            </div>
+            <div className="mt-6">
               <p className="text-sm font-black uppercase text-steel">Retail reference</p>
               <p className="flex flex-wrap items-baseline gap-3">
                 <span className="text-3xl font-black">{formatMoney(product.priceCents, product.currency)}</span>
@@ -112,17 +123,6 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
               </p>
               <p className="mt-1 text-sm font-bold text-navy">Wholesale price by volume — request a quote below</p>
               <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} className="mt-2" />
-            </div>
-            <div className="mt-5">
-              <FitmentChecker
-                productName={product.name}
-                sku={product.sku}
-                productUrl={productUrl}
-                compatibleModels={product.compatibleModels}
-                notCompatibleWith={product.notCompatibleWith}
-                fitmentType={product.fitmentType}
-                fitmentNote={product.fitmentNote}
-              />
             </div>
             <div className="mt-5 grid gap-3">
               <QuantityAddToCart
