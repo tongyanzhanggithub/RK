@@ -51,3 +51,50 @@ body {
     linear-gradient(90deg, rgba(15, 45, 63, 0.06) 1px, transparent 1px);
   background-size: 28px 28px;
 }
+
+/* Consistent micro-interactions: smooth state changes + a subtle press. */
+a,
+button,
+select,
+[role="button"] {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.08s ease;
+}
+
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active {
+  transform: translateY(1px);
+}
+
+/* Skeleton loading shimmer. */
+@keyframes rk-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e6eae6;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: rk-shimmer 1.3s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}
