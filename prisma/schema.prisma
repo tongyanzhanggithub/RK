@@ -36,6 +36,7 @@ model Product {
   isHotSeller          Boolean               @default(false)
   fitmentType          String                @default("SPECIFIC")
   fitmentNote          String?
+  fitmentGuaranteed    Boolean               @default(false)
   tags                 String
   compatibleModels     String
   compatibleEquipment  String

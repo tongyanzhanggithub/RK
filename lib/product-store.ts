@@ -41,6 +41,7 @@ export function normalizeProduct(product: DbProduct): Product {
     isHotSeller: product.isHotSeller,
     fitmentType: product.fitmentType === "UNIVERSAL" ? "UNIVERSAL" : "SPECIFIC",
     fitmentNote: product.fitmentNote || undefined,
+    fitmentGuaranteed: product.fitmentGuaranteed,
     tags: parseJson<string[]>(product.tags, []),
     compatibleModels: parseJson<string[]>(product.compatibleModels, []),
     compatibleEquipment: parseJson<string[]>(product.compatibleEquipment, []),

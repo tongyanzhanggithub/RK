@@ -2,6 +2,16 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.3] - 2026-06-16
+
+### 新增 Added
+- **Guaranteed Fit 保证适配**（仿 eBay Motors Assured Fit）：买家在 My Garage 选发动机后，
+  已核实适配的合格配件在产品卡/列表/详情显示绿色「Guaranteed Fit」徽章，并承诺装不上 30 天内免费退货。
+  - 新增产品字段 `Product.fitmentGuaranteed`；后台产品表单新增「保证适配资格」勾选项。
+  - `fit-badge` / `fitment-checker` 在确认适配且合格时升级为保证适配徽章与承诺。
+  - 新增政策页 `/guaranteed-fit`（中英双语，i18n `gfit.*`）+ 页脚入口。
+  - `scripts/seed-guaranteed-fit.js`：把有核实兼容型号的具体件批量登记为保证适配。
+
 ## [0.4.2] - 2026-06-16
 
 ### 新增 Added

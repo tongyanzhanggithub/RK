@@ -135,6 +135,15 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
           defaultValue={product?.fitmentNote}
           placeholder="适配使用 5.5mm 内径油管的发动机"
         />
+        <label className="flex items-start gap-3 text-sm font-bold md:col-span-2">
+          <input type="checkbox" name="fitmentGuaranteed" defaultChecked={product?.fitmentGuaranteed ?? false} className="mt-1 h-4 w-4" />
+          <span>
+            保证适配资格（Guaranteed Fit）
+            <span className="mt-0.5 block text-xs font-normal text-steel">
+              勾选后：当买家选择的发动机在兼容型号内时，前台显示绿色「保证适配」徽章并承诺装不上 30 天免费退货。仅对已核实兼容型号的具体件勾选；通用件无需勾选。
+            </span>
+          </span>
+        </label>
         <Textarea label="标签" name="tagsText" defaultValue={list(product?.tags)} placeholder="热销&#10;适用于 168F" />
         <Textarea label="套件包含" name="kitIncludesText" defaultValue={list(product?.kitIncludes)} placeholder="化油器 x1&#10;火花塞 x1" />
         <FitmentModelPicker defaultModels={product?.compatibleModels ?? []} />

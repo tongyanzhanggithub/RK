@@ -31,6 +31,7 @@ export function SiteFooter() {
           </div>
           <strong className="mt-5 block text-sm uppercase tracking-wide text-safety">{f.policies}</strong>
           <div className="mt-3 grid gap-2 text-sm font-bold text-white/80">
+            <Link href="/guaranteed-fit">{dict.gfit.title}</Link>
             <Link href="/shipping">{f.shipping}</Link>
             <Link href="/returns">{f.returns}</Link>
             <Link href="/about">{f.about}</Link>

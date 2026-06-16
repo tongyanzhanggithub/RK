@@ -252,6 +252,21 @@ const en = {
     video_heading: "Watch the video",
     has_video: "Video"
   },
+  gfit: {
+    title: "Guaranteed Fit",
+    badge: "Fit, guaranteed",
+    tagline: "Set your engine, look for the green badge, and buy with confidence — if a Guaranteed Fit part doesn't fit, return it free within 30 days.",
+    step1_t: "1 · Set your engine",
+    step1_d: "Pick your engine or machine in My Garage at the top of the products page. We remember it across the site.",
+    step2_t: "2 · Look for the green badge",
+    step2_d: "Parts verified to fit the engine you selected show a green “Guaranteed Fit” badge on the listing and product page.",
+    step3_t: "3 · Buy with confidence",
+    step3_d: "If a Guaranteed Fit part does not fit the engine you selected, return it free within 30 days for a full refund or the correct part.",
+    covers_t: "What's covered",
+    covers_d: "Parts showing the Guaranteed Fit badge for an engine saved in your garage. Universal parts — and parts viewed without selecting an engine — are not covered by the fit guarantee, though our standard 30-day warranty still applies.",
+    cta: "Browse parts",
+    note: "Not sure about a detail (carburetor shape, mounting holes)? Confirm on WhatsApp before ordering — fitment checks are always free."
+  },
   problems: {
     heading: "Troubleshooting Guides",
     subtext: "Select a symptom to find the right repair kit for your engine.",
@@ -555,6 +570,21 @@ const zh: typeof en = {
     related_title: "相关维修指南",
     video_heading: "观看视频",
     has_video: "视频"
+  },
+  gfit: {
+    title: "保证适配",
+    badge: "适配有保证",
+    tagline: "选好你的发动机，认准绿色徽章，放心下单 —— 标有「保证适配」的配件若装不上，30 天内免费退货。",
+    step1_t: "1 · 选择你的发动机",
+    step1_d: "在产品页顶部的 My Garage 选好你的发动机或机器，全站都会记住。",
+    step2_t: "2 · 认准绿色徽章",
+    step2_d: "已核实适配你所选发动机的配件，会在列表和详情页显示绿色「保证适配」徽章。",
+    step3_t: "3 · 放心下单",
+    step3_d: "若标有「保证适配」的配件装不上你所选的发动机，30 天内免费退货，全额退款或换正确的件。",
+    covers_t: "保障范围",
+    covers_d: "针对你车库中已保存发动机、且显示「保证适配」徽章的配件。通用件、以及未选择发动机时浏览的配件不在适配保证范围内（但我们标准的 30 天质保仍然适用）。",
+    cta: "浏览配件",
+    note: "对某个细节（化油器形状、安装孔位）拿不准？下单前在 WhatsApp 跟我们确认 —— 适配核对一律免费。"
   },
   problems: {
     heading: "故障排查指南",

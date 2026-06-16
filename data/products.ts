@@ -29,6 +29,8 @@ export type Product = {
   fitmentType?: "SPECIFIC" | "UNIVERSAL";
   /** One-line spec hint shown next to the universal badge, e.g. "Fits engines using 5.5mm fuel line". */
   fitmentNote?: string;
+  /** Eligible for the Guaranteed Fit promise (verified compatibility → free returns if it doesn't fit). */
+  fitmentGuaranteed?: boolean;
   tags: string[];
   compatibleModels: string[];
   compatibleEquipment: string[];

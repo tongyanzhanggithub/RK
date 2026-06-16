@@ -47,6 +47,7 @@ export function ProductCard({ product, activeModel }: { product: Product; active
           compatibleModels={product.compatibleModels}
           notCompatibleWith={product.notCompatibleWith}
           activeModel={activeModel}
+          guaranteed={product.fitmentGuaranteed}
         />
         {product.compatibleModels.length > 0 && (
           <p>

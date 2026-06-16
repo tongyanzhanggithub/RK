@@ -1,6 +1,7 @@
 "use client";
 
-import { CheckCircle2, CircleAlert, CircleX, Globe, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, CircleAlert, CircleX, Globe, MessageCircle, ShieldCheck } from "lucide-react";
 import { engineMatchesModels, useMyEngine } from "@/components/engine-provider";
 import { models } from "@/data/models";
 import { whatsappLink } from "@/lib/contact";
@@ -13,6 +14,7 @@ type FitmentCheckerProps = {
   notCompatibleWith?: string[];
   fitmentType?: "SPECIFIC" | "UNIVERSAL";
   fitmentNote?: string;
+  guaranteed?: boolean;
 };
 
 export function FitmentChecker({
@@ -22,7 +24,8 @@ export function FitmentChecker({
   compatibleModels,
   notCompatibleWith,
   fitmentType,
-  fitmentNote
+  fitmentNote,
+  guaranteed
 }: FitmentCheckerProps) {
   const { myEngine, setMyEngine } = useMyEngine();
 
@@ -103,6 +106,25 @@ export function FitmentChecker({
           className="ml-6 mt-2 inline-flex items-center gap-2 text-sm font-black text-navy underline"
         >
           <MessageCircle size={15} /> Find the right kit on WhatsApp
+        </a>
+      </div>
+    );
+  }
+
+  if (fits && guaranteed) {
+    return (
+      <div className="border border-green-600 bg-green-50 p-4">
+        <p className="inline-flex items-start gap-2 text-lg font-black text-green-800">
+          <ShieldCheck size={22} className="mt-0.5 shrink-0" /> Guaranteed Fit for your {myEngine}
+        </p>
+        <p className="mt-1 pl-7 text-sm font-bold text-green-800/90">
+          {myEngine} is a verified match. If it doesn’t fit, return it free within 30 days.{" "}
+          <Link href="/guaranteed-fit" className="text-navy underline">
+            How Guaranteed Fit works
+          </Link>
+        </p>
+        <a href={confirmLink} target="_blank" rel="noopener noreferrer" className="ml-7 mt-2 inline-flex items-center gap-2 text-sm font-black text-navy underline">
+          <MessageCircle size={15} /> Still unsure? Confirm on WhatsApp
         </a>
       </div>
     );

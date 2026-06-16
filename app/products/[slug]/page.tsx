@@ -142,6 +142,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 notCompatibleWith={product.notCompatibleWith}
                 fitmentType={product.fitmentType}
                 fitmentNote={product.fitmentNote}
+                guaranteed={product.fitmentGuaranteed}
               />
             </div>
             <div className="mt-6">
