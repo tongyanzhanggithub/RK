@@ -27,15 +27,13 @@ export default async function HomePage() {
   const dict = getServerDict();
   const hp = dict.homepage;
   const products = await getStoreProducts();
-  const bestSellers = products.slice(0, 10);
+  const bestSellers = products.slice(0, 5);
   const testimonials = await prisma.testimonial.findMany({
     where: { isPublished: true },
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-    take: 6
+    take: 3
   });
 
-  // Category grid driven by the managed Category table (active, sorted),
-  // with a fallback to product-derived categories if the table is empty.
   const categoryCounts = new Map<string, number>();
   for (const product of products) {
     categoryCounts.set(product.category, (categoryCounts.get(product.category) || 0) + 1);
@@ -59,13 +57,12 @@ export default async function HomePage() {
 
   return (
     <main>
+      {/* 1 — Hero */}
       <section className="industrial-grid border-b border-line bg-panel px-4 py-16">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_440px] lg:items-center">
           <div>
             <p className="mb-4 font-black uppercase text-safety">{hp.badge}</p>
-            <h1 className="max-w-4xl text-4xl font-black leading-[1.04] text-ink md:text-6xl">
-              {hp.headline}
-            </h1>
+            <h1 className="max-w-4xl text-4xl font-black leading-[1.04] text-ink md:text-6xl">{hp.headline}</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-steel">{hp.subtext}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -98,12 +95,14 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* 2 — Find the right part */}
       <section className="border-b border-line bg-white px-4 py-8">
         <div className="mx-auto max-w-7xl">
           <PartFinder />
         </div>
       </section>
 
+      {/* 3 — Region strip */}
       <section className="border-b border-line bg-navy px-4 py-5 text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-black">
           <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-safety" /> Middle East</span>
@@ -114,25 +113,28 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="px-4 py-14">
+      {/* 4 — Best sellers (products first) */}
+      <section className="border-b border-line bg-white px-4 py-14">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8">
-            <p className="font-black uppercase text-safety">{hp.supply_badge}</p>
-            <h2 className="text-3xl font-black">{hp.supply_title}</h2>
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-black uppercase text-safety">{hp.bestseller_badge}</p>
+              <h2 className="text-3xl font-black">{hp.bestseller_title}</h2>
+            </div>
+            <Link href="/products" className="inline-flex items-center gap-1 font-black text-navy hover:underline">
+              {dict.common.view_catalog} <ArrowRight size={16} />
+            </Link>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {supplyAdvantages.map(([Icon, title, copy]) => (
-              <div key={title as string} className="border border-line bg-white p-6 shadow-sm">
-                <Icon className="mb-4 text-navy" size={28} />
-                <strong className="block leading-snug">{title as string}</strong>
-                <p className="mt-2 text-sm leading-6 text-steel">{copy as string}</p>
-              </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            {bestSellers.map((product) => (
+              <ProductCard key={product.slug} product={product} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-y border-line bg-panel px-4 py-14">
+      {/* 5 — Shop by category */}
+      <section className="border-b border-line bg-panel px-4 py-14">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -161,28 +163,29 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-white px-4 py-14">
+      {/* 6 — Shop by engine (dark spotlight — the fitment USP) */}
+      <section className="border-b border-line bg-ink px-4 py-14 text-white">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="font-black uppercase text-safety">{hp.engine_badge}</p>
               <h2 className="text-3xl font-black">{hp.engine_title}</h2>
             </div>
-            <Link href="/engines" className="font-black text-navy">{hp.engine_view_all}</Link>
+            <Link href="/engines" className="inline-flex items-center gap-1 font-black text-safety hover:underline">
+              {hp.engine_view_all} <ArrowRight size={16} />
+            </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             {models.map((model) => (
               <Link
                 key={model.slug}
                 href={`/engines/${model.slug}`}
-                className="group flex items-center gap-3 border border-line bg-white p-4 shadow-sm hover:border-navy"
+                className="group flex items-center gap-3 border border-white/15 bg-white/5 p-4 hover:border-safety hover:bg-white/10"
               >
-                <Cog size={22} className="shrink-0 text-navy" />
+                <Cog size={22} className="shrink-0 text-safety" />
                 <span>
                   <strong className="block leading-tight">{model.name}</strong>
-                  <span className="mt-0.5 block text-xs font-bold text-steel">
-                    {model.commonEquipment[0]}
-                  </span>
+                  <span className="mt-0.5 block text-xs font-bold text-white/55">{model.commonEquipment[0]}</span>
                 </span>
               </Link>
             ))}
@@ -190,7 +193,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-panel px-4 py-14">
+      {/* 7 — Fix by symptom */}
+      <section className="border-b border-line bg-white px-4 py-14">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -219,25 +223,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-white px-4 py-14">
+      {/* 8 — Why buyers source from us (trust) — differentiated with numbered accent */}
+      <section className="border-b border-line bg-panel px-4 py-14">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="font-black uppercase text-safety">{hp.bestseller_badge}</p>
-              <h2 className="text-3xl font-black">{hp.bestseller_title}</h2>
-            </div>
-            <Link href="/products" className="font-black text-navy">{dict.common.view_catalog}</Link>
+          <div className="mb-8">
+            <p className="font-black uppercase text-safety">{hp.supply_badge}</p>
+            <h2 className="text-3xl font-black">{hp.supply_title}</h2>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-            {bestSellers.map((product) => (
-              <ProductCard key={product.slug} product={product} />
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {supplyAdvantages.map(([Icon, title, copy], index) => (
+              <div key={title as string} className="relative border border-line bg-white p-6 pl-7 shadow-sm">
+                <span className="absolute left-0 top-0 h-full w-1.5 bg-safety" />
+                <div className="flex items-center justify-between">
+                  <Icon className="text-navy" size={28} />
+                  <span className="text-2xl font-black text-line">{String(index + 1).padStart(2, "0")}</span>
+                </div>
+                <strong className="mt-4 block leading-snug">{title as string}</strong>
+                <p className="mt-2 text-sm leading-6 text-steel">{copy as string}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* 9 — Testimonials */}
       {testimonials.length > 0 && (
-        <section className="border-b border-line bg-panel px-4 py-14">
+        <section className="border-b border-line bg-white px-4 py-14">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6">
               <p className="font-black uppercase text-safety">{hp.testimonial_badge}</p>
@@ -245,7 +256,7 @@ export default async function HomePage() {
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {testimonials.map((testimonial) => (
-                <figure key={testimonial.id} className="grid content-start gap-3 border border-line bg-white p-6 shadow-sm">
+                <figure key={testimonial.id} className="grid content-start gap-3 border border-line bg-panel p-6">
                   <span className="inline-flex items-center gap-0.5 text-safety">
                     {Array.from({ length: testimonial.rating }).map((_, index) => (
                       <Star key={index} size={15} fill="currentColor" />
@@ -267,6 +278,7 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* 10 — Closing CTA */}
       <section className="bg-ink px-4 py-16 text-white">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
