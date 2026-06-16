@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
+import { MessageCircle, SearchX } from "lucide-react";
 import { FitmentBar } from "@/components/fitment-bar";
 import { ProductCard } from "@/components/product-card";
 import { ProductsFilter } from "@/components/products-filter";
+import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { getStoreProducts } from "@/lib/product-store";
 import { getServerDict } from "@/lib/locale";
 import type { Product } from "@/data/products";
@@ -121,9 +124,23 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
             ))}
           </div>
         ) : (
-          <div className="mt-4 border border-line bg-white p-8 text-center">
-            <p className="text-lg font-black">{p.no_results}</p>
-            <p className="mt-2 text-steel">{p.no_results_sub}</p>
+          <div className="mt-4 border border-line bg-white p-10 text-center">
+            <SearchX className="mx-auto text-steel" size={44} />
+            <p className="mt-4 text-lg font-black">{p.no_results}</p>
+            <p className="mx-auto mt-2 max-w-md text-steel">{p.no_results_sub}</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Link href="/products" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+                {p.clear_all}
+              </Link>
+              <a
+                href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-11 items-center justify-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel"
+              >
+                <MessageCircle size={17} /> WhatsApp
+              </a>
+            </div>
           </div>
         )}
       </div>

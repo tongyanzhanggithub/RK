@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, ShieldCheck, TicketPercent, Trash2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
@@ -217,17 +218,19 @@ export function CartPageClient({ products }: CartPageClientProps) {
                   <div className="mt-4 grid gap-3 md:grid-cols-3">
                     {crossSell.map((product) => (
                       <div key={product.slug} className="grid border border-line p-4">
-                        <Link href={`/products/${product.slug}`} className="mb-3 grid aspect-[4/3] place-items-center overflow-hidden bg-panel industrial-grid">
+                        <Link href={`/products/${product.slug}`} className="relative mb-3 grid aspect-[4/3] overflow-hidden bg-panel industrial-grid">
                           {product.image || product.images?.[0]?.url ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={product.image || product.images?.[0]?.url}
+                            <Image
+                              src={(product.image || product.images?.[0]?.url) as string}
                               alt={product.name}
-                              className="h-full w-full object-contain"
-                              loading="lazy"
+                              fill
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                              className="object-contain"
                             />
                           ) : (
-                            <span className="text-2xl font-black text-navy">{product.name.split(" ")[0]}</span>
+                            <span className="absolute inset-0 grid place-items-center text-2xl font-black text-navy">
+                              {product.name.split(" ")[0]}
+                            </span>
                           )}
                         </Link>
                         <Link href={`/products/${product.slug}`} className="text-sm font-black leading-snug hover:text-navy">

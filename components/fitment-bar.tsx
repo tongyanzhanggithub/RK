@@ -106,7 +106,7 @@ export function FitmentBar() {
         <select
           defaultValue=""
           onChange={(event) => event.target.value && apply(event.target.value)}
-          className="h-12 min-w-64 border border-navy bg-white px-3 font-bold text-ink outline-none focus:border-navy"
+          className="h-12 w-full border border-navy bg-white px-3 font-bold text-ink outline-none focus:border-navy sm:w-auto sm:min-w-64"
           aria-label={p.fitment_select}
         >
           <option value="" disabled>{p.fitment_select}</option>

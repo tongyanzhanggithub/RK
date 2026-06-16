@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2, FileText, Minus, MessageCircle, Plus, Send, Trash2 } from "lucide-react";
 import { useQuote } from "@/components/quote-provider";
@@ -113,12 +114,13 @@ export function QuotePageClient({ products }: { products: ProductLite[] }) {
               <div>
                 {lines.map(({ product, quantity }) => (
                   <article key={product.slug} className="grid gap-4 border-b border-line p-5 md:grid-cols-[64px_1fr_auto] md:items-center">
-                    <Link href={`/products/${product.slug}`} className="grid aspect-square place-items-center overflow-hidden bg-panel industrial-grid">
+                    <Link href={`/products/${product.slug}`} className="relative grid aspect-square overflow-hidden bg-panel industrial-grid">
                       {product.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={product.image} alt={product.name} className="h-full w-full object-contain" loading="lazy" />
+                        <Image src={product.image} alt={product.name} fill sizes="64px" className="object-contain" />
                       ) : (
-                        <span className="text-lg font-black text-navy">{product.name.split(" ")[0]}</span>
+                        <span className="absolute inset-0 grid place-items-center text-lg font-black text-navy">
+                          {product.name.split(" ")[0]}
+                        </span>
                       )}
                     </Link>
                     <div>

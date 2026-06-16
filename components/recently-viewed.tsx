@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { formatMoney } from "@/lib/format";
 
@@ -49,12 +50,13 @@ export function RecentlyViewed({ current, heading }: { current: ViewedProduct; h
       <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
         {others.map((product) => (
           <Link key={product.slug} href={`/products/${product.slug}`} className="group border border-line bg-white p-4 hover:border-navy">
-            <div className="mb-3 grid aspect-[4/3] place-items-center overflow-hidden bg-panel industrial-grid">
+            <div className="relative mb-3 aspect-[4/3] overflow-hidden bg-panel industrial-grid">
               {product.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={product.image} alt={product.name} className="h-full w-full object-contain" loading="lazy" />
+                <Image src={product.image} alt={product.name} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-contain" />
               ) : (
-                <span className="text-xl font-black text-navy">{product.name.split(" ")[0]}</span>
+                <span className="absolute inset-0 grid place-items-center text-xl font-black text-navy">
+                  {product.name.split(" ")[0]}
+                </span>
               )}
             </div>
             <p className="text-sm font-black leading-snug group-hover:text-navy">{product.name}</p>

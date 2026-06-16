@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
@@ -14,17 +15,19 @@ export function ProductCard({ product, activeModel }: { product: Product; active
   return (
     <article className="grid min-h-[360px] border border-line bg-white p-5 shadow-sm">
       <div>
-        <div className="mb-4 grid aspect-[4/3] place-items-center overflow-hidden bg-panel industrial-grid">
+        <div className="relative mb-4 aspect-[4/3] overflow-hidden bg-panel industrial-grid">
           {product.image || product.images?.[0]?.url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={product.image || product.images?.[0]?.url}
+            <Image
+              src={(product.image || product.images?.[0]?.url) as string}
               alt={product.images?.[0]?.alt || product.name}
-              className="h-full w-full object-contain"
-              loading="lazy"
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 20vw"
+              className="object-contain"
             />
           ) : (
-            <span className="text-4xl font-black text-navy">{product.name.split(" ")[0]}</span>
+            <span className="absolute inset-0 grid place-items-center text-4xl font-black text-navy">
+              {product.name.split(" ")[0]}
+            </span>
           )}
         </div>
         <div className="mb-3 flex flex-wrap gap-2">

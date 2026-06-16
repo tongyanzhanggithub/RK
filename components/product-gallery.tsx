@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import type { Product } from "@/data/products";
 
 type GalleryImage = {
@@ -36,9 +37,8 @@ export function ProductGallery({ product }: { product: Pick<Product, "name" | "i
 
   return (
     <div className="grid gap-3">
-      <div className="grid aspect-square place-items-center overflow-hidden border border-line bg-white">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={active.url} alt={active.alt} className="h-full w-full object-contain" loading="eager" />
+      <div className="relative aspect-square overflow-hidden border border-line bg-white">
+        <Image src={active.url} alt={active.alt} fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-contain" priority />
       </div>
       {images.length > 1 && (
         <div className="grid grid-cols-5 gap-2">
@@ -48,12 +48,11 @@ export function ProductGallery({ product }: { product: Pick<Product, "name" | "i
               type="button"
               onClick={() => setActiveIndex(index)}
               aria-label={`Show image ${index + 1}: ${image.alt}`}
-              className={`grid aspect-square place-items-center overflow-hidden border bg-white ${
+              className={`relative aspect-square overflow-hidden border bg-white ${
                 index === activeIndex ? "border-navy" : "border-line hover:border-steel"
               }`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image.url} alt={image.alt} className="h-full w-full object-contain" loading="lazy" />
+              <Image src={image.url} alt={image.alt} fill sizes="100px" className="object-contain" />
             </button>
           ))}
         </div>
