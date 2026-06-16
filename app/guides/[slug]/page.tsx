@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, PlayCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/contact";
 import { prisma } from "@/lib/db";
 import { getServerDict } from "@/lib/locale";
+import { youtubeEmbedUrl } from "@/lib/video";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
   if (!guide || guide.status !== "PUBLISHED") notFound();
 
   const inquiry = whatsappLink(`Hello, I read your guide "${guide.title}" and need the parts. Can you send a quote?`);
+  const embedUrl = guide.videoUrl ? youtubeEmbedUrl(guide.videoUrl) : null;
 
   return (
     <main className="px-4 py-10">
@@ -51,6 +53,24 @@ export default async function GuidePage({ params }: { params: { slug: string } }
         <p className="mt-4 font-black uppercase text-safety">{g.badge}</p>
         <h1 className="mt-1 text-4xl font-black leading-tight">{guide.title}</h1>
         {guide.excerpt && <p className="mt-3 text-lg leading-8 text-steel">{guide.excerpt}</p>}
+
+        {embedUrl && (
+          <div className="mt-8">
+            <h2 className="inline-flex items-center gap-2 text-xl font-black">
+              <PlayCircle className="text-navy" size={22} /> {g.video_heading}
+            </h2>
+            <div className="mt-3 aspect-video">
+              <iframe
+                src={embedUrl}
+                title={`${guide.title} video`}
+                className="h-full w-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+          </div>
+        )}
 
         {guide.content && (
           <div className="mt-8 whitespace-pre-wrap text-base leading-8 text-ink">{guide.content}</div>

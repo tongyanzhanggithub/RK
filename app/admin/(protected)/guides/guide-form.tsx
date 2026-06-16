@@ -76,6 +76,17 @@ export function GuideForm({
       </label>
 
       <label className="grid gap-2 text-sm font-bold">
+        YouTube 视频链接（可选）
+        <input
+          name="videoUrl"
+          defaultValue={guide?.videoUrl ?? ""}
+          className="h-11 border border-line px-3 font-normal outline-none focus:border-navy"
+          placeholder="https://www.youtube.com/watch?v=...（支持 watch / youtu.be / shorts 链接）"
+        />
+        <span className="text-xs font-normal text-steel">填写后，指南页顶部会嵌入可播放的视频。留空则不显示。</span>
+      </label>
+
+      <label className="grid gap-2 text-sm font-bold">
         正文（可选，支持纯文本 / Markdown）
         <textarea
           name="content"

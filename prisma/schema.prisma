@@ -294,6 +294,7 @@ model RepairGuide {
   title          String
   excerpt        String?
   content        String?
+  videoUrl       String?
   status         String   @default("DRAFT")
   seoTitle       String?
   seoDescription String?

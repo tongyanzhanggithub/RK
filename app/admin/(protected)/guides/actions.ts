@@ -19,6 +19,7 @@ const guideSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug 只能是小写字母、数字和连字符。"),
   excerpt: z.string().max(300).optional(),
   content: z.string().max(20000).optional(),
+  videoUrl: z.string().max(300).optional(),
   status: z.enum(["DRAFT", "PUBLISHED"]),
   seoTitle: z.string().max(160).optional(),
   seoDescription: z.string().max(300).optional()
@@ -44,6 +45,7 @@ function guideDataFromForm(formData: FormData) {
     slug,
     excerpt: text(formData, "excerpt") || undefined,
     content: text(formData, "content") || undefined,
+    videoUrl: text(formData, "videoUrl") || undefined,
     status: text(formData, "status") || "DRAFT",
     seoTitle: text(formData, "seoTitle") || undefined,
     seoDescription: text(formData, "seoDescription") || undefined
@@ -60,6 +62,7 @@ function guideDataFromForm(formData: FormData) {
       slug: g.slug,
       excerpt: g.excerpt ?? null,
       content: g.content ?? null,
+      videoUrl: g.videoUrl ?? null,
       status: g.status,
       seoTitle: g.seoTitle ?? null,
       seoDescription: g.seoDescription ?? null
