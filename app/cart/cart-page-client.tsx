@@ -9,6 +9,7 @@ import { AddToCartButton } from "@/components/add-to-cart-button";
 import { TrustBadges } from "@/components/trust-badges";
 import { useCart } from "@/components/cart-provider";
 import { useLanguage } from "@/components/language-provider";
+import { useRegion } from "@/components/region-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
 import { SHIPPING_CENTS } from "@/lib/shipping";
@@ -32,6 +33,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
   const { items, updateItem, removeItem, clearCart, totalQuantity } = useCart();
   const { dict } = useLanguage();
   const c = dict.cart;
+  const { local, isUsd, country } = useRegion();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const [couponCode, setCouponCode] = useState("");
@@ -171,7 +173,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                       </Link>
                       <p className="mt-2 max-w-2xl text-sm leading-6 text-steel">{product.shortDescription}</p>
                       <p className="mt-3 text-sm">
-                        <strong>{c.unit_price}</strong> {formatMoney(product.priceCents, product.currency)}
+                        <strong>{c.unit_price}</strong> {local(product.priceCents)}
                       </p>
                       {product.fitmentGuaranteed && (
                         <Link
@@ -208,7 +210,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                           <Plus size={16} />
                         </button>
                       </div>
-                      <strong className="text-lg">{formatMoney(lineTotal, product.currency)}</strong>
+                      <strong className="text-lg">{local(lineTotal)}</strong>
                       <button
                         type="button"
                         className="inline-flex items-center gap-2 text-sm font-black text-red-700"
@@ -248,7 +250,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
                         {product.fitmentType === "UNIVERSAL" && (
                           <span className="mt-1 text-xs font-bold text-navy">{dict.common.universal}</span>
                         )}
-                        <strong className="mt-2">{formatMoney(product.priceCents, product.currency)}</strong>
+                        <strong className="mt-2">{local(product.priceCents)}</strong>
                         <AddToCartButton slug={product.slug} name={product.name} className="mt-3 w-full" />
                       </div>
                     ))}
@@ -296,23 +298,28 @@ export function CartPageClient({ products }: CartPageClientProps) {
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-steel">{c.subtotal}</dt>
-                  <dd className="font-black">{formatMoney(subtotal, "usd")}</dd>
+                  <dd className="font-black">{local(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-steel">{c.shipping}</dt>
-                  <dd className="font-black">{formatMoney(shippingCents, "usd")}</dd>
+                  <dd className="font-black">{local(shippingCents)}</dd>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between gap-4 text-green-800">
                     <dt className="font-bold">{c.discount}</dt>
-                    <dd className="font-black">-{formatMoney(discountCents, "usd")}</dd>
+                    <dd className="font-black">-{local(discountCents)}</dd>
                   </div>
                 )}
                 <div className="flex justify-between gap-4 border-t border-line pt-3 text-base">
                   <dt className="font-black">{c.estimated_total}</dt>
-                  <dd className="font-black">{formatMoney(estimatedTotal, "usd")}</dd>
+                  <dd className="font-black">{local(estimatedTotal)}</dd>
                 </div>
               </dl>
+              <p className="mt-3 text-xs leading-5 text-steel">
+                {country.code !== "INTL" && <>Ships to {country.name}. </>}
+                {!isUsd && <>Amounts in {country.currency} are approximate. Your card is charged {formatMoney(estimatedTotal, "usd")} (USD). </>}
+                {country.vat && <>{country.vat}.</>}
+              </p>
               {guaranteedCount > 0 && (
                 <Link
                   href="/guaranteed-fit"

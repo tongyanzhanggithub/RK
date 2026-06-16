@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ADMIN_SESSION_COOKIE } from "@/lib/admin-constants";
+import { REGION_COOKIE } from "@/lib/region";
 
 // Optional IP allowlist for the admin area. Comma-separated list in
 // ADMIN_IP_ALLOWLIST; when empty, no IP restriction is applied.
@@ -12,6 +13,16 @@ function clientIp(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0].trim();
   return request.headers.get("x-real-ip")?.trim() || "";
+}
+
+// Best-effort country from the edge (Vercel / Cloudflare). Empty in local dev.
+function edgeCountry(request: NextRequest) {
+  return (
+    request.headers.get("x-vercel-ip-country") ||
+    request.headers.get("cf-ipcountry") ||
+    request.headers.get("x-country") ||
+    ""
+  ).toUpperCase();
 }
 
 export function middleware(request: NextRequest) {
@@ -37,9 +48,25 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+
+  // Seed the region cookie once from edge geo. Manual switching overwrites it
+  // client-side; we never override an existing value.
+  if (!request.cookies.get(REGION_COOKIE)?.value) {
+    const country = edgeCountry(request);
+    if (country) {
+      response.cookies.set(REGION_COOKIE, country, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: "lax"
+      });
+    }
+  }
+
+  return response;
 }
 
 export const config = {
-  matcher: ["/admin/:path*"]
+  // Run on everything except API routes, Next internals and uploaded files.
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|uploads).*)"]
 };

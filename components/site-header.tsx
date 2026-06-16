@@ -5,6 +5,7 @@ import { MessageCircle, User } from "lucide-react";
 import { CartNavLink } from "@/components/cart-nav-link";
 import { QuoteNavLink } from "@/components/quote-nav-link";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { RegionSwitcher } from "@/components/region-switcher";
 import { useLanguage } from "@/components/language-provider";
 import { MyEngineChip } from "@/components/my-engine-chip";
 import { SearchBox } from "@/components/search-box";
@@ -29,7 +30,10 @@ export function SiteHeader() {
       <div className="bg-ink px-4 py-2 text-sm font-semibold text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <span>{h.topbar_left}</span>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-2">
+            <RegionSwitcher />
+            <LanguageSwitcher />
+          </div>
         </div>
       </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-4 lg:grid-cols-[280px_1fr_auto] lg:items-center">

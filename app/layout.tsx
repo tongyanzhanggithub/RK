@@ -5,9 +5,11 @@ import { CartProvider } from "@/components/cart-provider";
 import { EngineProvider } from "@/components/engine-provider";
 import { LanguageProvider } from "@/components/language-provider";
 import { QuoteProvider } from "@/components/quote-provider";
+import { RegionProvider } from "@/components/region-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
+import { getServerCountry } from "@/lib/region-server";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 const SITE_NAME = "RepairKit Supply";
@@ -37,21 +39,24 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const country = getServerCountry();
   return (
     <html lang="en">
       <body>
         <Analytics />
         <LanguageProvider>
-          <EngineProvider>
-            <CartProvider>
-              <QuoteProvider>
-                <SiteHeader />
-                {children}
-                <SiteFooter />
-                <WhatsAppFloat />
-              </QuoteProvider>
-            </CartProvider>
-          </EngineProvider>
+          <RegionProvider initialCountryCode={country.code}>
+            <EngineProvider>
+              <CartProvider>
+                <QuoteProvider>
+                  <SiteHeader />
+                  {children}
+                  <SiteFooter />
+                  <WhatsAppFloat />
+                </QuoteProvider>
+              </CartProvider>
+            </EngineProvider>
+          </RegionProvider>
         </LanguageProvider>
       </body>
     </html>

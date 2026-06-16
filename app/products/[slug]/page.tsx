@@ -17,6 +17,8 @@ import { JsonLd } from "@/components/json-ld";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 import { getServerDict } from "@/lib/locale";
+import { getServerCountry } from "@/lib/region-server";
+import { Price } from "@/components/price";
 import { getStoreProduct, getStoreProducts } from "@/lib/product-store";
 import { breadcrumbLd } from "@/lib/seo";
 
@@ -52,6 +54,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
   const dict = getServerDict();
+  const shipCountry = getServerCountry();
   const product = await getStoreProduct(params.slug);
   if (!product) notFound();
   const allProducts = await getStoreProducts();
@@ -148,7 +151,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             <div className="mt-6">
               <p className="text-sm font-black uppercase text-steel">Retail reference</p>
               <p className="flex flex-wrap items-baseline gap-3">
-                <span className="text-3xl font-black">{formatMoney(product.priceCents, product.currency)}</span>
+                <Price cents={product.priceCents} showUsd className="text-3xl font-black" />
                 {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
                   <>
                     <span className="text-lg font-bold text-steel line-through">
@@ -161,6 +164,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 )}
               </p>
               <p className="mt-1 text-sm font-bold text-navy">Wholesale price by volume — request a quote below</p>
+              {shipCountry.vat && <p className="mt-1 text-xs text-steel">{shipCountry.vat}.</p>}
               <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} className="mt-2" />
             </div>
             <div className="mt-5 grid gap-3">

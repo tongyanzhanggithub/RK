@@ -5,9 +5,9 @@ import { AddToCartButton } from "@/components/add-to-cart-button";
 import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { FitBadge } from "@/components/fit-badge";
 import { InquiryButton } from "@/components/inquiry-button";
+import { Price } from "@/components/price";
 import { StockStatus } from "@/components/stock-status";
 import type { Product } from "@/data/products";
-import { formatMoney } from "@/lib/format";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 
@@ -67,10 +67,10 @@ export function ProductCard({ product, activeModel }: { product: Product; active
       <div className="mt-5 flex items-center justify-between gap-3">
         <span>
           <span className="flex items-baseline gap-2">
-            <strong className="text-lg text-ink">{formatMoney(product.priceCents, product.currency)}</strong>
+            <Price cents={product.priceCents} className="text-lg font-black text-ink" />
             {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
               <small className="font-bold text-steel line-through">
-                {formatMoney(product.compareAtPriceCents, product.currency)}
+                <Price cents={product.compareAtPriceCents} />
               </small>
             )}
           </span>

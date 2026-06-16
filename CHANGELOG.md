@@ -2,6 +2,20 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.6] - 2026-06-16
+
+### 新增 Added
+- **地区识别与货币/税显示**：访客进站时按边缘地理头（Vercel `x-vercel-ip-country` / Cloudflare `cf-ipcountry`）
+  判断国家，自动以当地货币**近似显示**价格、展示该地区 VAT 提示与「ship-to」信息；
+  头部新增**国家/货币手动切换器**（IP 偶尔不准时可改，写入 `rk-country` cookie）。
+  - `lib/region.ts`（国家→货币/近似汇率/VAT 注，覆盖中东/中亚/东南亚/英欧/南亚等）、`lib/region-server.ts`、
+    `components/region-provider.tsx`、`region-switcher.tsx`、`components/price.tsx`。
+  - 产品卡 / 详情 / 购物车价格按所选货币近似显示。
+
+### 说明 Notes
+- 仅为**显示**层：下单仍由 Stripe 按 **USD** 收款；购物车明确标注「Your card is charged $X (USD)」。
+- 汇率为静态近似值（仅用于「≈ 本币」提示，不影响实际扣款），需定期手动更新。
+
 ## [0.4.5] - 2026-06-16
 
 ### 新增 Added
