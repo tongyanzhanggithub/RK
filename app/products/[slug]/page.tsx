@@ -25,9 +25,26 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const product = await getStoreProduct(params.slug);
   if (!product) return {};
+  const title = product.seoTitle || `${product.name} | ${product.category}`;
+  const description = product.seoDescription || product.shortDescription;
+  const ogImage = product.ogImage || product.images?.find((i) => i.isPrimary)?.url || product.images?.[0]?.url || product.image;
   return {
-    title: product.seoTitle || `${product.name} | ${product.category}`,
-    description: product.seoDescription || product.shortDescription
+    title,
+    description,
+    alternates: { canonical: `/products/${product.slug}` },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: `/products/${product.slug}`,
+      ...(ogImage ? { images: [{ url: ogImage, alt: product.name }] } : {})
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {})
+    }
   };
 }
 
