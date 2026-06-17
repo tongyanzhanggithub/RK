@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
+import { sendRefundNotificationEmail } from "@/lib/refund-notification";
 import { sendShippingNotificationEmail } from "@/lib/shipping-notification";
 
 export type OrderFormState = {
@@ -104,4 +105,20 @@ export async function resendShippingEmail(orderId: string) {
 
   revalidatePath(`/admin/orders/${orderId}`);
   redirect(`/admin/orders/${orderId}?mail=shipping`);
+}
+
+export async function resendRefundEmail(orderId: string) {
+  await requireAdmin();
+  if (!process.env.SMTP_HOST) {
+    redirect(`/admin/orders/${orderId}?mail=nosmtp`);
+  }
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { refundEmailSentAt: null }
+  });
+  await sendRefundNotificationEmail(orderId);
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  redirect(`/admin/orders/${orderId}?mail=refund`);
 }

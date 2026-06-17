@@ -45,6 +45,7 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     `  Subtotal: ${money(order.subtotalCents, order.currency)}`,
     `  Shipping: ${money(order.shippingCents, order.currency)}`,
     ...(order.discountCents > 0 ? [`  Discount: -${money(order.discountCents, order.currency)}`] : []),
+    ...(order.taxCents > 0 ? [`  incl. VAT/tax: ${money(order.taxCents, order.currency)}`] : []),
     `  Total: ${money(order.totalCents, order.currency)}`,
     "",
     "Shipping: orders are handed to the carrier within 3-5 business days; delivery usually takes 7-15 days.",

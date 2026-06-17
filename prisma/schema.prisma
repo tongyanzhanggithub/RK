@@ -171,6 +171,7 @@ model Order {
   paidAt                  DateTime?
   confirmationEmailSentAt DateTime?
   shippingEmailSentAt     DateTime?
+  refundEmailSentAt       DateTime?
   shippingCarrier         String?
   trackingNumber          String?
   trackingUrl             String?

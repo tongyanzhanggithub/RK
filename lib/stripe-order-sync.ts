@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import { prisma } from "@/lib/db";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
+import { sendRefundNotificationEmail } from "@/lib/refund-notification";
 import { sendLowStockAlert, type LowStockItem } from "@/lib/stock-alert";
 
 type StripeEventReference = {
@@ -319,7 +320,7 @@ export async function syncChargeRefund(charge: Stripe.Charge, event: StripeEvent
 
   const refundedCents = Math.max(order.refundedCents, charge.amount_refunded);
   const fullyRefunded = refundedCents >= charge.amount;
-  return prisma.order.update({
+  const updated = await prisma.order.update({
     where: { id: order.id },
     data: {
       stripePaymentIntentId: paymentIntentId,
@@ -329,4 +330,11 @@ export async function syncChargeRefund(charge: Stripe.Charge, event: StripeEvent
       ...syncReference(event, order.stripeLastSyncedAt)
     }
   });
+
+  // Notify the buyer once a refund has actually been recorded.
+  if (refundedCents > 0) {
+    await sendRefundNotificationEmail(updated.id);
+  }
+
+  return updated;
 }

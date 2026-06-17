@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { resendConfirmationEmail, resendShippingEmail, updateOrder } from "@/app/admin/(protected)/orders/actions";
+import { resendConfirmationEmail, resendRefundEmail, resendShippingEmail, updateOrder } from "@/app/admin/(protected)/orders/actions";
 import { OrderManagementForm } from "@/app/admin/(protected)/orders/order-management-form";
 import { zhLabel, ORDER_PAYMENT_STATUS, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
@@ -134,6 +134,9 @@ export default async function AdminOrderDetailPage({
               {searchParams?.mail === "shipping" && (
                 <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">发货邮件已重新发送。</p>
               )}
+              {searchParams?.mail === "refund" && (
+                <p className="border border-green-200 bg-green-50 p-3 font-bold text-green-800">退款邮件已重新发送。</p>
+              )}
               {searchParams?.mail === "nosmtp" && (
                 <p className="border border-red-200 bg-red-50 p-3 font-bold text-red-800">
                   未配置 SMTP —— 请在 .env 中设置 SMTP_HOST 以启用邮件发送。
@@ -169,6 +172,23 @@ export default async function AdminOrderDetailPage({
                   </button>
                 </form>
               </div>
+              {order.refundedCents > 0 && (
+                <div className="flex items-center justify-between gap-3 border-t border-line pt-3">
+                  <div>
+                    <strong className="block">退款通知</strong>
+                    <span className="text-xs text-steel">
+                      {order.refundEmailSentAt
+                        ? `已发送 ${order.refundEmailSentAt.toLocaleString("zh-CN")}`
+                        : "尚未发送"}
+                    </span>
+                  </div>
+                  <form action={resendRefundEmail.bind(null, order.id)}>
+                    <button type="submit" className="font-black text-navy hover:underline">
+                      重新发送
+                    </button>
+                  </form>
+                </div>
+              )}
             </div>
           </section>
           <InfoPanel title="物流概览">

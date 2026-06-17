@@ -56,6 +56,11 @@ export async function POST(request: NextRequest) {
     }))
     .filter((item) => item.slug);
 
+  // Enable only after Stripe Tax is configured in the dashboard. With inclusive
+  // behaviour the listed price already contains VAT; Stripe breaks the VAT out and
+  // reports it as amount_tax (synced into order.taxCents and shown on receipts).
+  const inclusiveTax = process.env.STRIPE_AUTOMATIC_TAX === "1";
+
   const products = await getStoreProducts();
   const orderLines = normalizedItems
     .map((item) => {
@@ -70,6 +75,7 @@ export async function POST(request: NextRequest) {
       return {
         price_data: {
           currency: product.currency,
+          ...(inclusiveTax ? { tax_behavior: "inclusive" as const } : {}),
           product_data: {
             name: product.name,
             description: product.shortDescription,
@@ -206,6 +212,7 @@ export async function POST(request: NextRequest) {
       mode: "payment",
       client_reference_id: order.id,
       line_items: lineItems,
+      ...(inclusiveTax ? { automatic_tax: { enabled: true } } : {}),
       success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/checkout/cancel`,
       ...(stripeCoupon
@@ -235,6 +242,7 @@ export async function POST(request: NextRequest) {
               amount: stripeShippingCents,
               currency: "usd"
             },
+            ...(inclusiveTax ? { tax_behavior: "inclusive" as const } : {}),
             display_name: isFreeShipping
               ? "Standard international shipping (free with coupon)"
               : "Standard international shipping",

@@ -2,6 +2,20 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.7] - 2026-06-16
+
+### 新增 Added
+- **退款通知邮件**：Stripe `charge.refunded` 同步后自动给买家发退款邮件（全额/部分），
+  `refundEmailSentAt` 防重复；后台订单详情新增「退款通知」重发入口。
+- **结账 VAT 拆分（可选开关）**：`STRIPE_AUTOMATIC_TAX=1` 开启后，标价按**含税**处理，
+  Stripe 在结账时自动拆出 VAT（英国 20% 等）并回填 `order.taxCents`；确认邮件与订单明细显示「含 VAT」行。
+  默认关闭，须先在 Stripe 后台启用 Stripe Tax 方可打开。
+
+### 说明 Notes
+- 本次主要是**补缺口**：Stripe 托管结账、3DS、付款成功才建单/扣库存/发确认邮件、订单状态机
+  （待付款→已付款→已发货→已完成 + 退款）、下单确认/发货邮件等**早已实现**，此次补齐退款邮件与 VAT 拆分管道。
+- 真正"按 GBP 含税收款 + 开 VAT 发票"还需业务侧决定：收款币种、是否注册英国 VAT / IOSS、启用 Stripe Tax。
+
 ## [0.4.6] - 2026-06-16
 
 ### 新增 Added
