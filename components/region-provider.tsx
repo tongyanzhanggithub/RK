@@ -1,7 +1,15 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { DEFAULT_COUNTRY, REGION_COOKIE, formatLocal, isUsd, resolveCountry, type Country } from "@/lib/region";
+import {
+  DEFAULT_COUNTRY,
+  REGION_COOKIE,
+  formatLocal,
+  isChargeableCurrency,
+  isUsd,
+  resolveCountry,
+  type Country
+} from "@/lib/region";
 import { formatMoney } from "@/lib/format";
 
 type PriceDisplay = { main: string; sub?: string };
@@ -10,7 +18,9 @@ type RegionContextValue = {
   country: Country;
   setCountry: (code: string) => void;
   isUsd: boolean;
-  /** Approximate local-currency string, e.g. "≈ AED 91" (or "$24.90" for USD regions). */
+  /** True when this country is actually charged in its own currency (multi-currency on). */
+  charged: boolean;
+  /** Local-currency string. Exact when charged in local; "≈ ..." when only a display hint. */
   local: (cents: number) => string;
   /** Main + optional USD sub-line for price blocks. */
   display: (cents: number) => PriceDisplay;
@@ -20,10 +30,12 @@ const RegionContext = createContext<RegionContextValue | null>(null);
 
 export function RegionProvider({
   children,
-  initialCountryCode
+  initialCountryCode,
+  chargeEnabled = false
 }: {
   children: React.ReactNode;
   initialCountryCode?: string;
+  chargeEnabled?: boolean;
 }) {
   const [country, setCountryState] = useState<Country>(resolveCountry(initialCountryCode) || DEFAULT_COUNTRY);
 
@@ -35,17 +47,23 @@ export function RegionProvider({
 
   const value = useMemo<RegionContextValue>(() => {
     const usd = isUsd(country);
+    // Charged in local currency only when multi-currency is enabled AND the
+    // currency is chargeable; otherwise the local figure is just an estimate.
+    const charged = chargeEnabled && !usd && isChargeableCurrency(country.currency);
+    const exact = usd || charged; // no "≈", no USD sub-line
+
     return {
       country,
       setCountry,
       isUsd: usd,
-      local: (cents: number) => (usd ? formatLocal(cents, country) : `≈ ${formatLocal(cents, country)}`),
+      charged,
+      local: (cents: number) => (exact ? formatLocal(cents, country) : `≈ ${formatLocal(cents, country)}`),
       display: (cents: number) =>
-        usd
-          ? { main: formatMoney(cents, "usd") }
+        exact
+          ? { main: formatLocal(cents, country) }
           : { main: `≈ ${formatLocal(cents, country)}`, sub: formatMoney(cents, "usd") }
     };
-  }, [country, setCountry]);
+  }, [country, setCountry, chargeEnabled]);
 
   return <RegionContext.Provider value={value}>{children}</RegionContext.Provider>;
 }

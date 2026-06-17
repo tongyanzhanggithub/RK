@@ -5,14 +5,18 @@
 
 export const REGION_COOKIE = "rk-country";
 
-type CurrencyInfo = { symbol: string; rate: number; decimals: number }; // rate = local units per 1 USD
+// rate = local units per 1 USD. `chargeable` = we create the Stripe Checkout
+// session in this currency (real local charge); others fall back to USD charging
+// with an "≈ local" display. Only 2-decimal, widely-supported currencies are
+// marked chargeable to avoid minor-unit / settlement pitfalls.
+type CurrencyInfo = { symbol: string; rate: number; decimals: number; chargeable?: boolean };
 
 const CURRENCIES: Record<string, CurrencyInfo> = {
-  USD: { symbol: "$", rate: 1, decimals: 2 },
-  GBP: { symbol: "£", rate: 0.79, decimals: 2 },
-  EUR: { symbol: "€", rate: 0.92, decimals: 2 },
-  AED: { symbol: "AED ", rate: 3.67, decimals: 2 },
-  SAR: { symbol: "SAR ", rate: 3.75, decimals: 2 },
+  USD: { symbol: "$", rate: 1, decimals: 2, chargeable: true },
+  GBP: { symbol: "£", rate: 0.79, decimals: 2, chargeable: true },
+  EUR: { symbol: "€", rate: 0.92, decimals: 2, chargeable: true },
+  AED: { symbol: "AED ", rate: 3.67, decimals: 2, chargeable: true },
+  SAR: { symbol: "SAR ", rate: 3.75, decimals: 2, chargeable: true },
   QAR: { symbol: "QAR ", rate: 3.64, decimals: 2 },
   KWD: { symbol: "KWD ", rate: 0.31, decimals: 3 },
   CNY: { symbol: "¥", rate: 7.2, decimals: 2 },
@@ -23,7 +27,7 @@ const CURRENCIES: Record<string, CurrencyInfo> = {
   THB: { symbol: "฿", rate: 36, decimals: 2 },
   VND: { symbol: "₫", rate: 25400, decimals: 0 },
   PHP: { symbol: "₱", rate: 58, decimals: 2 },
-  SGD: { symbol: "S$", rate: 1.35, decimals: 2 },
+  SGD: { symbol: "S$", rate: 1.35, decimals: 2, chargeable: true },
   INR: { symbol: "₹", rate: 83, decimals: 2 },
   PKR: { symbol: "₨", rate: 278, decimals: 0 }
 };
@@ -101,4 +105,24 @@ export function formatLocal(cents: number, country: Country): string {
 
 export function isUsd(country: Country): boolean {
   return country.currency === "USD";
+}
+
+/** Whether we create the Stripe session directly in this currency (real local charge). */
+export function isChargeableCurrency(currency: string): boolean {
+  return CURRENCIES[currency]?.chargeable === true;
+}
+
+/** The currency a country is actually charged in: its own if chargeable, else USD. */
+export function chargeCurrency(country: Country): string {
+  return isChargeableCurrency(country.currency) ? country.currency : "USD";
+}
+
+/**
+ * Integer minor units in the CHARGE currency for a USD cents value — what we hand
+ * to Stripe. Chargeable currencies are all 2-decimal, so minor units = ×100.
+ */
+export function localChargeMinor(usdCents: number, currency: string): number {
+  if (currency === "USD") return usdCents;
+  const info = CURRENCIES[currency] || CURRENCIES.USD;
+  return Math.round((usdCents / 100) * info.rate * 100);
 }

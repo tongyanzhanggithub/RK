@@ -2,6 +2,20 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.4.8] - 2026-06-16
+
+### 新增 Added
+- **多币种定价/收款**（`STRIPE_MULTICURRENCY=1` 开启）：可结算货币（GBP/EUR/AED/SAR/SGD/USD）按访客所在国
+  以**当地货币真实收款**——Stripe Checkout 会话直接以当地币种创建（行项/运费/优惠券按区域 FX 换算为当地最小单位），
+  订单与确认邮件以当地币种记账；其余货币仍按 USD 收款、当地价仅作估算显示。
+  - `lib/region.ts` 加 `chargeable` 标记与 `chargeCurrency` / `localChargeMinor` 助手；
+    `RegionProvider` 新增 `chargeEnabled`，可结算币种展示**确切价**（去掉「≈ / billed in USD」）。
+  - `app/api/checkout/route.ts` 按所选国家换算并以当地币种建 Stripe 会话。
+
+### 说明 Notes
+- **默认关闭**，须确认 Stripe 账户支持目标 presentment 货币后再开。
+- FX 为 `lib/region.ts` 中的**静态近似汇率**，会真实影响收款金额 → 建议加小幅缓冲并定期更新（或后续接实时汇率）。
+
 ## [0.4.7] - 2026-06-16
 
 ### 新增 Added

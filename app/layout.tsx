@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Analytics />
         <LanguageProvider>
-          <RegionProvider initialCountryCode={country.code}>
+          <RegionProvider initialCountryCode={country.code} chargeEnabled={process.env.STRIPE_MULTICURRENCY === "1"}>
             <EngineProvider>
               <CartProvider>
                 <QuoteProvider>

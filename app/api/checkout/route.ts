@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { calculateCouponDiscount, normalizeCouponCode } from "@/lib/coupons";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
+import { chargeCurrency, localChargeMinor, REGION_COOKIE, resolveCountry } from "@/lib/region";
 import { SHIPPING_CENTS } from "@/lib/shipping";
 
 export const runtime = "nodejs";
@@ -61,6 +62,14 @@ export async function POST(request: NextRequest) {
   // reports it as amount_tax (synced into order.taxCents and shown on receipts).
   const inclusiveTax = process.env.STRIPE_AUTOMATIC_TAX === "1";
 
+  // Multi-currency: when enabled, charge in the visitor's local currency (if it is
+  // a chargeable one) using the region FX rate. Off by default → charge USD.
+  const multiCurrency = process.env.STRIPE_MULTICURRENCY === "1";
+  const country = resolveCountry(request.cookies.get(REGION_COOKIE)?.value);
+  const chargeCur = multiCurrency ? chargeCurrency(country) : "USD";
+  const curLower = chargeCur.toLowerCase();
+  const amt = (usdCents: number) => localChargeMinor(usdCents, chargeCur);
+
   const products = await getStoreProducts();
   const orderLines = normalizedItems
     .map((item) => {
@@ -74,7 +83,7 @@ export async function POST(request: NextRequest) {
     .map(({ product, quantity }) => {
       return {
         price_data: {
-          currency: product.currency,
+          currency: curLower,
           ...(inclusiveTax ? { tax_behavior: "inclusive" as const } : {}),
           product_data: {
             name: product.name,
@@ -84,7 +93,7 @@ export async function POST(request: NextRequest) {
               category: product.category
             }
           },
-          unit_amount: product.priceCents
+          unit_amount: amt(product.priceCents)
         },
         quantity
       };
@@ -149,6 +158,10 @@ export async function POST(request: NextRequest) {
     }
   }
   const discountCents = appliedCoupon?.discountCents || 0;
+  // Amounts recorded in the CHARGE currency so the order/emails match Stripe.
+  const subtotalCharged = orderLines.reduce((total, line) => total + amt(line.product.priceCents) * line.quantity, 0);
+  const shippingCharged = amt(shippingCents);
+  const discountCharged = amt(discountCents);
   const order = await prisma.order.create({
     data: {
       orderNumber: createOrderNumber(),
@@ -159,12 +172,12 @@ export async function POST(request: NextRequest) {
       customerName: "Stripe Checkout Customer",
       customerEmail: "pending@checkout.local",
       country: "Pending",
-      currency: "usd",
-      subtotalCents,
-      shippingCents,
+      currency: curLower,
+      subtotalCents: subtotalCharged,
+      shippingCents: shippingCharged,
       taxCents: 0,
-      discountCents,
-      totalCents: subtotalCents + shippingCents - discountCents,
+      discountCents: discountCharged,
+      totalCents: subtotalCharged + shippingCharged - discountCharged,
       paymentMethod: "stripe",
       paymentStatus: "PENDING",
       orderStatus: "PROCESSING",
@@ -175,9 +188,9 @@ export async function POST(request: NextRequest) {
           productName: line.product.name,
           productSlug: line.product.slug,
           sku: line.product.sku || line.product.slug,
-          unitPriceCents: line.product.priceCents,
+          unitPriceCents: amt(line.product.priceCents),
           quantity: line.quantity,
-          subtotalCents: line.product.priceCents * line.quantity,
+          subtotalCents: amt(line.product.priceCents) * line.quantity,
           image: line.product.image || null
         }))
       }
@@ -196,8 +209,8 @@ export async function POST(request: NextRequest) {
     stripeCoupon =
       appliedCoupon && !isFreeShipping
         ? await stripe.coupons.create({
-            amount_off: appliedCoupon.discountCents,
-            currency: "usd",
+            amount_off: amt(appliedCoupon.discountCents),
+            currency: curLower,
             duration: "once",
             name: appliedCoupon.label,
             metadata: {
@@ -239,8 +252,8 @@ export async function POST(request: NextRequest) {
           shipping_rate_data: {
             type: "fixed_amount",
             fixed_amount: {
-              amount: stripeShippingCents,
-              currency: "usd"
+              amount: amt(stripeShippingCents),
+              currency: curLower
             },
             ...(inclusiveTax ? { tax_behavior: "inclusive" as const } : {}),
             display_name: isFreeShipping

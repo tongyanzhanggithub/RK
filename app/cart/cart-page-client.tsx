@@ -33,7 +33,7 @@ export function CartPageClient({ products }: CartPageClientProps) {
   const { items, updateItem, removeItem, clearCart, totalQuantity } = useCart();
   const { dict } = useLanguage();
   const c = dict.cart;
-  const { local, isUsd, country } = useRegion();
+  const { local, isUsd, country, charged } = useRegion();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const [couponCode, setCouponCode] = useState("");
@@ -317,7 +317,10 @@ export function CartPageClient({ products }: CartPageClientProps) {
               </dl>
               <p className="mt-3 text-xs leading-5 text-steel">
                 {country.code !== "INTL" && <>Ships to {country.name}. </>}
-                {!isUsd && <>Amounts in {country.currency} are approximate. Your card is charged {formatMoney(estimatedTotal, "usd")} (USD). </>}
+                {charged && <>You will be charged in {country.currency}. </>}
+                {!isUsd && !charged && (
+                  <>Amounts in {country.currency} are approximate. Your card is charged {formatMoney(estimatedTotal, "usd")} (USD). </>
+                )}
                 {country.vat && <>{country.vat}.</>}
               </p>
               {guaranteedCount > 0 && (
