@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import {
   syncChargeDispute,
   syncChargeRefund,
+  syncChargeRisk,
   syncCheckoutSession,
   syncPaymentIntentFailure,
   syncPaymentIntentSucceeded
@@ -51,6 +52,9 @@ export async function POST(request: NextRequest) {
       break;
     case "payment_intent.succeeded":
       order = await syncPaymentIntentSucceeded(event.data.object, event);
+      break;
+    case "charge.succeeded":
+      order = await syncChargeRisk(event.data.object, event);
       break;
     case "charge.refunded":
       order = await syncChargeRefund(event.data.object, event);

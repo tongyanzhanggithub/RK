@@ -172,6 +172,42 @@ export async function deleteShipment(shipmentId: string) {
   revalidatePath(`/admin/orders/${shipment.orderId}`);
 }
 
+const BULK_STATUSES = ["PROCESSING", "SHIPPED", "COMPLETED", "CANCELLED"] as const;
+
+export async function bulkUpdateOrders(formData: FormData) {
+  const admin = await requireAdmin();
+  const status = String(formData.get("bulkStatus") || "");
+  const ids = formData.getAll("ids").map(String).filter(Boolean);
+  if (!BULK_STATUSES.includes(status as (typeof BULK_STATUSES)[number]) || ids.length === 0) {
+    redirect("/admin/orders");
+  }
+
+  for (const id of ids) {
+    const before = await prisma.order.findUnique({ where: { id } });
+    if (!before || before.orderStatus === status) continue;
+
+    await prisma.order.update({
+      where: { id },
+      data: {
+        orderStatus: status,
+        ...(status === "SHIPPED" && before.fulfillmentStatus === "UNFULFILLED" ? { fulfillmentStatus: "SHIPPED", shippedAt: new Date() } : {})
+      }
+    });
+    await logOrderEvent(id, "ORDER_STATUS", `批量：订单状态 ${before.orderStatus} → ${status}`, admin.email);
+
+    if (status === "CANCELLED" && before.inventoryReduced) {
+      await restoreInventoryForOrder(id, admin.email);
+      await logOrderEvent(id, "INVENTORY", "订单取消，库存已恢复", admin.email);
+    }
+    if (status === "SHIPPED") {
+      await sendShippingNotificationEmail(id);
+    }
+  }
+
+  revalidatePath("/admin/orders");
+  redirect(`/admin/orders?bulk=${ids.length}`);
+}
+
 export async function refundOrder(orderId: string, _prevState: OrderFormState, formData: FormData): Promise<OrderFormState> {
   const admin = await requireAdmin();
   const secretKey = process.env.STRIPE_SECRET_KEY;

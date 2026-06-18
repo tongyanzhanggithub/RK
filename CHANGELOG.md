@@ -2,6 +2,31 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.5.0] - 2026-06-16 — 订单管理大升级（三阶段）
+
+### 阶段 1
+- **后台一键退款**：Stripe `refunds.create`（全额/部分），结果由 `charge.refunded` Webhook 回填并发退款邮件。
+- **取消订单自动恢复库存**：取消时反向加回库存并写 `RETURN` 调整流水（修复"取消不退库存"的隐患）。
+- **订单审计时间线**（`OrderEvent`）：状态变更 / 退款 / 库存 / 退货 / 发货 / 争议 / 风控 全程留痕。
+- **退货 RMA 流程**：后台按单创建并推进（申请→批准→收货→退款/拒绝）、`/admin/returns` 总览、侧边栏入口；
+  客户在 `/account/orders/[id]` 可提交退货申请。
+
+### 阶段 2
+- **多包裹发货**（`Shipment`）：一单可加多个承运商+追踪号，自动标记发货并通知。
+- **可打印发票 / 形式发票 + 装箱单**（`/invoice`、`/packing-slip`，浏览器打印存 PDF；含公司信息与 VAT 拆分）。
+- **手动建单**（`/admin/orders/new`）：线下/电汇(T/T)订单，标记已付款则扣库存。
+- **拒付/争议**：Webhook 处理 `charge.dispute.created/closed` → 标记 `disputeStatus` + 审计；详情页红色告警。
+
+### 阶段 3
+- **批量操作**：订单列表勾选 + 批量改状态（发货发邮件 / 取消恢复库存）。
+- **Stripe Radar 风险展示**：`charge.succeeded` 回填 `riskLevel/riskScore`，详情页显示，elevated/highest 记审计。
+- 新模型 `OrderEvent / Shipment / ReturnRequest` + `Order.disputeStatus/riskLevel/riskScore` + `Customer.vatNumber`。
+
+### 说明 / 需外部账号的部分
+- **真实承运商面单 API**（自动出单号/打印面单）需对接 DHL/FedEx 等承运商账号 —— 当前提供可打印的装箱/拣货单替代。
+- **ERP / 会计对接**需你的目标系统 —— 当前已有订单/客户 CSV 导出可作桥梁。
+- **Radar 风控调参**在 Stripe 后台设置；站内只做展示与告警。
+
 ## [0.4.8] - 2026-06-16
 
 ### 新增 Added

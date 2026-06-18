@@ -340,6 +340,26 @@ export async function syncChargeRefund(charge: Stripe.Charge, event: StripeEvent
   return updated;
 }
 
+export async function syncChargeRisk(charge: Stripe.Charge, event: StripeEventReference) {
+  const paymentIntentId = objectId(charge.payment_intent);
+  if (!paymentIntentId) return null;
+  const order = await prisma.order.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+  if (!order) return null;
+
+  const level = charge.outcome?.risk_level;
+  const score = typeof charge.outcome?.risk_score === "number" ? charge.outcome.risk_score : null;
+  if (!level && score === null) return order;
+
+  const updated = await prisma.order.update({
+    where: { id: order.id },
+    data: { riskLevel: level || order.riskLevel, riskScore: score ?? order.riskScore }
+  });
+  if (level === "elevated" || level === "highest") {
+    await logOrderEvent(order.id, "RISK", `Stripe 风控：${level}${score !== null ? `（评分 ${score}）` : ""}`, "stripe-webhook");
+  }
+  return updated;
+}
+
 export async function syncChargeDispute(dispute: Stripe.Dispute, event: StripeEventReference) {
   const paymentIntentId = objectId(dispute.payment_intent);
   const chargeId = objectId(dispute.charge);

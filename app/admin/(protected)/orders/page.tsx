@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { bulkUpdateOrders } from "@/app/admin/(protected)/orders/actions";
 import { zhLabel, ORDER_PAYMENT_STATUS, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -22,6 +23,7 @@ export default async function AdminOrdersPage({
     fulfillmentStatus?: string;
     from?: string;
     to?: string;
+    bulk?: string;
   };
 }) {
   const q = searchParams?.q?.trim() || "";
@@ -126,10 +128,25 @@ export default async function AdminOrdersPage({
         <input name="to" type="date" defaultValue={to} className="border border-line px-3 py-2" />
       </form>
 
-      <section className="mt-6 overflow-x-auto border border-line bg-white">
-        <table className="w-full min-w-[1050px] text-left text-sm">
+      {searchParams?.bulk && (
+        <p className="mt-6 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">已批量更新 {searchParams.bulk} 个订单。</p>
+      )}
+      <form action={bulkUpdateOrders} className="mt-6">
+        <div className="flex flex-wrap items-center gap-2 border border-line bg-panel p-3">
+          <span className="text-sm font-bold text-steel">批量操作选中订单 →</span>
+          <select name="bulkStatus" className="border border-line px-3 py-2 text-sm font-bold">
+            <option value="PROCESSING">标记 {zhLabel(ORDER_STATUS, "PROCESSING")}</option>
+            <option value="SHIPPED">标记 {zhLabel(ORDER_STATUS, "SHIPPED")}（发邮件）</option>
+            <option value="COMPLETED">标记 {zhLabel(ORDER_STATUS, "COMPLETED")}</option>
+            <option value="CANCELLED">标记 {zhLabel(ORDER_STATUS, "CANCELLED")}（恢复库存）</option>
+          </select>
+          <button className="bg-navy px-4 py-2 text-sm font-black text-white">应用到选中</button>
+        </div>
+        <section className="overflow-x-auto border border-t-0 border-line bg-white">
+        <table className="w-full min-w-[1100px] text-left text-sm">
           <thead className="bg-panel text-xs uppercase text-steel">
             <tr>
+              <th className="p-3"><span className="sr-only">选择</span></th>
               <th className="p-3">订单号</th>
               <th className="p-3">客户</th>
               <th className="p-3">邮箱</th>
@@ -145,6 +162,7 @@ export default async function AdminOrdersPage({
           <tbody>
             {orders.map((order) => (
               <tr key={order.id} className="border-t border-line">
+                <td className="p-3"><input type="checkbox" name="ids" value={order.id} className="h-4 w-4" /></td>
                 <td className="p-3 font-black">{order.orderNumber}</td>
                 <td className="p-3">{order.customerName}</td>
                 <td className="p-3">{order.customerEmail}</td>
@@ -162,7 +180,8 @@ export default async function AdminOrdersPage({
           </tbody>
         </table>
         {orders.length === 0 && <p className="p-5 text-sm text-steel">没有符合当前筛选条件的订单。</p>}
-      </section>
+        </section>
+      </form>
     </main>
   );
 }

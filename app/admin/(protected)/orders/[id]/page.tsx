@@ -92,6 +92,13 @@ export default async function AdminOrderDetailPage({
             <Info label="最近 Stripe 事件" value={order.stripeLastEventType || "-"} />
             <Info label="最近 Stripe 事件 ID" value={order.stripeLastEventId || "-"} />
             <Info label="最近 Stripe 同步" value={order.stripeLastSyncedAt ? order.stripeLastSyncedAt.toLocaleString("zh-CN") : "-"} />
+            {order.riskLevel && (
+              <Info
+                label="Stripe 风控"
+                value={`${order.riskLevel}${order.riskScore !== null && order.riskScore !== undefined ? `（评分 ${order.riskScore}）` : ""}`}
+                strong={order.riskLevel === "elevated" || order.riskLevel === "highest"}
+              />
+            )}
             {searchParams?.refund === "ok" && (
               <p className="mt-3 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">退款已提交，Stripe 确认后将回填已退金额并发邮件。</p>
             )}
