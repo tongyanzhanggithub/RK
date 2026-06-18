@@ -75,12 +75,20 @@ export default async function AdminOrdersPage({
           <h1 className="text-4xl font-black">订单管理</h1>
           <p className="mt-3 text-steel">查看订单、履约状态、物流详情和内部备注。</p>
         </div>
-        <a
-          href="/admin/orders/export"
-          className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white"
-        >
-          导出CSV
-        </a>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/admin/orders/new"
+            className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400"
+          >
+            手动建单
+          </Link>
+          <a
+            href="/admin/orders/export"
+            className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white"
+          >
+            导出CSV
+          </a>
+        </div>
       </div>
 
       <form className="mt-8 grid gap-3 border border-line bg-white p-4 lg:grid-cols-7">

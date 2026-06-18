@@ -1,5 +1,6 @@
 import type Stripe from "stripe";
 import { prisma } from "@/lib/db";
+import { logOrderEvent } from "@/lib/order-events";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
 import { sendRefundNotificationEmail } from "@/lib/refund-notification";
 import { sendLowStockAlert, type LowStockItem } from "@/lib/stock-alert";
@@ -336,5 +337,26 @@ export async function syncChargeRefund(charge: Stripe.Charge, event: StripeEvent
     await sendRefundNotificationEmail(updated.id);
   }
 
+  return updated;
+}
+
+export async function syncChargeDispute(dispute: Stripe.Dispute, event: StripeEventReference) {
+  const paymentIntentId = objectId(dispute.payment_intent);
+  const chargeId = objectId(dispute.charge);
+  const order = await prisma.order.findFirst({
+    where: {
+      OR: [
+        ...(paymentIntentId ? [{ stripePaymentIntentId: paymentIntentId }] : []),
+        ...(chargeId ? [{ stripePaymentIntentId: chargeId }] : [])
+      ]
+    }
+  });
+  if (!order) return null;
+
+  const updated = await prisma.order.update({
+    where: { id: order.id },
+    data: { disputeStatus: dispute.status, ...syncReference(event, order.stripeLastSyncedAt) }
+  });
+  await logOrderEvent(order.id, "DISPUTE", `收到拒付/争议：${dispute.status}（理由 ${dispute.reason}）`, "stripe-webhook");
   return updated;
 }

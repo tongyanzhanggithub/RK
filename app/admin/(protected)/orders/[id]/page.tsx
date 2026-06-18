@@ -5,6 +5,7 @@ import { resendConfirmationEmail, resendRefundEmail, resendShippingEmail, update
 import { OrderManagementForm } from "@/app/admin/(protected)/orders/order-management-form";
 import { RefundForm } from "@/app/admin/(protected)/orders/refund-form";
 import { ReturnControls } from "@/app/admin/(protected)/orders/return-controls";
+import { ShipmentControls } from "@/app/admin/(protected)/orders/shipment-controls";
 import { zhLabel, ORDER_PAYMENT_STATUS, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -44,10 +45,24 @@ export default async function AdminOrderDetailPage({
           <h1 className="text-4xl font-black">{order.orderNumber}</h1>
           <p className="mt-3 text-steel">创建时间 {order.createdAt.toLocaleString("zh-CN")}</p>
         </div>
-        <Link href="/admin/orders" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
-          返回订单列表
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href={`/admin/orders/${order.id}/invoice`} target="_blank" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
+            发票
+          </Link>
+          <Link href={`/admin/orders/${order.id}/packing-slip`} target="_blank" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
+            装箱单
+          </Link>
+          <Link href="/admin/orders" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
+            返回订单列表
+          </Link>
+        </div>
       </div>
+
+      {order.disputeStatus && (
+        <div className="mb-6 border border-red-300 bg-red-50 p-4 font-bold text-red-800">
+          ⚠️ 此订单有支付争议/拒付（状态：{order.disputeStatus}）。请尽快在 Stripe 后台提交证据应对。
+        </div>
+      )}
 
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <div className="grid gap-6">
@@ -135,6 +150,15 @@ export default async function AdminOrderDetailPage({
             <Info label="折扣" value={`-${formatMoney(order.discountCents, order.currency)}`} />
             <Info label="合计" value={formatMoney(order.totalCents, order.currency)} strong />
           </InfoPanel>
+
+          <section className="border border-line bg-white">
+            <div className="border-b border-line p-5">
+              <h2 className="text-xl font-black">物流包裹（可多包裹）</h2>
+            </div>
+            <div className="p-5">
+              <ShipmentControls orderId={order.id} shipments={order.shipments} />
+            </div>
+          </section>
 
           <section className="border border-line bg-white">
             <div className="border-b border-line p-5">

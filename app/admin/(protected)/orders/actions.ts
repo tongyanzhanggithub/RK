@@ -122,6 +122,56 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
   redirect(`/admin/orders/${orderId}?saved=1`);
 }
 
+export async function addShipment(orderId: string, _prevState: OrderFormState, formData: FormData): Promise<OrderFormState> {
+  const admin = await requireAdmin();
+  const order = await prisma.order.findUnique({ where: { id: orderId } });
+  if (!order) return { error: "订单不存在。" };
+
+  const carrier = text(formData, "carrier");
+  const trackingNumber = text(formData, "trackingNumber");
+  const trackingUrl = text(formData, "trackingUrl");
+  const note = text(formData, "note");
+  if (!trackingNumber && !carrier) return { error: "请至少填写承运商或追踪号。" };
+  if (trackingUrl && !/^https?:\/\//i.test(trackingUrl)) return { error: "追踪链接需以 http(s):// 开头。" };
+
+  await prisma.shipment.create({
+    data: {
+      orderId,
+      carrier: carrier || null,
+      trackingNumber: trackingNumber || null,
+      trackingUrl: trackingUrl || null,
+      note: note || null
+    }
+  });
+
+  // Mark fulfilled + mirror the latest tracking onto the order, then notify once.
+  await prisma.order.update({
+    where: { id: orderId },
+    data: {
+      fulfillmentStatus: "FULFILLED",
+      orderStatus: order.orderStatus === "PROCESSING" ? "SHIPPED" : order.orderStatus,
+      shippingCarrier: carrier || order.shippingCarrier,
+      trackingNumber: trackingNumber || order.trackingNumber,
+      trackingUrl: trackingUrl || order.trackingUrl,
+      shippedAt: order.shippedAt || new Date()
+    }
+  });
+  await logOrderEvent(orderId, "SHIPMENT", `新增包裹${carrier ? `（${carrier}` : ""}${trackingNumber ? ` ${trackingNumber}` : ""}${carrier ? "）" : ""}`, admin.email);
+  await sendShippingNotificationEmail(orderId);
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  redirect(`/admin/orders/${orderId}?saved=1`);
+}
+
+export async function deleteShipment(shipmentId: string) {
+  const admin = await requireAdmin();
+  const shipment = await prisma.shipment.findUnique({ where: { id: shipmentId } });
+  if (!shipment) return;
+  await prisma.shipment.delete({ where: { id: shipmentId } });
+  await logOrderEvent(shipment.orderId, "SHIPMENT", "删除一个包裹记录", admin.email);
+  revalidatePath(`/admin/orders/${shipment.orderId}`);
+}
+
 export async function refundOrder(orderId: string, _prevState: OrderFormState, formData: FormData): Promise<OrderFormState> {
   const admin = await requireAdmin();
   const secretKey = process.env.STRIPE_SECRET_KEY;

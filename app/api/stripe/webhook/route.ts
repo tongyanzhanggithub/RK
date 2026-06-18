@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
 import {
+  syncChargeDispute,
   syncChargeRefund,
   syncCheckoutSession,
   syncPaymentIntentFailure,
@@ -53,6 +54,10 @@ export async function POST(request: NextRequest) {
       break;
     case "charge.refunded":
       order = await syncChargeRefund(event.data.object, event);
+      break;
+    case "charge.dispute.created":
+    case "charge.dispute.closed":
+      order = await syncChargeDispute(event.data.object, event);
       break;
     default:
       return NextResponse.json({ received: true, handled: false, eventType: event.type });
