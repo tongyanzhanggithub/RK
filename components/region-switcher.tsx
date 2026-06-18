@@ -14,10 +14,10 @@ export function RegionSwitcher({ className = "" }: { className?: string }) {
         value={country.code}
         onChange={(event) => setCountry(event.target.value)}
         aria-label="Ship-to country and currency"
-        className="max-w-[150px] truncate bg-transparent py-2 text-sm font-bold outline-none"
+        className="max-w-[150px] truncate bg-white py-2 text-sm font-bold text-ink outline-none"
       >
         {COUNTRIES.map((c) => (
-          <option key={c.code} value={c.code}>
+          <option key={c.code} value={c.code} className="text-ink">
             {c.name}{c.currency !== "USD" ? ` · ${c.currency}` : ""}
           </option>
         ))}

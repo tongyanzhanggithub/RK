@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import Stripe from "stripe";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
+import { logOrderEvent } from "@/lib/order-events";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
 import { sendRefundNotificationEmail } from "@/lib/refund-notification";
 import { sendShippingNotificationEmail } from "@/lib/shipping-notification";
@@ -12,6 +14,35 @@ import { sendShippingNotificationEmail } from "@/lib/shipping-notification";
 export type OrderFormState = {
   error?: string;
 };
+
+/** Put stock back when an order is cancelled (reverses the paid-order deduction). */
+async function restoreInventoryForOrder(orderId: string, actorEmail: string) {
+  await prisma.$transaction(async (tx) => {
+    const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+    if (!order || !order.inventoryReduced) return;
+
+    for (const item of order.items) {
+      if (!item.productId) continue;
+      const product = await tx.product.findUnique({ where: { id: item.productId } });
+      if (!product) continue;
+      const stockAfter = product.stock + item.quantity;
+      await tx.product.update({ where: { id: product.id }, data: { stock: stockAfter } });
+      await tx.inventoryAdjustment.create({
+        data: {
+          productId: product.id,
+          type: "RETURN",
+          quantityDelta: item.quantity,
+          stockBefore: product.stock,
+          stockAfter,
+          reason: "Order cancelled — stock restored",
+          reference: order.orderNumber,
+          createdBy: actorEmail
+        }
+      });
+    }
+    await tx.order.update({ where: { id: order.id }, data: { inventoryReduced: false } });
+  });
+}
 
 const orderUpdateSchema = z.object({
   orderStatus: z.enum(["PROCESSING", "SHIPPED", "COMPLETED", "CANCELLED"]),
@@ -28,7 +59,7 @@ function text(formData: FormData, key: string) {
 }
 
 export async function updateOrder(orderId: string, _prevState: OrderFormState, formData: FormData): Promise<OrderFormState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   const parsed = orderUpdateSchema.safeParse({
     orderStatus: text(formData, "orderStatus"),
@@ -43,6 +74,9 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
   if (!parsed.success) {
     return { error: "请检查订单状态、履约状态、物流链接以及内部备注长度。" };
   }
+
+  const before = await prisma.order.findUnique({ where: { id: orderId } });
+  if (!before) return { error: "订单不存在。" };
 
   const shippedAt = parsed.data.shippedAt ? new Date(parsed.data.shippedAt) : null;
 
@@ -60,6 +94,20 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
     }
   });
 
+  // Audit: record status transitions.
+  if (before.orderStatus !== parsed.data.orderStatus) {
+    await logOrderEvent(orderId, "ORDER_STATUS", `订单状态 ${before.orderStatus} → ${parsed.data.orderStatus}`, admin.email);
+  }
+  if (before.fulfillmentStatus !== parsed.data.fulfillmentStatus) {
+    await logOrderEvent(orderId, "FULFILLMENT", `履约状态 ${before.fulfillmentStatus} → ${parsed.data.fulfillmentStatus}`, admin.email);
+  }
+
+  // Cancelling an order restores the stock it had reserved.
+  if (parsed.data.orderStatus === "CANCELLED" && before.orderStatus !== "CANCELLED" && before.inventoryReduced) {
+    await restoreInventoryForOrder(orderId, admin.email);
+    await logOrderEvent(orderId, "INVENTORY", "订单取消，库存已恢复", admin.email);
+  }
+
   const nowShipped =
     parsed.data.orderStatus === "SHIPPED" ||
     parsed.data.fulfillmentStatus === "SHIPPED" ||
@@ -72,6 +120,50 @@ export async function updateOrder(orderId: string, _prevState: OrderFormState, f
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${orderId}`);
   redirect(`/admin/orders/${orderId}?saved=1`);
+}
+
+export async function refundOrder(orderId: string, _prevState: OrderFormState, formData: FormData): Promise<OrderFormState> {
+  const admin = await requireAdmin();
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey || !secretKey.startsWith("sk_")) {
+    return { error: "Stripe 未配置，无法发起退款。请在 .env 设置 STRIPE_SECRET_KEY。" };
+  }
+
+  const order = await prisma.order.findUnique({ where: { id: orderId } });
+  if (!order) return { error: "订单不存在。" };
+  if (!order.stripePaymentIntentId) return { error: "该订单没有可退款的 Stripe 支付。" };
+
+  const remaining = Math.max(0, order.totalCents - order.refundedCents);
+  if (remaining <= 0) return { error: "该订单已全额退款。" };
+
+  // Amount in major units of the order currency; blank = refund the remainder.
+  const raw = text(formData, "amount");
+  const requested = raw ? Math.round(Number(raw) * 100) : remaining;
+  if (!Number.isFinite(requested) || requested <= 0) return { error: "请输入有效的退款金额。" };
+  const refundCents = Math.min(requested, remaining);
+
+  try {
+    const stripe = new Stripe(secretKey);
+    await stripe.refunds.create({
+      payment_intent: order.stripePaymentIntentId,
+      amount: refundCents,
+      metadata: { orderId: order.id, orderNumber: order.orderNumber }
+    });
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Stripe 退款失败。" };
+  }
+
+  // The charge.refunded webhook syncs refundedCents/status and emails the buyer;
+  // log the admin action immediately for the audit trail.
+  await logOrderEvent(
+    orderId,
+    "REFUND",
+    `发起退款 ${(refundCents / 100).toFixed(2)} ${order.currency.toUpperCase()}（经 Stripe）`,
+    admin.email
+  );
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  redirect(`/admin/orders/${orderId}?refund=ok`);
 }
 
 export async function resendConfirmationEmail(orderId: string) {

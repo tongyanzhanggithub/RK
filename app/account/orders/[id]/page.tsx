@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Truck } from "lucide-react";
+import { ReturnRequestForm } from "@/app/account/return-request-form";
 import { requireCustomer } from "@/lib/customer-auth";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -35,10 +36,11 @@ export default async function CustomerOrderDetailPage({ params }: { params: { id
   const customer = await requireCustomer();
   const order = await prisma.order.findFirst({
     where: { id: params.id, customerEmail: customer.email },
-    include: { items: true }
+    include: { items: true, returnRequests: { orderBy: { createdAt: "desc" } } }
   });
   if (!order) notFound();
 
+  const openReturn = order.returnRequests.find((r) => ["REQUESTED", "APPROVED", "RECEIVED"].includes(r.status));
   const pay = PAYMENT_LABEL[order.paymentStatus] || PAYMENT_LABEL.PENDING;
   const shipParts = [order.shippingAddress, order.city, order.postalCode, order.country].filter(Boolean);
 
@@ -130,6 +132,16 @@ export default async function CustomerOrderDetailPage({ params }: { params: { id
             )}
           </div>
         </section>
+
+        {order.paymentStatus === "PAID" && (
+          <section className="mt-6 border border-line bg-white p-5">
+            <h2 className="text-lg font-black">Returns</h2>
+            <p className="mt-1 mb-3 text-sm text-steel">
+              Wrong fit or a problem? Request a return and we&apos;ll help — Guaranteed Fit parts ship back free within 30 days.
+            </p>
+            <ReturnRequestForm orderId={order.id} openStatus={openReturn?.status} />
+          </section>
+        )}
       </div>
     </main>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, Boxes, FileText, FileSpreadsheet, LayoutDashboard, MessageSquareQuote, Package, Settings, ShoppingBag, Stethoscope, Tag, Target, Ticket, Users } from "lucide-react";
+import { BarChart3, Boxes, FileText, FileSpreadsheet, LayoutDashboard, MessageSquareQuote, Package, RotateCcw, Settings, ShoppingBag, Stethoscope, Tag, Target, Ticket, Users } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/auth-actions";
 
 const activeItems = [
@@ -7,6 +7,7 @@ const activeItems = [
   ["产品", "/admin/products", Package],
   ["适配健康度", "/admin/fitment", Target],
   ["订单", "/admin/orders", ShoppingBag],
+  ["退货", "/admin/returns", RotateCcw],
   ["库存", "/admin/inventory", Boxes],
   ["客户", "/admin/customers", Users],
   ["批发", "/admin/wholesale", BarChart3],

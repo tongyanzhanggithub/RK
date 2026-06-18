@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { resendConfirmationEmail, resendRefundEmail, resendShippingEmail, updateOrder } from "@/app/admin/(protected)/orders/actions";
 import { OrderManagementForm } from "@/app/admin/(protected)/orders/order-management-form";
+import { RefundForm } from "@/app/admin/(protected)/orders/refund-form";
+import { ReturnControls } from "@/app/admin/(protected)/orders/return-controls";
 import { zhLabel, ORDER_PAYMENT_STATUS, ORDER_STATUS, FULFILLMENT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -19,14 +21,20 @@ export default async function AdminOrderDetailPage({
   searchParams
 }: {
   params: { id: string };
-  searchParams?: { saved?: string; mail?: string };
+  searchParams?: { saved?: string; mail?: string; refund?: string };
 }) {
   const order = await prisma.order.findUnique({
     where: { id: params.id },
-    include: { items: true }
+    include: {
+      items: true,
+      events: { orderBy: { createdAt: "desc" } },
+      shipments: { orderBy: { createdAt: "desc" } },
+      returnRequests: { orderBy: { createdAt: "desc" } }
+    }
   });
 
   if (!order) notFound();
+  const refundable = Math.max(0, order.totalCents - order.refundedCents);
 
   return (
     <main>
@@ -69,6 +77,15 @@ export default async function AdminOrderDetailPage({
             <Info label="最近 Stripe 事件" value={order.stripeLastEventType || "-"} />
             <Info label="最近 Stripe 事件 ID" value={order.stripeLastEventId || "-"} />
             <Info label="最近 Stripe 同步" value={order.stripeLastSyncedAt ? order.stripeLastSyncedAt.toLocaleString("zh-CN") : "-"} />
+            {searchParams?.refund === "ok" && (
+              <p className="mt-3 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-800">退款已提交，Stripe 确认后将回填已退金额并发邮件。</p>
+            )}
+            {order.paymentStatus === "PAID" && refundable > 0 && (
+              <div className="pt-2">
+                <strong className="block text-sm">发起退款</strong>
+                <RefundForm orderId={order.id} currency={order.currency} refundableMajor={(refundable / 100).toFixed(2)} />
+              </div>
+            )}
           </InfoPanel>
 
           <InfoPanel title="收货地址">
@@ -118,6 +135,36 @@ export default async function AdminOrderDetailPage({
             <Info label="折扣" value={`-${formatMoney(order.discountCents, order.currency)}`} />
             <Info label="合计" value={formatMoney(order.totalCents, order.currency)} strong />
           </InfoPanel>
+
+          <section className="border border-line bg-white">
+            <div className="border-b border-line p-5">
+              <h2 className="text-xl font-black">退货 / 售后（RMA）</h2>
+            </div>
+            <div className="p-5">
+              <ReturnControls orderId={order.id} returns={order.returnRequests} />
+            </div>
+          </section>
+
+          <section className="border border-line bg-white">
+            <div className="border-b border-line p-5">
+              <h2 className="text-xl font-black">订单时间线</h2>
+            </div>
+            <ol className="grid gap-0">
+              {order.events.length === 0 ? (
+                <li className="p-5 text-sm text-steel">暂无记录。</li>
+              ) : (
+                order.events.map((event) => (
+                  <li key={event.id} className="grid gap-1 border-b border-line p-4 text-sm last:border-b-0">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-black">{event.message}</span>
+                      <span className="text-xs text-steel">{event.createdAt.toLocaleString("zh-CN")}</span>
+                    </div>
+                    <span className="text-xs uppercase text-steel">{event.type} · {event.actor}</span>
+                  </li>
+                ))
+              )}
+            </ol>
+          </section>
         </div>
 
         <aside className="grid h-fit gap-6">

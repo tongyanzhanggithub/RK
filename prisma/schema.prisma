@@ -70,6 +70,7 @@ model Customer {
   role                  String                 @default("CUSTOMER")
   tags                  String                 @default("[]")
   internalNote          String?
+  vatNumber             String?
   passwordHash          String?
   resetTokenHash        String?
   resetTokenExpiresAt   DateTime?
@@ -176,10 +177,61 @@ model Order {
   trackingNumber          String?
   trackingUrl             String?
   shippedAt               DateTime?
+  disputeStatus           String?
+  riskLevel               String?
+  riskScore               Int?
   internalNote            String?
   items                   OrderItem[]
+  events                  OrderEvent[]
+  shipments               Shipment[]
+  returnRequests          ReturnRequest[]
   createdAt               DateTime    @default(now())
   updatedAt               DateTime    @updatedAt
+}
+
+// Append-only audit trail: status changes, refunds, emails, shipments, disputes.
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  type      String
+  message   String
+  actor     String   @default("system")
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// Multi-package fulfilment: an order can ship in several parcels.
+model Shipment {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  carrier        String?
+  trackingNumber String?
+  trackingUrl    String?
+  note           String?
+  shippedAt      DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// Return / RMA workflow.
+model ReturnRequest {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderNumber String
+  status      String   @default("REQUESTED") // REQUESTED | APPROVED | RECEIVED | REFUNDED | REJECTED | CLOSED
+  resolution  String   @default("REFUND") // REFUND | REPLACE | REPAIR
+  reason      String?
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([status])
 }
 
 model Coupon {
