@@ -2,6 +2,7 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { submitWholesaleApplication, type WholesaleApplicationState } from "@/app/wholesale/actions";
+import { TurnstileWidget } from "@/components/turnstile-widget";
 
 const initialState: WholesaleApplicationState = {};
 
@@ -99,6 +100,7 @@ export function WholesaleApplicationForm() {
         <p className="max-w-xl text-xs leading-5 text-steel">
           Applications are reviewed manually. Submitting this form does not immediately activate wholesale pricing.
         </p>
+        <TurnstileWidget />
         <SubmitButton />
       </div>
     </form>

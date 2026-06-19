@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type ReviewFormState = { ok: boolean; error: string };
 
@@ -22,6 +23,10 @@ export async function submitReview(
 
   if (!authorName || body.length < 4) {
     return { ok: false, error: "Please enter your name and a short review." };
+  }
+
+  if (!(await verifyTurnstile(String(formData.get("cf-turnstile-response") || "")))) {
+    return { ok: false, error: "Verification failed. Please complete the challenge and try again." };
   }
 
   const product = await prisma.product.findUnique({ where: { slug: productSlug }, select: { id: true } });

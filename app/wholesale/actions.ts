@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { sendMail } from "@/lib/mailer";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type WholesaleApplicationState = {
   error?: string;
@@ -58,6 +59,10 @@ export async function submitWholesaleApplication(
 
   if (!parsed.success) {
     return { error: "Please check the required fields, email address and estimated monthly quantity." };
+  }
+
+  if (!(await verifyTurnstile(text(formData, "cf-turnstile-response")))) {
+    return { error: "Verification failed. Please complete the challenge and try again." };
   }
 
   const customer = await prisma.customer.findUnique({ where: { email: parsed.data.email } });

@@ -8,6 +8,7 @@ import { CheckCircle2, FileText, Minus, MessageCircle, Plus, Send, Trash2 } from
 import { useQuote } from "@/components/quote-provider";
 import { submitQuoteRequest, type QuoteRequestState } from "@/app/quote/actions";
 import { whatsappLink } from "@/lib/contact";
+import { TurnstileWidget } from "@/components/turnstile-widget";
 
 type ProductLite = {
   slug: string;
@@ -184,6 +185,7 @@ export function QuotePageClient({ products }: { products: ProductLite[] }) {
                   Message (optional)
                   <textarea name="message" rows={3} className="border border-line px-3 py-2 font-normal leading-6 outline-none focus:border-navy" placeholder="Target market, packaging, timeline..." />
                 </label>
+                <TurnstileWidget />
                 <SubmitButton />
               </form>
             </aside>

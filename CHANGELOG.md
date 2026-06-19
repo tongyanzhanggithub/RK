@@ -2,6 +2,13 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.12.0] - 2026-06-19 — 表单验证码(Cloudflare Turnstile)
+
+- 新增 `lib/turnstile.ts` + `components/turnstile-widget.tsx`,接入 **批发申请 / 询价 / 产品评价** 三个公开表单。
+- **env 门控**:配 `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` 才启用;不配时表单照常工作、不显示验证码、服务端不拦截(本地默认)。
+- 服务端在各 action 内校验 token(免费、隐私友好,防垃圾询盘/刷评价)。
+- `.env*` 加 Turnstile 变量。真机验证:未配 key 时三表单页均 200、照常提交;tsc 通过。
+
 ## [0.11.0] - 2026-06-19 — 弃单挽回邮件(env/cron 门控)
 
 - **结账前可选填邮箱**:购物车加「Email for order updates (optional)」,经 Stripe / PayPal 两条链路存到 PENDING 订单(为挽回提供联系方式)。

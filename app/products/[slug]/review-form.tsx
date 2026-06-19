@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Star } from "lucide-react";
+import { TurnstileWidget } from "@/components/turnstile-widget";
 import { submitReview, type ReviewFormState } from "./actions";
 
 const initialState: ReviewFormState = { ok: false, error: "" };
@@ -56,6 +57,7 @@ export function ReviewForm({ productSlug }: { productSlug: string }) {
       <input name="title" placeholder="Title (optional)" className="border border-line px-3 py-2" />
       <textarea name="body" required rows={4} placeholder="Share your experience with this part…" className="border border-line px-3 py-2" />
       {state.error && <p className="text-sm font-bold text-red-700">{state.error}</p>}
+      <TurnstileWidget />
       <SubmitButton />
     </form>
   );

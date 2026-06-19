@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { sendMail } from "@/lib/mailer";
 import { getStoreProducts } from "@/lib/product-store";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type QuoteRequestState = {
   error?: string;
@@ -47,6 +48,10 @@ export async function submitQuoteRequest(
 
   if (!parsed.success) {
     return { error: "Please fill in name, country, a valid email and add at least one product." };
+  }
+
+  if (!(await verifyTurnstile(text(formData, "cf-turnstile-response")))) {
+    return { error: "Verification failed. Please complete the challenge and try again." };
   }
 
   // Resolve products to snapshot name/sku at request time.
