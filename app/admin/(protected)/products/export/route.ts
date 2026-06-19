@@ -15,7 +15,9 @@ function jsonList(value: string): string {
 }
 
 // Columns match what the importer accepts, so an export round-trips.
-export const PRODUCT_CSV_COLUMNS = [
+// NOTE: must NOT be exported — Next.js route modules may only export route
+// handlers + config (GET/POST/dynamic/...). Exporting other symbols fails `next build`.
+const PRODUCT_CSV_COLUMNS = [
   "slug", "name", "sku", "category", "brand", "status",
   "retailPrice", "compareAtPrice", "stock", "lowStockThreshold",
   "fitmentType", "fitmentNote", "compatibleModels", "compatibleEquipment",

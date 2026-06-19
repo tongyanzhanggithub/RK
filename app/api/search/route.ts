@@ -6,7 +6,7 @@ import { getStoreProducts } from "@/lib/product-store";
 
 export const runtime = "nodejs";
 
-export type SearchSuggestion = {
+type SearchSuggestion = {
   type: "engine" | "problem" | "product";
   label: string;
   hint?: string;
