@@ -10,7 +10,7 @@ import { calculateCouponDiscount, normalizeCouponCode } from "@/lib/coupons";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
 import { chargeCurrency, localChargeMinor, resolveCountry } from "@/lib/region";
-import { SHIPPING_CENTS } from "@/lib/shipping";
+import { computeShippingCents, DEFAULT_ITEM_WEIGHT_G } from "@/lib/shipping";
 
 export type DraftItem = { slug: string; quantity: number };
 
@@ -71,7 +71,10 @@ export async function buildOrderDraft(args: BuildArgs): Promise<OrderDraft | Dra
     return { error: `Some items are out of stock or exceed available quantity: ${names}`, status: 409 };
   }
 
-  const shippingCents = SHIPPING_CENTS;
+  // 按目的国分区 + 总重量计算运费(满额包邮)。重量缺失的商品按默认克重估算。
+  const subtotalUsdCents = orderLines.reduce((total, line) => total + line.product.priceCents * line.quantity, 0);
+  const totalWeightG = orderLines.reduce((total, line) => total + (line.product.weightGrams ?? DEFAULT_ITEM_WEIGHT_G) * line.quantity, 0);
+  const shippingCents = computeShippingCents({ countryCode: country.code, weightGrams: totalWeightG, subtotalCents: subtotalUsdCents });
   const couponCode = normalizeCouponCode(args.couponCode);
   const coupon = couponCode ? await prisma.coupon.findUnique({ where: { code: couponCode } }) : null;
   const couponValidation = couponCode

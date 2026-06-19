@@ -2,6 +2,15 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.8.0] - 2026-06-19 — 按地区分档运费(框架)
+
+- **`lib/shipping.ts` 重写为分区计费**:东南亚 / 中东 / 欧洲英国 / 中亚 / 其它 五个区,
+  每区按「首重价 + 续重步进加价」计费,并支持「订单满额包邮」与「时效(ETA)」。**费率为占位值,改 `SHIPPING_ZONES` 即可**。
+- 国家→分区映射;重量缺失的商品按 `DEFAULT_ITEM_WEIGHT_G` 估算。
+- 接入结账两条链路:`lib/payments/order-draft.ts`(PayPal/通用)与 `app/api/checkout/route.ts`(Stripe)按目的国+总重量算运费,满额包邮自动 0 元;免运费优惠券逻辑保留。
+- 购物车展示分区运费、**预计送达天数**、以及「满 X 包邮」提示;满额时运费显示 Free。
+- 真机验证:SEA 0.3kg=$6.90、EU 1.2kg=$18.90、ME 0.6kg=$14.40、中亚 0.5kg=$8.90、满额包邮=Free、其它区 0.7kg=$17.90,计算正确;tsc 通过、相关路由 200。
+
 ## [0.7.0] - 2026-06-19 — 支付层抽象 + PayPal（大陆主体收款准备）
 
 面向"大陆营业执照 + 不开海外公司"的收款方案：主卡通道规划走 Airwallex，备选 PayPal。本版搭好可插拔支付层并接入 PayPal（沙箱就绪），Airwallex 留占位待账号下来接入。Stripe 流程保持不变、不删除。

@@ -13,7 +13,7 @@ import { useRegion } from "@/components/region-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
 import type { PaymentOption } from "@/lib/payments/types";
-import { SHIPPING_CENTS } from "@/lib/shipping";
+import { DEFAULT_ITEM_WEIGHT_G, shippingQuote } from "@/lib/shipping";
 
 type CartPageClientProps = {
   products: Product[];
@@ -57,7 +57,10 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
     .filter(Boolean) as { product: Product; quantity: number; lineTotal: number }[];
   const subtotal = lines.reduce((total, line) => total + line.lineTotal, 0);
   const guaranteedCount = lines.filter((line) => line.product.fitmentGuaranteed).length;
-  const shippingCents = SHIPPING_CENTS;
+  // 按目的国分区 + 总重量算运费(满额包邮)。重量缺失按默认克重估算。
+  const totalWeightG = lines.reduce((total, line) => total + (line.product.weightGrams ?? DEFAULT_ITEM_WEIGHT_G) * line.quantity, 0);
+  const shipping = shippingQuote({ countryCode: country.code, weightGrams: totalWeightG, subtotalCents: subtotal });
+  const shippingCents = shipping.cents;
   const discountCents = appliedCoupon?.discountCents || 0;
   const estimatedTotal = subtotal + shippingCents - discountCents;
   // Nudge likely-wholesale orders toward bank transfer (T/T), which avoids card
@@ -307,7 +310,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-steel">{c.shipping}</dt>
-                  <dd className="font-black">{local(shippingCents)}</dd>
+                  <dd className="font-black">{shipping.freeApplied ? "Free" : local(shippingCents)}</dd>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between gap-4 text-green-800">
@@ -322,6 +325,8 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
               </dl>
               <p className="mt-3 text-xs leading-5 text-steel">
                 {country.code !== "INTL" && <>Ships to {country.name}. </>}
+                <>Est. delivery {shipping.etaMinDays}–{shipping.etaMaxDays} days. </>
+                {!shipping.freeApplied && <>Free shipping over {formatMoney(shipping.freeOverCents, "usd")}. </>}
                 {charged && <>You will be charged in {country.currency}. </>}
                 {!isUsd && !charged && (
                   <>Amounts in {country.currency} are approximate. Your card is charged {formatMoney(estimatedTotal, "usd")} (USD). </>

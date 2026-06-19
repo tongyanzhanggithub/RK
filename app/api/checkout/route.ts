@@ -5,7 +5,7 @@ import { calculateCouponDiscount, normalizeCouponCode } from "@/lib/coupons";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
 import { chargeCurrency, localChargeMinor, REGION_COOKIE, resolveCountry } from "@/lib/region";
-import { SHIPPING_CENTS } from "@/lib/shipping";
+import { computeShippingCents, DEFAULT_ITEM_WEIGHT_G } from "@/lib/shipping";
 
 export const runtime = "nodejs";
 
@@ -118,7 +118,8 @@ export async function POST(request: NextRequest) {
   const stripe = new Stripe(secretKey);
   const baseUrl = getBaseUrl(request);
   const subtotalCents = orderLines.reduce((total, line) => total + line.product.priceCents * line.quantity, 0);
-  const shippingCents = SHIPPING_CENTS;
+  const totalWeightG = orderLines.reduce((total, line) => total + (line.product.weightGrams ?? DEFAULT_ITEM_WEIGHT_G) * line.quantity, 0);
+  const shippingCents = computeShippingCents({ countryCode: country.code, weightGrams: totalWeightG, subtotalCents });
   const couponCode = normalizeCouponCode(payload.couponCode);
   const coupon = couponCode ? await prisma.coupon.findUnique({ where: { code: couponCode } }) : null;
   const couponValidation = couponCode
@@ -202,7 +203,7 @@ export async function POST(request: NextRequest) {
   // free-shipping coupon must zero the shipping rate itself or small orders
   // would still pay full shipping.
   const isFreeShipping = appliedCoupon?.type === "FREE_SHIPPING";
-  const stripeShippingCents = isFreeShipping ? 0 : SHIPPING_CENTS;
+  const stripeShippingCents = isFreeShipping ? 0 : shippingCents;
   let stripeCoupon: Stripe.Coupon | null = null;
 
   try {
