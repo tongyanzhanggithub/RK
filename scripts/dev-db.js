@@ -7,6 +7,7 @@
 //
 // 数据存在项目下的 .localdb/（已被 git 忽略）。连接串与 .env.example 一致：
 //   postgresql://rk:rk_dev_password@localhost:5432/rk
+const fs = require("fs");
 const path = require("path");
 
 process.env.LC_ALL = "C";
@@ -17,6 +18,8 @@ const EP = require("embedded-postgres");
 const EmbeddedPostgres = EP.default || EP;
 
 const dataDir = path.join(__dirname, "..", ".localdb");
+// 首次运行才 initdb；已存在数据目录则直接启动（否则 initdb 会因目录非空报错）。
+const alreadyInitialised = fs.existsSync(dataDir) && fs.readdirSync(dataDir).length > 0;
 
 (async () => {
   const pg = new EmbeddedPostgres({
@@ -27,12 +30,16 @@ const dataDir = path.join(__dirname, "..", ".localdb");
     persistent: true,
     initdbFlags: ["--locale=C", "--encoding=UTF8"]
   });
-  await pg.initialise();
+  if (!alreadyInitialised) {
+    await pg.initialise();
+  }
   await pg.start();
-  try {
-    await pg.createDatabase("rk");
-  } catch {
-    // 已存在则忽略
+  if (!alreadyInitialised) {
+    try {
+      await pg.createDatabase("rk");
+    } catch {
+      // 已存在则忽略
+    }
   }
   console.log("✅ 本地 PostgreSQL 已启动：postgresql://rk:rk_dev_password@localhost:5432/rk");
   console.log("   保持此终端开着；Ctrl+C 停止。");

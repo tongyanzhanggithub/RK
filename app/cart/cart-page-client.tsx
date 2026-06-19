@@ -359,7 +359,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                   const busy = pendingProvider === option.id;
                   const isPaypal = option.id === "paypal";
                   const base =
-                    "mt-3 inline-flex h-12 w-full items-center justify-center gap-2 px-4 font-black disabled:cursor-not-allowed disabled:opacity-60";
+                    "mt-3 inline-flex min-h-[3rem] w-full items-center justify-center gap-2 px-4 py-2 text-center font-black leading-tight disabled:cursor-not-allowed disabled:opacity-60";
                   const tone = isPaypal
                     ? "bg-[#ffc439] text-[#003087] hover:brightness-95"
                     : "bg-safety text-ink hover:bg-amber-400";
@@ -380,7 +380,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
               <button
                 type="button"
                 onClick={clearCart}
-                className="mt-3 inline-flex h-11 w-full items-center justify-center border border-line px-4 font-black text-navy hover:bg-panel"
+                className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center border border-line px-4 py-2 text-center font-black leading-tight text-navy hover:bg-panel"
               >
                 {c.clear_cart}
               </button>

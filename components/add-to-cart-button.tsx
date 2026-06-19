@@ -28,7 +28,7 @@ export function AddToCartButton({ slug, name, className = "", quantity = 1, outO
         type="button"
         disabled
         aria-label={`${name} is out of stock`}
-        className={`inline-flex h-11 whitespace-nowrap cursor-not-allowed items-center justify-center gap-2 border border-line bg-panel px-3 text-sm font-black text-steel ${className}`}
+        className={`inline-flex min-h-[2.75rem] cursor-not-allowed items-center justify-center gap-1.5 border border-line bg-panel px-3 py-1.5 text-center text-sm font-black leading-tight text-steel ${className}`}
       >
         <XCircle size={17} /> Out of Stock
       </button>

@@ -9,7 +9,7 @@ const variants: Record<ButtonVariant, string> = {
   ghost: "text-navy hover:bg-panel"
 };
 
-const base = "inline-flex h-11 items-center justify-center gap-2 px-4 font-black transition-colors";
+const base = "inline-flex min-h-[2.75rem] items-center justify-center gap-2 px-4 py-2 text-center font-black leading-tight transition-colors";
 
 export function Button({ variant = "primary", className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }) {
   return <button className={`${base} ${variants[variant]} ${className}`} {...props} />;
