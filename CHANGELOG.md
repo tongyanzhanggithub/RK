@@ -2,6 +2,15 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.15.0] - 2026-06-20 — 首页轮播(Hero)后台可编辑
+
+- 新增 **HeroSlide** 模型 + 后台 `/admin/hero`(列表/新建/编辑/启停/删除/排序),可视化编辑首页大图的标题、副标题、卖点、按钮。
+- 首页轮播改为**优先读数据库幻灯片**;无任何启用幻灯片时**回退到内置多语言默认**(故未导入也不变样)。
+- `scripts/seed-hero.js`:幂等导入现有 3 张默认幻灯片(仅当表为空)。
+- 侧边栏新增「首页轮播」入口。真机验证:首页读 DB 幻灯片正常,后台页 200,tsc 通过。
+
+## [0.14.1] - 2026-06-20 — 修复 http 部署登录掉线(会话 Cookie Secure 跟随站点是否 https)
+
 ## [0.14.0] - 2026-06-20 — 品牌更名为 Partavio + 地区货币补全
 
 - **全站品牌 RepairKit Supply → Partavio**:页眉/页脚/后台、邮件(订单确认/发货/退款/找回密码/弃单)、SEO 标题与 JSON-LD、PayPal 品牌名、产品默认品牌、占位域名 `repairkit-supply.com → partavio.com`。

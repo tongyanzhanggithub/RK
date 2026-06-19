@@ -83,10 +83,27 @@ export default async function HomePage() {
     }
   ];
 
+  // 后台编辑的幻灯片优先;没有启用的则回退到上面的内置多语言默认。
+  const dbHero = await prisma.heroSlide.findMany({
+    where: { isActive: true },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }]
+  });
+  const slides: HeroSlide[] = dbHero.length
+    ? dbHero.map((s) => ({
+        badge: s.badge,
+        title: s.title,
+        subtitle: s.subtitle,
+        primary: { label: s.primaryLabel, href: s.primaryHref, external: s.primaryExternal || undefined, whatsapp: s.primaryWhatsapp || undefined },
+        secondary: s.secondaryLabel && s.secondaryHref ? { label: s.secondaryLabel, href: s.secondaryHref } : undefined,
+        panelTitle: s.panelTitle,
+        bullets: JSON.parse(s.bullets || "[]") as string[]
+      }))
+    : heroSlides;
+
   return (
     <main>
       {/* 1 — Hero carousel */}
-      <HeroCarousel slides={heroSlides} />
+      <HeroCarousel slides={slides} />
 
       {/* 2 — Find the right part */}
       <section className="border-b border-line bg-white px-4 py-8">

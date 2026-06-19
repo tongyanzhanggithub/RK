@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { BarChart3, Boxes, FileText, FileSpreadsheet, LayoutDashboard, MessageSquareQuote, Package, RotateCcw, Settings, ShoppingBag, Star, Stethoscope, Tag, Target, Ticket, Users } from "lucide-react";
+import { BarChart3, Boxes, FileText, FileSpreadsheet, GalleryHorizontalEnd, LayoutDashboard, MessageSquareQuote, Package, RotateCcw, Settings, ShoppingBag, Star, Stethoscope, Tag, Target, Ticket, Users } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/auth-actions";
 
 const activeItems = [
   ["仪表盘", "/admin/dashboard", LayoutDashboard],
+  ["首页轮播", "/admin/hero", GalleryHorizontalEnd],
   ["产品", "/admin/products", Package],
   ["适配健康度", "/admin/fitment", Target],
   ["订单", "/admin/orders", ShoppingBag],

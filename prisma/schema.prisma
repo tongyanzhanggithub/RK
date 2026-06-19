@@ -393,6 +393,28 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+model HeroSlide {
+  id              String   @id @default(cuid())
+  badge           String
+  title           String
+  subtitle        String
+  primaryLabel    String
+  primaryHref     String
+  primaryExternal Boolean  @default(false)
+  primaryWhatsapp Boolean  @default(false)
+  secondaryLabel  String?
+  secondaryHref   String?
+  panelTitle      String
+  bullets         String   @default("[]") // JSON 字符串数组
+  sortOrder       Int      @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
 model ProductReview {
   id          String   @id @default(cuid())
   productId   String
