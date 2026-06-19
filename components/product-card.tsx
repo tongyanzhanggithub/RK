@@ -86,13 +86,14 @@ export function ProductCard({ product, activeModel }: { product: Product; active
         url={`${SITE_URL}/products/${product.slug}`}
         className="mt-3 w-full"
       />
-      <div className="mt-2 grid grid-cols-2 gap-2">
+      <div className="mt-2 grid grid-cols-1 gap-2">
         <AddToCartButton
           slug={product.slug}
           name={product.name}
           outOfStock={(product.stock ?? 0) <= 0}
+          className="w-full"
         />
-        <AddToQuoteButton slug={product.slug} name={product.name} />
+        <AddToQuoteButton slug={product.slug} name={product.name} className="w-full" />
       </div>
     </article>
   );
