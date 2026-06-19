@@ -52,6 +52,7 @@ model Product {
   seoKeywords          String?
   ogImage              String?
   inventoryAdjustments InventoryAdjustment[]
+  reviews              ProductReview[]
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
 }
@@ -389,6 +390,24 @@ model Setting {
   key       String   @unique
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model ProductReview {
+  id          String   @id @default(cuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productSlug String
+  authorName  String
+  country     String?
+  rating      Int      @default(5)
+  title       String?
+  body        String
+  isPublished Boolean  @default(false) // 默认待审核，后台通过后才前台展示
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([productSlug])
+  @@index([isPublished])
 }
 
 model CustomerAddress {

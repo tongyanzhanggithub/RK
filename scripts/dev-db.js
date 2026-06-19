@@ -56,6 +56,7 @@ const alreadyInitialised = fs.existsSync(dataDir) && fs.readdirSync(dataDir).len
   process.on("SIGTERM", stop);
   setInterval(() => {}, 1 << 30); // 保持进程存活
 })().catch((error) => {
-  console.error(error.message || error);
+  console.error((error && error.message) || error || "未知错误");
+  console.error("提示:若端口 5432 已被占用,可能 db:local 已在另一个终端运行(无需重复启动)。");
   process.exit(1);
 });

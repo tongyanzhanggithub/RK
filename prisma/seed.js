@@ -262,6 +262,7 @@ async function main() {
   await prisma.wholesaleApplication.deleteMany();
   await prisma.customer.deleteMany();
   await prisma.coupon.deleteMany();
+  await prisma.productReview.deleteMany();
   await prisma.product.deleteMany();
   await prisma.problem.deleteMany();
   await prisma.equipment.deleteMany();
@@ -332,6 +333,31 @@ async function main() {
       reference: "SEED",
       createdBy: "system",
       createdAt: now
+    }))
+  });
+
+  // ---- Sample product reviews (published) ----
+  const sampleReviews = [
+    { p: 0, name: "James W.", country: "United Kingdom", rating: 5, title: "Exact fit, fast shipping", body: "Fitted my 168F generator perfectly. Delivery to the UK was quicker than I expected." },
+    { p: 0, name: "Ahmad R.", country: "Malaysia", rating: 4, title: "Good maintenance kit", body: "Decent quality service parts. The gasket set sealed well after a rebuild." },
+    { p: 1, name: "Khalid M.", country: "United Arab Emirates", rating: 5, title: "Repeat buyer", body: "Second order for our repair shop. Reliable parts, consistent quality." },
+    { p: 2, name: "Siti N.", country: "Indonesia", rating: 5, title: "Engine starts first pull", body: "Recoil starter swapped in minutes. Pump engine starts on the first pull now." },
+    { p: 4, name: "Daniel L.", country: "Malaysia", rating: 4, title: "Stopped the leak", body: "Seal kit fixed the leak on our 2-inch pump. Would order again." },
+    { p: 6, name: "Omar A.", country: "Saudi Arabia", rating: 5, title: "Great value", body: "Pull start kit got our generator running again. Good price for the quality." }
+  ];
+  await prisma.productReview.createMany({
+    data: sampleReviews.map((r, i) => ({
+      id: id("review", i),
+      productId: productRecords[r.p].id,
+      productSlug: productRecords[r.p].slug,
+      authorName: r.name,
+      country: r.country,
+      rating: r.rating,
+      title: r.title,
+      body: r.body,
+      isPublished: true,
+      createdAt: new Date(Date.now() - (i + 1) * 36 * 60 * 60 * 1000),
+      updatedAt: now
     }))
   });
 

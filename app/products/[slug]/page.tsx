@@ -10,7 +10,9 @@ import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { QuantityAddToCart } from "@/components/quantity-add-to-cart";
 import { StockStatus } from "@/components/stock-status";
+import { Stars } from "@/components/stars";
 import { TrustBadges } from "@/components/trust-badges";
+import { ReviewForm } from "./review-form";
 import { getProduct } from "@/data/products";
 import { engineHrefForModelText, problemHrefForTitle } from "@/lib/discovery-links";
 import { JsonLd } from "@/components/json-ld";
@@ -84,6 +86,12 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
   const productUrl = `${SITE_URL}/products/${product.slug}`;
   const productImage = product.images?.find((image) => image.isPrimary)?.url || product.images?.[0]?.url || product.image;
   const outOfStock = (product.stock ?? 0) <= 0;
+  const reviews = await prisma.productReview.findMany({
+    where: { productSlug: product.slug, isPublished: true },
+    orderBy: { createdAt: "desc" }
+  });
+  const reviewCount = reviews.length;
+  const avgRating = reviewCount ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount : 0;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -100,7 +108,10 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       price: (product.priceCents / 100).toFixed(2),
       availability: outOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition"
-    }
+    },
+    ...(reviewCount > 0
+      ? { aggregateRating: { "@type": "AggregateRating", ratingValue: avgRating.toFixed(1), reviewCount } }
+      : {})
   };
   const breadcrumb = breadcrumbLd([
     { name: "Home", path: "/" },
@@ -132,6 +143,11 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
           <div>
             <p className="font-black uppercase text-safety">{product.category}</p>
             <h1 className="mt-2 text-4xl font-black">{product.name}</h1>
+            {reviewCount > 0 && (
+              <a href="#reviews" className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-steel hover:text-navy">
+                <Stars rating={avgRating} /> {avgRating.toFixed(1)} ({reviewCount})
+              </a>
+            )}
             <p className="mt-4 text-lg leading-8 text-steel">{product.shortDescription}</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {product.tags.map((tag) => <span key={tag} className="bg-safety/15 px-3 py-1 text-sm font-black">{tag}</span>)}
@@ -292,6 +308,40 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             </div>
           </section>
         )}
+
+        <section id="reviews" className="mt-10 border-t border-line pt-8">
+          <h2 className="text-2xl font-black">Customer Reviews</h2>
+          {reviewCount > 0 ? (
+            <div className="mt-2 flex items-center gap-3">
+              <Stars rating={avgRating} size={20} />
+              <span className="font-black">{avgRating.toFixed(1)}</span>
+              <span className="text-steel">/ 5 · {reviewCount} review{reviewCount > 1 ? "s" : ""}</span>
+            </div>
+          ) : (
+            <p className="mt-2 text-steel">No reviews yet — be the first to review this part.</p>
+          )}
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_380px]">
+            <div className="grid gap-4">
+              {reviews.map((r) => (
+                <article key={r.id} className="border border-line bg-white p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <Stars rating={r.rating} />
+                    <span className="text-xs text-steel">
+                      {r.createdAt.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                    </span>
+                  </div>
+                  {r.title && <p className="mt-2 font-black">{r.title}</p>}
+                  <p className="mt-1 text-sm leading-6 text-ink">{r.body}</p>
+                  <p className="mt-2 text-xs font-bold text-steel">
+                    {r.authorName}
+                    {r.country ? ` · ${r.country}` : ""}
+                  </p>
+                </article>
+              ))}
+            </div>
+            <ReviewForm productSlug={product.slug} />
+          </div>
+        </section>
 
         <RecentlyViewed
           heading={dict.product.recently_viewed}
