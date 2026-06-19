@@ -76,7 +76,7 @@ export function setCustomerSessionCookie(token: string) {
   cookies().set(CUSTOMER_SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: (process.env.NEXT_PUBLIC_SITE_URL || "").startsWith("https"), // 仅 https 站点加 Secure(http/IP 部署下也能保持登录)
     path: "/",
     maxAge: 60 * 60 * 24 * 30
   });
