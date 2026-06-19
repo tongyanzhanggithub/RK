@@ -2,6 +2,13 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.13.0] - 2026-06-19 — 阿语/俄语深层翻译(核心购物流程)
+
+- 在 v0.10.0 基础上,把**核心店面区块**完整翻译为阿拉伯语 + 俄语:
+  `footer / common / homepage / products / product / cart / wholesale / checkout`(首页/产品/购物车/结账/批发全流程)。
+- 其余长文/次要区块(legal 条款、guides/problems 正文、engines/about 等)暂用英文兜底,可后续补全(建议母语者校对,尤其阿语)。
+- 真机验证:ar/ru 首页、购物车等渲染对应语言;tsc 通过。
+
 ## [0.12.0] - 2026-06-19 — 表单验证码(Cloudflare Turnstile)
 
 - 新增 `lib/turnstile.ts` + `components/turnstile-widget.tsx`,接入 **批发申请 / 询价 / 产品评价** 三个公开表单。
