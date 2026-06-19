@@ -77,7 +77,7 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
             ))}
           </datalist>
         </label>
-        <Field label="品牌" name="brand" defaultValue={product?.brand || "RepairKit Supply"} />
+        <Field label="品牌" name="brand" defaultValue={product?.brand || "Partavio"} />
         <Textarea label="简短描述" name="shortDescription" required defaultValue={product?.shortDescription} />
         <Textarea label="详细描述" name="description" defaultValue={product?.description} />
         <label className="grid gap-2 text-sm font-bold">

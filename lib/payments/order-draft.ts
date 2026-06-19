@@ -25,7 +25,7 @@ export type DraftFailure = { error: string; status: number };
 export function createOrderNumber() {
   const now = new Date();
   const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
-  return `RK-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+  return `PV-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 }
 
 export function normalizeQuantity(value: unknown) {

@@ -15,15 +15,15 @@ import { getServerLocale } from "@/lib/locale";
 import { getServerCountry } from "@/lib/region-server";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
-const SITE_NAME = "RepairKit Supply";
+const SITE_NAME = "Partavio";
 const SITE_DESC =
   "Factory-direct small engine parts, repair kits and complete engines. Wholesale for the Middle East, Central Asia and Southeast Asia.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Small Engine Repair Kits Store | RepairKit Supply",
-    template: "%s | RepairKit Supply"
+    default: "Small Engine Repair Kits Store | Partavio",
+    template: "%s | Partavio"
   },
   description: SITE_DESC,
   applicationName: SITE_NAME,

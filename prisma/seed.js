@@ -278,7 +278,7 @@ async function main() {
       subtitle: product.subtitle || null,
       sku: product.sku || defaultSku(product, index),
       category: product.category,
-      brand: product.brand || "RepairKit Supply",
+      brand: product.brand || "Partavio",
       shortDescription: product.shortDescription,
       description: product.description || product.shortDescription,
       status: product.status || "ACTIVE",
@@ -396,7 +396,7 @@ async function main() {
   // ---- Sample customers + orders (demo data) ----
   const sampleOrders = [
     {
-      orderNumber: "RK-20260604-1001",
+      orderNumber: "PV-20260604-1001",
       customerName: "Ahmad Rahman",
       customerEmail: "ahmad.rahman@example.com",
       customerPhone: "+60 12 555 0198",
@@ -416,7 +416,7 @@ async function main() {
       internalNote: "Repair shop buyer. Confirm pump seal size before shipping."
     },
     {
-      orderNumber: "RK-20260604-1002",
+      orderNumber: "PV-20260604-1002",
       customerName: "Siti Nur",
       customerEmail: "siti.nur@example.com",
       customerPhone: "+62 812 1234 5678",
@@ -432,7 +432,7 @@ async function main() {
       internalNote: "Waiting for Stripe payment confirmation."
     },
     {
-      orderNumber: "RK-20260603-1003",
+      orderNumber: "PV-20260603-1003",
       customerName: "Khalid Motors",
       customerEmail: "parts@khalidmotors.example",
       customerPhone: "+971 50 123 4567",

@@ -17,7 +17,7 @@ function text(formData: FormData, key: string) {
 function orderNumber() {
   const d = new Date();
   const date = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
-  return `RK-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+  return `PV-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 }
 
 export async function createManualOrder(_prev: ManualOrderState, formData: FormData): Promise<ManualOrderState> {

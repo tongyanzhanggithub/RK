@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "What information RepairKit Supply collects, why, and your choices."
+  description: "What information Partavio collects, why, and your choices."
 };
 
 export default function PrivacyPage() {

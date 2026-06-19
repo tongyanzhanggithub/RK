@@ -43,12 +43,12 @@ export async function sendRefundNotificationEmail(orderId: string) {
     "",
     `Questions about this refund? Reply to this email or message us on WhatsApp: ${whatsappLink(GENERAL_INQUIRY_MESSAGE)}`,
     "",
-    "RepairKit Supply — factory-direct engine parts from Chongqing, China"
+    "Partavio — factory-direct engine parts from Chongqing, China"
   ];
 
   await sendMail({
     to: email,
-    subject: `Refund issued for order ${order.orderNumber} — RepairKit Supply`,
+    subject: `Refund issued for order ${order.orderNumber} — Partavio`,
     text: lines.join("\n")
   }).catch((error) => {
     console.error(`[refund-notification] failed for ${order.orderNumber}:`, error);

@@ -24,7 +24,7 @@ export async function sendAbandonedCartEmail(orderId: string): Promise<boolean> 
   const text = [
     "Hello,",
     "",
-    "You left these items in your cart at RepairKit Supply:",
+    "You left these items in your cart at Partavio:",
     "",
     items,
     "",
@@ -32,9 +32,9 @@ export async function sendAbandonedCartEmail(orderId: string): Promise<boolean> 
     "",
     "Need help choosing the right part, or wholesale pricing? Just reply to this email or message us on WhatsApp.",
     "",
-    "— RepairKit Supply"
+    "— Partavio"
   ].join("\n");
 
-  await sendMail({ to: email, subject: "You left items in your cart — RepairKit Supply", text });
+  await sendMail({ to: email, subject: "You left items in your cart — Partavio", text });
   return true;
 }

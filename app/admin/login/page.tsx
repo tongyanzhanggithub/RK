@@ -4,7 +4,7 @@ import { AdminLoginForm } from "@/app/admin/login/login-form";
 
 export const metadata: Metadata = {
   title: "管理员登录",
-  description: "登录 RepairKit Supply 管理系统。"
+  description: "登录 Partavio 管理系统。"
 };
 
 export default function AdminLoginPage({ searchParams }: { searchParams?: { next?: string; reset?: string } }) {
@@ -15,7 +15,7 @@ export default function AdminLoginPage({ searchParams }: { searchParams?: { next
     <main className="grid min-h-screen place-items-center bg-panel px-4 py-12">
       <section className="w-full max-w-md border border-line bg-white p-7 shadow-soft">
         <Link href="/" className="inline-flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center bg-navy text-xl font-black text-white">RK</span>
+          <span className="grid h-11 w-11 place-items-center bg-navy text-xl font-black text-white">PV</span>
           <span>
             <strong className="block text-xl leading-tight">RepairKit 管理后台</strong>
             <small className="font-bold uppercase text-steel">受保护的管理区域</small>

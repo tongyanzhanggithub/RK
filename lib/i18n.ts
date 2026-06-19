@@ -233,7 +233,7 @@ const en = {
     whatsapp_link: "WhatsApp"
   },
   about: {
-    heading: "About RepairKit Supply",
+    heading: "About Partavio",
     subheading: "Factory-direct from Chongqing's engine-parts cluster"
   },
   shipping: {
@@ -601,7 +601,7 @@ const zh: typeof en = {
     whatsapp_link: "WhatsApp"
   },
   about: {
-    heading: "关于 RepairKit Supply",
+    heading: "关于 Partavio",
     subheading: "重庆发动机零配件产业集群工厂直供"
   },
   shipping: {

@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions",
-  description: "The terms that govern use of this website and purchases from RepairKit Supply."
+  description: "The terms that govern use of this website and purchases from Partavio."
 };
 
 export default function TermsPage() {

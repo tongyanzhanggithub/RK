@@ -149,7 +149,7 @@ export async function requestCustomerReset(
     if (process.env.SMTP_HOST) {
       await sendMail({
         to: email,
-        subject: "Reset your RepairKit Supply password",
+        subject: "Reset your Partavio password",
         text: [
           "A password reset was requested for your account.",
           "",

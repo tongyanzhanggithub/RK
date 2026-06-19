@@ -40,12 +40,12 @@ export async function sendShippingNotificationEmail(orderId: string) {
     "",
     `Questions? Reply to this email or message us on WhatsApp: ${whatsappLink(GENERAL_INQUIRY_MESSAGE)}`,
     "",
-    "RepairKit Supply — factory-direct engine parts from Chongqing, China"
+    "Partavio — factory-direct engine parts from Chongqing, China"
   ];
 
   await sendMail({
     to: email,
-    subject: `Your order ${order.orderNumber} has shipped — RepairKit Supply`,
+    subject: `Your order ${order.orderNumber} has shipped — Partavio`,
     text: lines.join("\n")
   }).catch((error) => {
     console.error(`[shipping-notification] failed for ${order.orderNumber}:`, error);

@@ -36,7 +36,7 @@ function getBaseUrl(request: NextRequest) {
 function createOrderNumber() {
   const now = new Date();
   const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
-  return `RK-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+  return `PV-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 }
 
 export async function POST(request: NextRequest) {
@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
             duration: "once",
             name: appliedCoupon.label,
             metadata: {
-              source: "repairkit-supply",
+              source: "partavio",
               couponId: appliedCoupon.coupon.id,
               couponCode: appliedCoupon.code
             }
@@ -280,14 +280,14 @@ export async function POST(request: NextRequest) {
         }
       ],
       metadata: {
-        source: "repairkit-supply",
+        source: "partavio",
         orderId: order.id,
         orderNumber: order.orderNumber,
         couponCode: appliedCoupon?.code || ""
       },
       payment_intent_data: {
         metadata: {
-          source: "repairkit-supply",
+          source: "partavio",
           orderId: order.id,
           orderNumber: order.orderNumber,
           couponCode: appliedCoupon?.code || ""

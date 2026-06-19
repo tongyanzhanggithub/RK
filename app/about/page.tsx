@@ -6,7 +6,7 @@ import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "RepairKit Supply is a factory-direct supplier of small engine repair kits, spare parts and complete engines from the Chongqing manufacturing cluster."
+    "Partavio is a factory-direct supplier of small engine repair kits, spare parts and complete engines from the Chongqing manufacturing cluster."
 };
 
 const facts = [
@@ -23,7 +23,7 @@ export default function AboutPage() {
         <p className="font-black uppercase text-safety">About us</p>
         <h1 className="mt-1 text-4xl font-black">A parts supplier that speaks repair</h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-steel">
-          RepairKit Supply sells small engine repair kits, spare parts and complete 168F / GX160-style engines directly
+          Partavio sells small engine repair kits, spare parts and complete 168F / GX160-style engines directly
           from the factory floor in Chongqing, China. We exist for the repair shop that needs the right carburetor the
           first time, and the distributor who wants one supplier for the full range.
         </p>

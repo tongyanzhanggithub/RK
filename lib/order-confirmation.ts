@@ -53,12 +53,12 @@ export async function sendOrderConfirmationEmail(orderId: string) {
     "",
     `Questions or changes? Reply to this email or message us on WhatsApp: ${whatsappLink(GENERAL_INQUIRY_MESSAGE)}`,
     "",
-    "RepairKit Supply — factory-direct engine parts from Chongqing, China"
+    "Partavio — factory-direct engine parts from Chongqing, China"
   ];
 
   await sendMail({
     to: email,
-    subject: `Order confirmed: ${order.orderNumber} — RepairKit Supply`,
+    subject: `Order confirmed: ${order.orderNumber} — Partavio`,
     text: lines.join("\n")
   }).catch((error) => {
     console.error(`[order-confirmation] failed for ${order.orderNumber}:`, error);

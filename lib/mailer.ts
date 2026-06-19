@@ -27,6 +27,6 @@ export async function sendMail(options: MailOptions) {
   const transport = createTransport();
   if (!transport) return; // silently skip when SMTP not configured
 
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@repairkit-supply.com";
+  const from = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@partavio.com";
   await transport.sendMail({ from, ...options });
 }

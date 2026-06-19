@@ -53,8 +53,8 @@ export default async function GuidePage({ params }: { params: { slug: string } }
     description: guide.excerpt || undefined,
     datePublished: guide.createdAt.toISOString(),
     dateModified: guide.updatedAt.toISOString(),
-    author: { "@type": "Organization", name: "RepairKit Supply" },
-    publisher: { "@type": "Organization", name: "RepairKit Supply" }
+    author: { "@type": "Organization", name: "Partavio" },
+    publisher: { "@type": "Organization", name: "Partavio" }
   };
 
   return (

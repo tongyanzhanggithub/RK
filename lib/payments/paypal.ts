@@ -58,7 +58,7 @@ export async function createPayPalOrder(args: CreateArgs): Promise<{ id: string;
         }
       ],
       application_context: {
-        brand_name: "RepairKit Supply",
+        brand_name: "Partavio",
         user_action: "PAY_NOW",
         shipping_preference: "GET_FROM_FILE",
         return_url: args.returnUrl,

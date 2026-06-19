@@ -2,6 +2,13 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.14.0] - 2026-06-20 — 品牌更名为 Partavio + 地区货币补全
+
+- **全站品牌 RepairKit Supply → Partavio**:页眉/页脚/后台、邮件(订单确认/发货/退款/找回密码/弃单)、SEO 标题与 JSON-LD、PayPal 品牌名、产品默认品牌、占位域名 `repairkit-supply.com → partavio.com`。
+- logo 缩写 `RK → PV`;新订单号前缀 `RK- → PV-`。
+- 地区货币补全:Oman/Bahrain/Egypt/Jordan/Iraq/Kyrgyzstan/Tajikistan 配本地货币显示(OMR/BHD/EGP/JOD/IQD/KGS/TJS,显示用近似汇率,仍按 USD 结算)。
+- tsc 通过,无品牌残留。
+
 ## [0.13.0] - 2026-06-19 — 阿语/俄语深层翻译(核心购物流程)
 
 - 在 v0.10.0 基础上,把**核心店面区块**完整翻译为阿拉伯语 + 俄语:

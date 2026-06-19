@@ -34,7 +34,7 @@ if (!existing) {
     "Universal Fuel Line & Clamp Kit",
     "RK-UNI-FUEL-01",
     "Universal Parts",
-    "RepairKit Supply",
+    "Partavio",
     "Universal fuel hose, inline fuel filters and spring clamps that fit nearly every small gasoline engine in the field.",
     "Universal fuel hose, inline fuel filters and spring clamps that fit nearly every small gasoline engine in the field.",
     "ACTIVE",

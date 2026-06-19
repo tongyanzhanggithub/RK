@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Reach RepairKit Supply by email or WhatsApp — we reply within one business day."
+  description: "Reach Partavio by email or WhatsApp — we reply within one business day."
 };
 
 export default function ContactPage() {

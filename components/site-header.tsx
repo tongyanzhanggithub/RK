@@ -38,9 +38,9 @@ export function SiteHeader() {
       </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-4 lg:grid-cols-[280px_1fr_auto] lg:items-center">
         <Link href="/" className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center bg-navy text-xl font-black text-white">RK</span>
+          <span className="grid h-11 w-11 place-items-center bg-navy text-xl font-black text-white">PV</span>
           <span>
-            <strong className="block text-xl leading-tight">RepairKit Supply</strong>
+            <strong className="block text-xl leading-tight">Partavio</strong>
             <small className="font-bold uppercase text-steel">{h.tagline}</small>
           </span>
         </Link>
