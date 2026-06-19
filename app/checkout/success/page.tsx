@@ -14,13 +14,21 @@ export const metadata: Metadata = {
   description: "Stripe checkout completed successfully."
 };
 
-export default async function CheckoutSuccessPage({ searchParams }: { searchParams?: { session_id?: string } }) {
+export default async function CheckoutSuccessPage({
+  searchParams
+}: {
+  searchParams?: { session_id?: string; order?: string };
+}) {
   const dict = getServerDict();
   const ck = dict.checkout;
   const sessionId = searchParams?.session_id || "";
-  const order = sessionId
-    ? await prisma.order.findFirst({ where: { stripeCheckoutSessionId: sessionId } })
-    : null;
+  const orderId = searchParams?.order || "";
+  // Stripe returns ?session_id=...; PayPal/Airwallex redirect with ?order=<our id>.
+  const order = orderId
+    ? await prisma.order.findUnique({ where: { id: orderId } })
+    : sessionId
+      ? await prisma.order.findFirst({ where: { stripeCheckoutSessionId: sessionId } })
+      : null;
   const paid = order?.paymentStatus === "PAID";
   const failed = order?.paymentStatus === "FAILED";
   const refunded = order?.paymentStatus === "REFUNDED";

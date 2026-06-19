@@ -160,6 +160,7 @@ model Order {
   refundedCents           Int         @default(0)
   totalCents              Int
   paymentMethod           String      @default("stripe")
+  paymentRef              String?
   paymentStatus           String      @default("PENDING")
   paymentFailureMessage   String?
   orderStatus             String      @default("PROCESSING")

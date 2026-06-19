@@ -2,6 +2,22 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.7.0] - 2026-06-19 — 支付层抽象 + PayPal（大陆主体收款准备）
+
+面向"大陆营业执照 + 不开海外公司"的收款方案：主卡通道规划走 Airwallex，备选 PayPal。本版搭好可插拔支付层并接入 PayPal（沙箱就绪），Airwallex 留占位待账号下来接入。Stripe 流程保持不变、不删除。
+
+### 新增
+- **中立结算模块 `lib/order-settlement.ts`**：把"标记订单已付"的副作用（状态机 / 优惠券用量 / 扣库存 / 确认邮件 / 客户落库）抽成单一可复用入口 `markOrderPaid()`，所有支付通道共用同一套经测试逻辑；并提供 `recordRefund()`。Stripe 同步改为复用这些函数，行为不变。
+- **支付层抽象 `lib/payments/`**：`types`（统一接口）、`index`（探测已配置的通道供结账页显示）、`order-draft`（中立建单：校验购物车/库存/优惠券、按币种计价、创建 PENDING 订单）。
+- **PayPal 对接（沙箱就绪，env 门控）**：`lib/payments/paypal.ts`（Orders API v2：建单/捕获/Webhook 验签）+ 路由 `api/payments/paypal`（创建）、`/capture`（回跳捕获并结算）、`/webhook`（兜底，幂等）。
+- **Airwallex 占位** `lib/payments/airwallex.ts` + 路由：未配置时报友好提示；配齐 `AIRWALLEX_*` 后结账页"信用卡"按钮自动改走它取代 Stripe。
+- **结账页二选一**：购物车按已配置通道渲染"信用卡 / PayPal"按钮（`availablePaymentOptions()` 决定）。
+- Order 新增 `paymentRef`（通用网关交易号）。成功页同时识别 Stripe 的 `?session_id` 与 PayPal/Airwallex 的 `?order=`。
+
+### 验证
+- `tsc` 通过；用真实 PostgreSQL 跑通 `markOrderPaid` 全链路：扣库存(12→10)、写 SALE 流水、优惠券用量+1、`paidAt/paymentRef` 落库，且**重复结算幂等**（不重复扣库存、不重复计用量）。
+- PayPal/Airwallex 实链路需各自账号的沙箱/正式密钥后再连测；当前代码 env 门控，未配置不影响现有 Stripe 流程。
+
 ## [0.6.0] - 2026-06-19 — 上线准备：SQLite → PostgreSQL + 阿里云部署
 
 ### 数据库迁移（破坏性，本地开发方式有变）

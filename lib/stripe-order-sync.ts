@@ -3,26 +3,17 @@ import { prisma } from "@/lib/db";
 import { logOrderEvent } from "@/lib/order-events";
 import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
 import { sendRefundNotificationEmail } from "@/lib/refund-notification";
-import { sendLowStockAlert, type LowStockItem } from "@/lib/stock-alert";
+import {
+  paymentStatusAfter,
+  reduceInventoryForOrder,
+  syncCustomerFromOrder,
+  type PaymentStatus
+} from "@/lib/order-settlement";
 
 type StripeEventReference = {
   id: string;
   type: string;
   created: number;
-};
-
-type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
-
-type CustomerOrderData = {
-  id: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string | null;
-  customerWhatsapp: string | null;
-  country: string;
-  city: string | null;
-  shippingAddress: string | null;
-  postalCode: string | null;
 };
 
 function objectId(value: string | { id: string } | null) {
@@ -47,13 +38,6 @@ function shippingAddress(session: Stripe.Checkout.Session) {
   return [address.line1, address.line2, address.state].filter(Boolean).join(", ") || null;
 }
 
-function paymentStatusAfter(currentStatus: string, nextStatus: PaymentStatus) {
-  if (currentStatus === "REFUNDED" && nextStatus !== "REFUNDED") return currentStatus;
-  if (currentStatus === "PAID" && (nextStatus === "PENDING" || nextStatus === "FAILED")) return currentStatus;
-  if (currentStatus === "FAILED" && nextStatus === "PENDING") return currentStatus;
-  return nextStatus;
-}
-
 async function findOrderForSession(session: Stripe.Checkout.Session) {
   const identifiers = [
     session.metadata?.orderId ? { id: session.metadata.orderId } : null,
@@ -75,107 +59,6 @@ function syncReference(event: StripeEventReference, lastSyncedAt: Date | null) {
     stripeLastEventType: event.type,
     stripeLastSyncedAt: eventDate
   };
-}
-
-async function syncCustomerFromOrder(order: CustomerOrderData) {
-  const email = order.customerEmail.trim().toLowerCase();
-  if (!email || email.endsWith("@checkout.local")) return order;
-
-  const customer = await prisma.customer.upsert({
-    where: { email },
-    create: {
-      email,
-      name: order.customerName,
-      phone: order.customerPhone,
-      whatsapp: order.customerWhatsapp,
-      country: order.country,
-      city: order.city,
-      address: order.shippingAddress,
-      postalCode: order.postalCode,
-      status: "ACTIVE",
-      tags: "[]"
-    },
-    update: {
-      name: order.customerName,
-      phone: order.customerPhone,
-      whatsapp: order.customerWhatsapp,
-      country: order.country,
-      city: order.city,
-      address: order.shippingAddress,
-      postalCode: order.postalCode
-    }
-  });
-
-  return prisma.order.update({
-    where: { id: order.id },
-    data: { customerId: customer.id }
-  });
-}
-
-async function reduceInventoryForOrder(orderId: string) {
-  const lowStock: LowStockItem[] = [];
-
-  await prisma.$transaction(async (tx) => {
-    const order = await tx.order.findUnique({
-      where: { id: orderId },
-      include: { items: true }
-    });
-    if (!order || order.inventoryReduced) return;
-
-    const shortages: string[] = [];
-
-    for (const item of order.items) {
-      if (!item.productId) continue;
-      const product = await tx.product.findUnique({ where: { id: item.productId } });
-      if (!product) continue;
-
-      if (product.stock < item.quantity) {
-        shortages.push(`${item.productName}: paid ${item.quantity}, stock was ${product.stock}`);
-      }
-      const stockAfter = Math.max(0, product.stock - item.quantity);
-      const delta = stockAfter - product.stock;
-      if (delta === 0) continue;
-
-      // Alert when stock newly crosses to/below its low threshold.
-      const threshold = product.lowStockThreshold ?? 5;
-      if (product.stock > threshold && stockAfter <= threshold) {
-        lowStock.push({ name: product.name, sku: product.sku, stockAfter, threshold });
-      }
-
-      await tx.product.update({
-        where: { id: product.id },
-        data: { stock: stockAfter }
-      });
-      await tx.inventoryAdjustment.create({
-        data: {
-          productId: product.id,
-          type: "SALE",
-          quantityDelta: delta,
-          stockBefore: product.stock,
-          stockAfter,
-          reason: "Paid order",
-          reference: order.orderNumber,
-          createdBy: "stripe-webhook"
-        }
-      });
-    }
-
-    await tx.order.update({
-      where: { id: order.id },
-      data: {
-        inventoryReduced: true,
-        ...(shortages.length > 0
-          ? {
-              internalNote: [order.internalNote, `OVERSOLD — check before fulfilling: ${shortages.join("; ")}`]
-                .filter(Boolean)
-                .join("\n")
-            }
-          : {})
-      }
-    });
-  });
-
-  await sendLowStockAlert(lowStock);
 }
 
 export async function syncCheckoutSession(
@@ -237,7 +120,7 @@ export async function syncCheckoutSession(
   }
 
   if (finalStatus === "PAID" && !updatedOrder.inventoryReduced) {
-    await reduceInventoryForOrder(updatedOrder.id);
+    await reduceInventoryForOrder(updatedOrder.id, "stripe-webhook");
   }
 
   if (finalStatus === "PAID") {
@@ -294,7 +177,7 @@ export async function syncPaymentIntentSucceeded(paymentIntent: Stripe.PaymentIn
   });
 
   if (updatedOrder.paymentStatus === "PAID" && !updatedOrder.inventoryReduced) {
-    await reduceInventoryForOrder(updatedOrder.id);
+    await reduceInventoryForOrder(updatedOrder.id, "stripe-webhook");
   }
 
   if (updatedOrder.paymentStatus === "PAID") {

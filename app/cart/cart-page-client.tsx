@@ -12,10 +12,12 @@ import { useLanguage } from "@/components/language-provider";
 import { useRegion } from "@/components/region-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
+import type { PaymentOption } from "@/lib/payments/types";
 import { SHIPPING_CENTS } from "@/lib/shipping";
 
 type CartPageClientProps = {
   products: Product[];
+  paymentOptions: PaymentOption[];
 };
 
 type CheckoutResponse = {
@@ -29,12 +31,12 @@ type AppliedCoupon = {
   discountCents: number;
 };
 
-export function CartPageClient({ products }: CartPageClientProps) {
+export function CartPageClient({ products, paymentOptions }: CartPageClientProps) {
   const { items, updateItem, removeItem, clearCart, totalQuantity } = useCart();
   const { dict } = useLanguage();
   const c = dict.cart;
   const { local, isUsd, country, charged } = useRegion();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [pendingProvider, setPendingProvider] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [couponError, setCouponError] = useState("");
@@ -112,11 +114,11 @@ export function CartPageClient({ products }: CartPageClientProps) {
     }
   }
 
-  async function handleCheckout() {
+  async function handleCheckout(endpoint: string, providerId: string) {
     setCheckoutError("");
-    setIsCheckingOut(true);
+    setPendingProvider(providerId);
     try {
-      const response = await fetch("/api/checkout", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -126,12 +128,12 @@ export function CartPageClient({ products }: CartPageClientProps) {
       });
       const data = (await response.json()) as CheckoutResponse;
       if (!response.ok || !data.url) {
-        throw new Error(data.error || "Unable to create Stripe Checkout session.");
+        throw new Error(data.error || "Unable to start checkout.");
       }
       window.location.href = data.url;
     } catch (error) {
       setCheckoutError(error instanceof Error ? error.message : "Unable to start checkout.");
-      setIsCheckingOut(false);
+      setPendingProvider(null);
     }
   }
 
@@ -332,15 +334,33 @@ export function CartPageClient({ products }: CartPageClientProps) {
                   {c.gfit_summary.replace("{n}", String(guaranteedCount))}
                 </Link>
               )}
-              <button
-                type="button"
-                onClick={handleCheckout}
-                disabled={isCheckingOut}
-                className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <ShieldCheck size={18} />
-                {isCheckingOut ? c.checking_out : c.checkout_btn}
-              </button>
+              {paymentOptions.length === 0 ? (
+                <p className="mt-6 border border-amber-300 bg-amber-50 p-3 text-sm font-bold text-amber-800">
+                  暂未配置支付方式，请联系我们下单。
+                </p>
+              ) : (
+                paymentOptions.map((option, index) => {
+                  const busy = pendingProvider === option.id;
+                  const isPaypal = option.id === "paypal";
+                  const base =
+                    "mt-3 inline-flex h-12 w-full items-center justify-center gap-2 px-4 font-black disabled:cursor-not-allowed disabled:opacity-60";
+                  const tone = isPaypal
+                    ? "bg-[#ffc439] text-[#003087] hover:brightness-95"
+                    : "bg-safety text-ink hover:bg-amber-400";
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => handleCheckout(option.endpoint, option.id)}
+                      disabled={pendingProvider !== null}
+                      className={`${base} ${tone} ${index === 0 ? "mt-6" : ""}`}
+                    >
+                      {!isPaypal && <ShieldCheck size={18} />}
+                      {busy ? c.checking_out : isPaypal ? "PayPal" : option.label}
+                    </button>
+                  );
+                })
+              )}
               <button
                 type="button"
                 onClick={clearCart}
