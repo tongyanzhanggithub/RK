@@ -28,7 +28,7 @@ export function AddToCartButton({ slug, name, className = "", quantity = 1, outO
         type="button"
         disabled
         aria-label={`${name} is out of stock`}
-        className={`inline-flex h-11 whitespace-nowrap cursor-not-allowed items-center justify-center gap-2 border border-line bg-panel px-4 text-sm font-black text-steel ${className}`}
+        className={`inline-flex h-11 whitespace-nowrap cursor-not-allowed items-center justify-center gap-2 border border-line bg-panel px-3 text-sm font-black text-steel ${className}`}
       >
         <XCircle size={17} /> Out of Stock
       </button>
@@ -40,7 +40,7 @@ export function AddToCartButton({ slug, name, className = "", quantity = 1, outO
       type="button"
       onClick={handleAdd}
       aria-label={`Add ${name} to cart`}
-      className={`inline-flex h-11 whitespace-nowrap items-center justify-center gap-2 bg-safety px-4 text-sm font-black text-ink transition-colors hover:bg-amber-400 ${className}`}
+      className={`inline-flex min-h-[2.75rem] items-center justify-center gap-1.5 py-1.5 text-center leading-tight bg-safety px-3 text-sm font-black text-ink transition-colors hover:bg-amber-400 ${className}`}
     >
       {added ? <Check size={17} /> : <ShoppingCart size={17} />}
       {added ? "Added" : "Add to Cart"}

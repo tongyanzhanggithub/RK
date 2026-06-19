@@ -19,7 +19,7 @@ export function AddToQuoteButton({ slug, name, className = "", quantity = 1 }: P
       type="button"
       onClick={() => addItem(slug, quantity)}
       aria-label={`Add ${name} to quote request`}
-      className={`inline-flex h-11 whitespace-nowrap items-center justify-center gap-2 border px-4 text-sm font-black transition-colors ${
+      className={`inline-flex min-h-[2.75rem] items-center justify-center gap-1.5 border px-3 py-1.5 text-center text-sm font-black leading-tight transition-colors ${
         inQuote ? "border-green-300 bg-green-50 text-green-800" : "border-navy text-navy hover:bg-panel"
       } ${className}`}
     >
