@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@/components/analytics";
 import { CartProvider } from "@/components/cart-provider";
+import { CookieConsent } from "@/components/cookie-consent";
 import { EngineProvider } from "@/components/engine-provider";
 import { LanguageProvider } from "@/components/language-provider";
 import { QuoteProvider } from "@/components/quote-provider";
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   {children}
                   <SiteFooter />
                   <WhatsAppFloat />
+                  <CookieConsent />
                 </QuoteProvider>
               </CartProvider>
             </EngineProvider>

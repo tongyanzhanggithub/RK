@@ -4,6 +4,12 @@ export const LOCALE_COOKIE = "rk-locale";
 
 const en = {
   locale: "en" as Locale,
+  cookie: {
+    text: "We use cookies to run this site (cart, language) and, with your consent, basic analytics.",
+    accept: "Accept",
+    decline: "Decline",
+    learn_more: "Privacy Policy"
+  },
   header: {
     topbar_left: "Factory-direct engine parts & complete engines — Chongqing, China",
     topbar_right: "Serving the Middle East, Central Asia & Southeast Asia",
@@ -374,6 +380,12 @@ const en = {
 
 const zh: typeof en = {
   locale: "zh" as Locale,
+  cookie: {
+    text: "我们使用 Cookie 让网站正常运行（购物车、语言），并在您同意后用于基础访问统计。",
+    accept: "接受",
+    decline: "拒绝",
+    learn_more: "隐私政策"
+  },
   header: {
     topbar_left: "工厂直供 · 小型发动机零配件及整机 — 中国重庆",
     topbar_right: "服务中东、中亚及东南亚市场",

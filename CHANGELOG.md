@@ -2,6 +2,12 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.8.1] - 2026-06-19 — Cookie 同意横幅(GDPR)
+
+- 新增底部 **Cookie 同意横幅**(接受/拒绝 + 隐私政策链接,中英双语),首次访问显示,选择后记 cookie 不再弹。
+- **Google Analytics 改为同意后才加载**:`analytics.tsx` 客户端化,仅在访客点"接受"后注入 GA;拒绝则完全不加载追踪。购物车/语言/会话等必要 cookie 不受影响。
+- 共享 `lib/consent.ts` 管理同意状态 + 变更事件(接受后无需刷新即生效)。
+
 ## [0.8.0] - 2026-06-19 — 按地区分档运费(框架)
 
 - **`lib/shipping.ts` 重写为分区计费**:东南亚 / 中东 / 欧洲英国 / 中亚 / 其它 五个区,
