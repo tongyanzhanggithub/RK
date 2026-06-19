@@ -6,7 +6,7 @@ import { REGION_COOKIE } from "@/lib/region";
 
 export const runtime = "nodejs";
 
-type Payload = { couponCode?: unknown; items?: { slug?: unknown; quantity?: unknown }[] };
+type Payload = { couponCode?: unknown; items?: { slug?: unknown; quantity?: unknown }[]; email?: unknown };
 
 function baseUrl(request: NextRequest) {
   return process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
     provider: "paypal",
     items: (payload.items as { slug: string; quantity: number }[]) || [],
     couponCode: payload.couponCode,
+    email: payload.email,
     countryCookie: request.cookies.get(REGION_COOKIE)?.value
   });
   if ("error" in draft) {

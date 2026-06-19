@@ -38,6 +38,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
   const { local, isUsd, country, charged } = useRegion();
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
+  const [email, setEmail] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [couponError, setCouponError] = useState("");
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
@@ -129,7 +130,8 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: lines.map((line) => ({ slug: line.product.slug, quantity: line.quantity })),
-          couponCode: appliedCoupon?.code || undefined
+          couponCode: appliedCoupon?.code || undefined,
+          email: email.trim() || undefined
         })
       });
       const data = (await response.json()) as CheckoutResponse;
@@ -342,6 +344,19 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                   {c.gfit_summary.replace("{n}", String(guaranteedCount))}
                 </Link>
               )}
+              <div className="mt-6">
+                <label htmlFor="checkout-email" className="text-xs font-bold text-steel">
+                  Email for order updates (optional)
+                </label>
+                <input
+                  id="checkout-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="mt-1 w-full border border-line px-3 py-2"
+                />
+              </div>
               {isBulkOrder && (
                 <Link
                   href="/quote"

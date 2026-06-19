@@ -2,6 +2,14 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.11.0] - 2026-06-19 — 弃单挽回邮件(env/cron 门控)
+
+- **结账前可选填邮箱**:购物车加「Email for order updates (optional)」,经 Stripe / PayPal 两条链路存到 PENDING 订单(为挽回提供联系方式)。
+- **挽回邮件** `lib/abandoned-cart-email.ts`:对留邮箱、1–72h 未付款的订单发一次提醒(幂等,`abandonedEmailSentAt` 防重);无 SMTP 时静默跳过。
+- **定时接口** `/api/cron/abandoned-cart`:`CRON_SECRET` 保护,crontab 每小时调用一次扫描发送;新增 `Order.abandonedEmailSentAt`。
+- 部署文档加 cron 配置;`.env*` 加 `CRON_SECRET`。
+- 真机验证:无密钥 401、正确密钥返回候选/已发数;未配 SMTP 时只统计不发信(安全)。需你配好 SMTP + cron 才真正发信。
+
 ## [0.10.0] - 2026-06-19 — 阿拉伯语 + 俄语(中东/中亚市场)
 
 - 新增 **阿拉伯语(ar)与俄语(ru)** 两种前台语言(语言切换器:EN / 中 / ع / RU)。

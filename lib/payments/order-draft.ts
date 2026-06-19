@@ -39,7 +39,13 @@ type BuildArgs = {
   items: DraftItem[];
   couponCode?: unknown;
   countryCookie?: string;
+  email?: unknown; // optional buyer email captured at cart (enables abandoned-cart reminders)
 };
+
+function normalizeEmail(value: unknown): string | null {
+  const email = String(value || "").trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null;
+}
 
 export async function buildOrderDraft(args: BuildArgs): Promise<OrderDraft | DraftFailure> {
   const normalizedItems = (Array.isArray(args.items) ? args.items : [])
@@ -124,7 +130,7 @@ export async function buildOrderDraft(args: BuildArgs): Promise<OrderDraft | Dra
       couponType: appliedCoupon?.type || null,
       couponValue: appliedCoupon?.value || null,
       customerName: "Pending Customer",
-      customerEmail: "pending@checkout.local",
+      customerEmail: normalizeEmail(args.email) || "pending@checkout.local",
       country: "Pending",
       currency: curLower,
       subtotalCents: subtotalCharged,

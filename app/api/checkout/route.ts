@@ -11,11 +11,17 @@ export const runtime = "nodejs";
 
 type CheckoutPayload = {
   couponCode?: unknown;
+  email?: unknown;
   items?: {
     slug?: unknown;
     quantity?: unknown;
   }[];
 };
+
+function normalizeEmail(value: unknown): string | null {
+  const email = String(value || "").trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null;
+}
 
 function normalizeQuantity(value: unknown) {
   const quantity = Number(value);
@@ -171,7 +177,7 @@ export async function POST(request: NextRequest) {
       couponType: appliedCoupon?.type || null,
       couponValue: appliedCoupon?.value || null,
       customerName: "Stripe Checkout Customer",
-      customerEmail: "pending@checkout.local",
+      customerEmail: normalizeEmail(payload.email) || "pending@checkout.local",
       country: "Pending",
       currency: curLower,
       subtotalCents: subtotalCharged,
