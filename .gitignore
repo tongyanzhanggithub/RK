@@ -7,6 +7,7 @@ tsconfig.tsbuildinfo
 dev.db
 dev.db-journal
 dev.db.bak
+.localdb/
 *.db
 *.db-journal
 *.db.bak

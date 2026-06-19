@@ -78,7 +78,8 @@ node scripts/seed-taxonomy.js
 npm run dev
 ```
 
-> 没装 Docker？本机装 PostgreSQL，或把 `DATABASE_URL` 指向一个云上开发库即可。生产部署见 [docs/部署-阿里云.md](docs/部署-阿里云.md)。
+> 没装 Docker？改用 **`npm run db:local`**（基于 embedded-postgres，在本机起一个真实 PostgreSQL，数据存 `.localdb/`）——
+> 另开一个终端保持它运行，再在第二个终端 `npm run dev`。或本机装 PostgreSQL / 指向云上开发库亦可。生产部署见 [docs/部署-阿里云.md](docs/部署-阿里云.md)。
 
 ## 环境变量
 
