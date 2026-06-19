@@ -24,7 +24,7 @@ export default async function AdminInventoryPage({
     prisma.product.findMany({
       where: {
         AND: [
-          q ? { OR: [{ name: { contains: q } }, { sku: { contains: q } }] } : {},
+          q ? { OR: [{ name: { contains: q, mode: "insensitive" as const } }, { sku: { contains: q, mode: "insensitive" as const } }] } : {},
           category ? { category } : {},
           status ? { status } : {}
         ]

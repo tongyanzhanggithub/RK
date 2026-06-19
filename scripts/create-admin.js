@@ -1,6 +1,7 @@
 const crypto = require("crypto");
-const path = require("path");
-const { DatabaseSync } = require("node:sqlite");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 
 const email = process.env.ADMIN_EMAIL;
 const password = process.env.ADMIN_PASSWORD;
@@ -17,57 +18,29 @@ if (password.length < 8) {
   process.exit(1);
 }
 
-const db = new DatabaseSync(path.join(__dirname, "..", "prisma", "dev.db"));
-
 function hashPassword(rawPassword) {
   const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto.pbkdf2Sync(rawPassword, salt, 120000, 32, "sha256").toString("hex");
   return `pbkdf2_sha256$120000$${salt}$${hash}`;
 }
 
-function createTable() {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS AdminUser (
-      id TEXT PRIMARY KEY,
-      email TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      passwordHash TEXT NOT NULL,
-      role TEXT NOT NULL DEFAULT 'ADMIN',
-      resetTokenHash TEXT,
-      resetTokenExpiresAt DATETIME,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL
-    );
-  `);
+async function main() {
+  const normalizedEmail = email.toLowerCase();
+  const passwordHash = hashPassword(password);
+
+  const user = await prisma.adminUser.upsert({
+    where: { email: normalizedEmail },
+    update: { name, passwordHash, role: "ADMIN" },
+    create: { email: normalizedEmail, name, passwordHash, role: "ADMIN" }
+  });
+
+  console.log(`Upserted ADMIN user: ${user.email}`);
 }
 
-function id() {
-  return `admin_${crypto.randomBytes(8).toString("hex")}`;
-}
-
-createTable();
-
-const now = new Date().toISOString();
-const existing = db.prepare("SELECT id FROM AdminUser WHERE email = ?").get(email.toLowerCase());
-
-if (existing) {
-  db.prepare("UPDATE AdminUser SET name = ?, passwordHash = ?, role = 'ADMIN', updatedAt = ? WHERE id = ?").run(
-    name,
-    hashPassword(password),
-    now,
-    existing.id
-  );
-  console.log(`Updated ADMIN user: ${email.toLowerCase()}`);
-} else {
-  db.prepare("INSERT INTO AdminUser (id, email, name, passwordHash, role, createdAt, updatedAt) VALUES (?, ?, ?, ?, 'ADMIN', ?, ?)").run(
-    id(),
-    email.toLowerCase(),
-    name,
-    hashPassword(password),
-    now,
-    now
-  );
-  console.log(`Created ADMIN user: ${email.toLowerCase()}`);
-}
-
-db.close();
+main()
+  .then(() => prisma.$disconnect())
+  .catch(async (error) => {
+    console.error(error);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

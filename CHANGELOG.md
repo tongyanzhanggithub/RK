@@ -2,6 +2,32 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/)。
 
+## [0.6.0] - 2026-06-19 — 上线准备：SQLite → PostgreSQL + 阿里云部署
+
+### 数据库迁移（破坏性，本地开发方式有变）
+- **provider 切到 PostgreSQL**：从 SQLite 迁移，支持并发、备份、横向扩展 —— 上线前置条件。
+- **重写 `prisma/seed.js`**：去掉 `node:sqlite` 直连与手写 DDL，全部改用 Prisma Client（`createMany`/`create`）。
+  schema 改由 Prisma 管理（`prisma db push`），seed 只负责写数据。产品/参考数据数组原样保留。
+- **重写 `scripts/create-admin.js`**：改用 Prisma `upsert`，不再依赖 `node:sqlite`。
+- **后台搜索加 `mode: "insensitive"`**（15 处 `contains`）：PG 的 `contains` 默认区分大小写，
+  不加会导致后台按订单号/邮箱/名称等搜索失效。已用真实 Postgres 验证：搜 "KIT" 不敏感命中 13 条、敏感命中 0 条。
+- 早期一次性 SQLite 迁移脚本 `scripts/migrate-*.js` 标记为废弃（不被构建/运行引用，仅留作历史）。
+
+### 验证
+- 用 `embedded-postgres` 本地起真实 PostgreSQL 18，完整跑通 `db push → seed → create-admin → 冒烟查询`：
+  13 产品 / 3 订单 / 5 订单行 / 3 客户 / 3 优惠券 / 1 管理员，订单↔商品/客户/优惠券关系与折扣计算均正确；`tsc` 通过。
+
+### 阿里云部署资产（新增）
+- `docs/部署-阿里云.md`：从买 ECS/RDS、海外节点(免备案)、安全组，到 build/PM2/Nginx/HTTPS/Stripe webhook/备份/抗流量的完整清单。
+- `deploy/setup-ecs.sh`（Ubuntu 一键装 Node20/Nginx/PM2/Certbot）、`deploy/nginx.conf.example`（反代+静态缓存+`cf-ipcountry` 透传）、`deploy/ecosystem.config.js`（PM2）。
+- `docker-compose.dev.yml`：本地开发用 Postgres，与线上同引擎。
+- `.env.production.example` 改写为阿里云口径（RDS 内网串、OSS 可选、本机磁盘存图默认）。
+
+### 说明
+- **图片上传无需改动即可上线**：`app/api/admin/upload/route.ts` 已支持本机 `public/uploads/` 回退，ECS 持久磁盘可直接用；
+  迁 OSS 是「多机/上 CDN」时的后续优化，非上线阻塞项。
+- 本地开发不再用 SQLite，改用 `docker-compose.dev.yml` 起 Postgres（详见 README / 部署文档第 10 节）。
+
 ## [0.5.0] - 2026-06-16 — 订单管理大升级（三阶段）
 
 ### 阶段 1

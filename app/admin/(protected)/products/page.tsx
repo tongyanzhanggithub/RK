@@ -36,8 +36,8 @@ export default async function AdminProductsPage({
         q
           ? {
               OR: [
-                { name: { contains: q } },
-                { sku: { contains: q } }
+                { name: { contains: q, mode: "insensitive" as const } },
+                { sku: { contains: q, mode: "insensitive" as const } }
               ]
             }
           : {},

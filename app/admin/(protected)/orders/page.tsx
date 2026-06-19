@@ -46,8 +46,8 @@ export default async function AdminOrdersPage({
         q
           ? {
               OR: [
-                { orderNumber: { contains: q } },
-                { customerEmail: { contains: q } }
+                { orderNumber: { contains: q, mode: "insensitive" as const } },
+                { customerEmail: { contains: q, mode: "insensitive" as const } }
               ]
             }
           : {},

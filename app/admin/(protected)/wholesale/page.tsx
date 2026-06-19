@@ -28,11 +28,11 @@ export default async function AdminWholesalePage({
           q
             ? {
                 OR: [
-                  { companyName: { contains: q } },
-                  { contactName: { contains: q } },
-                  { email: { contains: q } },
-                  { whatsapp: { contains: q } },
-                  { productInterest: { contains: q } }
+                  { companyName: { contains: q, mode: "insensitive" as const } },
+                  { contactName: { contains: q, mode: "insensitive" as const } },
+                  { email: { contains: q, mode: "insensitive" as const } },
+                  { whatsapp: { contains: q, mode: "insensitive" as const } },
+                  { productInterest: { contains: q, mode: "insensitive" as const } }
                 ]
               }
             : {},

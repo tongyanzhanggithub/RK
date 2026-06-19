@@ -8,7 +8,7 @@
 |---|---|
 | 框架 | Next.js 14（App Router）+ TypeScript |
 | 样式 | Tailwind CSS |
-| 数据库 | SQLite + Prisma ORM |
+| 数据库 | PostgreSQL + Prisma ORM |
 | 支付 | Stripe Checkout + Webhook 订单同步 |
 | 表单校验 | Zod |
 | 图标 | lucide-react |
@@ -49,34 +49,42 @@
 ## 快速开始
 
 ```bash
-# 1. 安装依赖（需要 Node.js 22+，seed 脚本依赖 node:sqlite）
+# 1. 安装依赖（需要 Node.js 20+）
 npm install
 
-# 2. 配置环境变量
-copy .env.example .env
-# 编辑 .env，填入 Stripe 密钥等（见下表）
+# 2. 起本地 PostgreSQL（与线上同引擎）
+docker compose -f docker-compose.dev.yml up -d
 
-# 3. 初始化数据库（建表 + 写入种子产品数据）
-npm run db:seed
+# 3. 配置环境变量
+copy .env.example .env
+# .env 默认 DATABASE_URL 已指向本地 5432；再填入 Stripe 密钥等（见下表）
 
 # 4. 生成 Prisma Client
 npm run db:generate
 
-# 5. 创建管理员账号
+# 5. 建表（Prisma 管理 schema）
+npx prisma db push
+
+# 6. 写入种子产品数据
+npm run db:seed
+
+# 7. 创建管理员账号
 $env:ADMIN_EMAIL='admin@example.com'; $env:ADMIN_PASSWORD='你的密码'; npm run admin:create
 
-# 6. 填充分类与维修指南（从现有产品派生，幂等）
+# 8. 填充分类与维修指南（从现有产品派生，幂等）
 node scripts/seed-taxonomy.js
 
-# 7. 启动开发服务器（http://127.0.0.1:4173）
+# 9. 启动开发服务器（http://127.0.0.1:4173）
 npm run dev
 ```
+
+> 没装 Docker？本机装 PostgreSQL，或把 `DATABASE_URL` 指向一个云上开发库即可。生产部署见 [docs/部署-阿里云.md](docs/部署-阿里云.md)。
 
 ## 环境变量
 
 | 变量 | 说明 |
 |---|---|
-| `DATABASE_URL` | SQLite 文件路径，默认 `file:./dev.db` |
+| `DATABASE_URL` | PostgreSQL 连接串（本地默认指向 `docker-compose.dev.yml` 的 5432） |
 | `NEXT_PUBLIC_SITE_URL` | 站点地址，用于 Stripe 支付完成后的跳转 |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | WhatsApp 询盘号码（纯数字含国家码，不带 `+`） |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | 联系邮箱 |
@@ -92,7 +100,7 @@ Stripe Webhook 的本地调试与生产配置见 [STRIPE_WEBHOOK_SETUP.md](STRIP
 |---|---|
 | `npm run dev` | 启动开发服务器（127.0.0.1:4173） |
 | `npm run build` / `npm run start` | 生产构建 / 启动 |
-| `npm run db:seed` | 建表并写入种子数据（重复执行会重置产品数据） |
+| `npm run db:seed` | 写入种子数据（重复执行会重置业务数据；建表由 `npx prisma db push` 负责） |
 | `npm run db:generate` | 生成 Prisma Client |
 | `npm run admin:create` | 创建或重置管理员账号（读取 `ADMIN_EMAIL` / `ADMIN_PASSWORD` 环境变量） |
 
@@ -124,6 +132,7 @@ scripts/                    # create-admin.js、seed-taxonomy.js
 
 ## 注意事项
 
-- `.env` 与 `dev.db` 已被 git 忽略，不会提交到仓库；部署时需自行配置。
+- `.env` 已被 git 忽略，不会提交到仓库；部署时需自行配置。
 - 生产环境务必设置强随机的 `ADMIN_SESSION_SECRET`，否则后台会话可被伪造。
-- SQLite 适合当前体量；如果订单量上来，Prisma 的 `provider` 换成 PostgreSQL 即可平滑迁移。
+- 数据库为 PostgreSQL，schema 由 Prisma 管理（`npx prisma db push`）；生产部署、抗流量、备份方案见 [docs/部署-阿里云.md](docs/部署-阿里云.md)。
+- `scripts/migrate-*.js` 是早期 SQLite 时代的一次性迁移脚本，迁到 Postgres 后已废弃（不被构建/运行引用），保留仅作历史参考，请勿在生产执行。

@@ -1,0 +1,38 @@
+# /etc/nginx/sites-available/repairkit  —— 反向代理到 Next.js (127.0.0.1:4173)
+# 启用：ln -s /etc/nginx/sites-available/repairkit /etc/nginx/sites-enabled/ && nginx -t && systemctl reload nginx
+# HTTPS 证书用 certbot 自动注入（见部署文档第 6 步），certbot 会自动补全 443 与跳转。
+
+server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;
+
+    # 上传体积上限（产品图片）。Next 默认较小，按需调大。
+    client_max_body_size 20m;
+
+    # 静态资源/图片直接由 Nginx 提供并长缓存（减轻 Node 压力）
+    location /_next/static/ {
+        proxy_pass http://127.0.0.1:4173;
+        proxy_cache_valid 200 60m;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+    location /uploads/ {
+        proxy_pass http://127.0.0.1:4173;
+        add_header Cache-Control "public, max-age=86400";
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:4173;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # 地区自动识别：站点读取 cf-ipcountry / x-vercel-ip-country 头。
+        # 若前面挂了 Cloudflare，下面这行把 Cloudflare 的国家码透传给应用，实现按 IP 自动切币种/运费/税：
+        proxy_set_header cf-ipcountry $http_cf_ipcountry;
+        # 不挂 Cloudflare 时，自动识别不可用 —— 用户仍可用页面上的手动国家切换器。
+    }
+}

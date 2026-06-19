@@ -1,7 +1,5 @@
-const path = require("path");
-const { DatabaseSync } = require("node:sqlite");
-
-const db = new DatabaseSync(path.join(__dirname, "dev.db"));
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 const products = [
   {
@@ -236,414 +234,6 @@ const models = [
   ["5kw-generator", "5kW Generator", "Larger portable generator class commonly paired with 188F style engines.", "Engine service kits and electrical kits must be selected separately."]
 ];
 
-function resetLegacyProductTable() {
-  const table = db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'Product'").get();
-  if (!table) return;
-  const columns = db.prepare("PRAGMA table_info(Product)").all();
-  const createdAt = columns.find((column) => column.name === "createdAt");
-  if (createdAt && String(createdAt.type).toUpperCase() !== "DATETIME") {
-    db.exec("DROP TABLE Product;");
-  }
-}
-
-function createTables() {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS Product (
-      id TEXT PRIMARY KEY,
-      slug TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      subtitle TEXT,
-      sku TEXT NOT NULL UNIQUE,
-      category TEXT NOT NULL,
-      brand TEXT,
-      shortDescription TEXT NOT NULL,
-      description TEXT,
-      status TEXT NOT NULL DEFAULT 'ACTIVE',
-      priceRange TEXT NOT NULL,
-      priceCents INTEGER NOT NULL DEFAULT 0,
-      currency TEXT NOT NULL DEFAULT 'usd',
-      compareAtPriceCents INTEGER,
-      wholesalePriceCents INTEGER,
-      costPriceCents INTEGER,
-      allowCoupons INTEGER NOT NULL DEFAULT 1,
-      stock INTEGER NOT NULL DEFAULT 0,
-      lowStockThreshold INTEGER NOT NULL DEFAULT 5,
-      weightGrams INTEGER,
-      lengthMm INTEGER,
-      widthMm INTEGER,
-      heightMm INTEGER,
-      wholesaleAvailable INTEGER NOT NULL DEFAULT 0,
-      isFeatured INTEGER NOT NULL DEFAULT 0,
-      isHotSeller INTEGER NOT NULL DEFAULT 0,
-      fitmentType TEXT NOT NULL DEFAULT 'SPECIFIC',
-      fitmentNote TEXT,
-      tags TEXT NOT NULL,
-      compatibleModels TEXT NOT NULL,
-      compatibleEquipment TEXT NOT NULL,
-      problemsSolved TEXT NOT NULL,
-      kitIncludes TEXT NOT NULL,
-      notCompatibleWith TEXT,
-      specifications TEXT,
-      faqs TEXT,
-      images TEXT,
-      image TEXT,
-      seoTitle TEXT,
-      seoDescription TEXT,
-      seoKeywords TEXT,
-      ogImage TEXT,
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS Testimonial (
-      id TEXT PRIMARY KEY,
-      authorName TEXT NOT NULL,
-      company TEXT,
-      country TEXT NOT NULL,
-      content TEXT NOT NULL,
-      contentZh TEXT,
-      rating INTEGER NOT NULL DEFAULT 5,
-      isPublished INTEGER NOT NULL DEFAULT 0,
-      sortOrder INTEGER NOT NULL DEFAULT 0,
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS AdminUser (
-      id TEXT PRIMARY KEY,
-      email TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      passwordHash TEXT NOT NULL,
-      role TEXT NOT NULL DEFAULT 'ADMIN',
-      resetTokenHash TEXT,
-      resetTokenExpiresAt DATETIME,
-      createdAt TEXT NOT NULL,
-      updatedAt TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS Customer (
-      id TEXT PRIMARY KEY,
-      email TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      phone TEXT,
-      whatsapp TEXT,
-      country TEXT,
-      city TEXT,
-      address TEXT,
-      postalCode TEXT,
-      status TEXT NOT NULL DEFAULT 'ACTIVE',
-      role TEXT NOT NULL DEFAULT 'CUSTOMER',
-      tags TEXT NOT NULL DEFAULT '[]',
-      internalNote TEXT,
-      passwordHash TEXT,
-      resetTokenHash TEXT,
-      resetTokenExpiresAt DATETIME,
-      wholesaleApprovedAt DATETIME,
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS WholesaleApplication (
-      id TEXT PRIMARY KEY,
-      customerId TEXT,
-      companyName TEXT NOT NULL,
-      contactName TEXT NOT NULL,
-      country TEXT NOT NULL,
-      whatsapp TEXT NOT NULL,
-      email TEXT NOT NULL,
-      businessType TEXT NOT NULL,
-      productInterest TEXT NOT NULL,
-      estimatedMonthlyQuantity INTEGER,
-      website TEXT,
-      businessAddress TEXT,
-      salesChannel TEXT,
-      message TEXT,
-      status TEXT NOT NULL DEFAULT 'PENDING',
-      adminNote TEXT,
-      reviewedBy TEXT,
-      reviewedAt DATETIME,
-      notificationStatus TEXT NOT NULL DEFAULT 'NOT_SENT',
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL,
-      CONSTRAINT WholesaleApplication_customerId_fkey FOREIGN KEY (customerId) REFERENCES Customer (id) ON DELETE SET NULL ON UPDATE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS Coupon (
-      id TEXT PRIMARY KEY,
-      code TEXT NOT NULL UNIQUE,
-      type TEXT NOT NULL,
-      value INTEGER NOT NULL,
-      isActive INTEGER NOT NULL DEFAULT 1,
-      minSubtotalCents INTEGER,
-      usageLimit INTEGER,
-      usageCount INTEGER NOT NULL DEFAULT 0,
-      perCustomerLimit INTEGER,
-      startsAt DATETIME,
-      endsAt DATETIME,
-      allowWholesaleCustomers INTEGER NOT NULL DEFAULT 0,
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS "Order" (
-      id TEXT PRIMARY KEY,
-      orderNumber TEXT NOT NULL UNIQUE,
-      customerId TEXT,
-      couponId TEXT,
-      couponCode TEXT,
-      couponType TEXT,
-      couponValue INTEGER,
-      couponUsageRecorded INTEGER NOT NULL DEFAULT 0,
-      customerName TEXT NOT NULL,
-      customerEmail TEXT NOT NULL,
-      customerPhone TEXT,
-      customerWhatsapp TEXT,
-      country TEXT NOT NULL,
-      city TEXT,
-      shippingAddress TEXT,
-      postalCode TEXT,
-      currency TEXT NOT NULL DEFAULT 'usd',
-      subtotalCents INTEGER NOT NULL,
-      shippingCents INTEGER NOT NULL DEFAULT 0,
-      taxCents INTEGER NOT NULL DEFAULT 0,
-      discountCents INTEGER NOT NULL DEFAULT 0,
-      refundedCents INTEGER NOT NULL DEFAULT 0,
-      totalCents INTEGER NOT NULL,
-      paymentMethod TEXT NOT NULL DEFAULT 'stripe',
-      paymentStatus TEXT NOT NULL DEFAULT 'PENDING',
-      paymentFailureMessage TEXT,
-      orderStatus TEXT NOT NULL DEFAULT 'PROCESSING',
-      fulfillmentStatus TEXT NOT NULL DEFAULT 'UNFULFILLED',
-      stripeCheckoutSessionId TEXT,
-      stripePaymentIntentId TEXT,
-      stripeLastEventId TEXT,
-      stripeLastEventType TEXT,
-      stripeLastSyncedAt DATETIME,
-      paidAt DATETIME,
-      confirmationEmailSentAt DATETIME,
-      shippingEmailSentAt DATETIME,
-      shippingCarrier TEXT,
-      trackingNumber TEXT,
-      trackingUrl TEXT,
-      shippedAt DATETIME,
-      internalNote TEXT,
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL,
-      CONSTRAINT Order_customerId_fkey FOREIGN KEY (customerId) REFERENCES Customer (id) ON DELETE SET NULL ON UPDATE CASCADE,
-      CONSTRAINT Order_couponId_fkey FOREIGN KEY (couponId) REFERENCES Coupon (id) ON DELETE SET NULL ON UPDATE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS OrderItem (
-      id TEXT PRIMARY KEY,
-      orderId TEXT NOT NULL,
-      productId TEXT,
-      productName TEXT NOT NULL,
-      productSlug TEXT NOT NULL,
-      sku TEXT NOT NULL,
-      unitPriceCents INTEGER NOT NULL,
-      quantity INTEGER NOT NULL,
-      subtotalCents INTEGER NOT NULL,
-      image TEXT,
-      createdAt DATETIME NOT NULL,
-      CONSTRAINT OrderItem_orderId_fkey FOREIGN KEY (orderId) REFERENCES "Order" (id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS InventoryAdjustment (
-      id TEXT PRIMARY KEY,
-      productId TEXT NOT NULL,
-      type TEXT NOT NULL,
-      quantityDelta INTEGER NOT NULL,
-      stockBefore INTEGER NOT NULL,
-      stockAfter INTEGER NOT NULL,
-      reason TEXT,
-      reference TEXT,
-      createdBy TEXT,
-      createdAt DATETIME NOT NULL,
-      CONSTRAINT InventoryAdjustment_productId_fkey FOREIGN KEY (productId) REFERENCES Product (id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS Problem (
-      id TEXT PRIMARY KEY,
-      slug TEXT NOT NULL UNIQUE,
-      title TEXT NOT NULL,
-      description TEXT NOT NULL,
-      createdAt TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS Equipment (
-      id TEXT PRIMARY KEY,
-      slug TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      description TEXT NOT NULL,
-      createdAt TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS EngineModel (
-      id TEXT PRIMARY KEY,
-      slug TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      description TEXT NOT NULL,
-      compatibilityNote TEXT NOT NULL,
-      createdAt TEXT NOT NULL
-    );
-  `);
-}
-
-function ensureProductColumns() {
-  const columns = db.prepare("PRAGMA table_info(Product)").all().map((column) => column.name);
-  const additions = [
-    ["subtitle", "TEXT"],
-    ["sku", "TEXT"],
-    ["brand", "TEXT"],
-    ["description", "TEXT"],
-    ["status", "TEXT NOT NULL DEFAULT 'ACTIVE'"],
-    ["priceCents", "INTEGER NOT NULL DEFAULT 0"],
-    ["currency", "TEXT NOT NULL DEFAULT 'usd'"],
-    ["compareAtPriceCents", "INTEGER"],
-    ["wholesalePriceCents", "INTEGER"],
-    ["costPriceCents", "INTEGER"],
-    ["allowCoupons", "INTEGER NOT NULL DEFAULT 1"],
-    ["stock", "INTEGER NOT NULL DEFAULT 0"],
-    ["lowStockThreshold", "INTEGER NOT NULL DEFAULT 5"],
-    ["weightGrams", "INTEGER"],
-    ["lengthMm", "INTEGER"],
-    ["widthMm", "INTEGER"],
-    ["heightMm", "INTEGER"],
-    ["isFeatured", "INTEGER NOT NULL DEFAULT 0"],
-    ["isHotSeller", "INTEGER NOT NULL DEFAULT 0"],
-    ["fitmentType", "TEXT NOT NULL DEFAULT 'SPECIFIC'"],
-    ["fitmentNote", "TEXT"],
-    ["images", "TEXT"],
-    ["seoTitle", "TEXT"],
-    ["seoDescription", "TEXT"],
-    ["seoKeywords", "TEXT"],
-    ["ogImage", "TEXT"]
-  ];
-
-  additions.forEach(([name, definition]) => {
-    if (!columns.includes(name)) {
-      db.exec(`ALTER TABLE Product ADD COLUMN ${name} ${definition};`);
-    }
-  });
-
-  db.exec("CREATE UNIQUE INDEX IF NOT EXISTS Product_sku_key ON Product(sku);");
-}
-
-function ensureOrderTables() {
-  const columns = db.prepare('PRAGMA table_info("Order")').all().map((column) => column.name);
-  const additions = [
-    ["refundedCents", "INTEGER NOT NULL DEFAULT 0"],
-    ["paymentFailureMessage", "TEXT"],
-    ["stripeLastEventId", "TEXT"],
-    ["stripeLastEventType", "TEXT"],
-    ["stripeLastSyncedAt", "DATETIME"],
-    ["customerId", "TEXT"]
-  ];
-
-  additions.forEach(([name, definition]) => {
-    if (!columns.includes(name)) {
-      db.exec(`ALTER TABLE "Order" ADD COLUMN ${name} ${definition};`);
-    }
-  });
-
-  db.exec(`
-    CREATE INDEX IF NOT EXISTS "Order_createdAt_idx" ON "Order"(createdAt);
-    CREATE INDEX IF NOT EXISTS "Order_paymentStatus_idx" ON "Order"(paymentStatus);
-    CREATE INDEX IF NOT EXISTS "Order_orderStatus_idx" ON "Order"(orderStatus);
-    CREATE INDEX IF NOT EXISTS "Order_customerId_idx" ON "Order"(customerId);
-    CREATE INDEX IF NOT EXISTS OrderItem_orderId_idx ON OrderItem(orderId);
-    CREATE INDEX IF NOT EXISTS InventoryAdjustment_productId_idx ON InventoryAdjustment(productId);
-    CREATE INDEX IF NOT EXISTS InventoryAdjustment_createdAt_idx ON InventoryAdjustment(createdAt);
-  `);
-}
-
-function ensureWholesaleTables() {
-  const customerColumns = db.prepare("PRAGMA table_info(Customer)").all().map((column) => column.name);
-  const customerAdditions = [
-    ["role", "TEXT NOT NULL DEFAULT 'CUSTOMER'"],
-    ["wholesaleApprovedAt", "DATETIME"]
-  ];
-
-  customerAdditions.forEach(([name, definition]) => {
-    if (!customerColumns.includes(name)) {
-      db.exec(`ALTER TABLE Customer ADD COLUMN ${name} ${definition};`);
-    }
-  });
-
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS WholesaleApplication (
-      id TEXT PRIMARY KEY,
-      customerId TEXT,
-      companyName TEXT NOT NULL,
-      contactName TEXT NOT NULL,
-      country TEXT NOT NULL,
-      whatsapp TEXT NOT NULL,
-      email TEXT NOT NULL,
-      businessType TEXT NOT NULL,
-      productInterest TEXT NOT NULL,
-      estimatedMonthlyQuantity INTEGER,
-      website TEXT,
-      businessAddress TEXT,
-      salesChannel TEXT,
-      message TEXT,
-      status TEXT NOT NULL DEFAULT 'PENDING',
-      adminNote TEXT,
-      reviewedBy TEXT,
-      reviewedAt DATETIME,
-      notificationStatus TEXT NOT NULL DEFAULT 'NOT_SENT',
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL,
-      CONSTRAINT WholesaleApplication_customerId_fkey FOREIGN KEY (customerId) REFERENCES Customer (id) ON DELETE SET NULL ON UPDATE CASCADE
-    );
-    CREATE INDEX IF NOT EXISTS WholesaleApplication_customerId_idx ON WholesaleApplication(customerId);
-    CREATE INDEX IF NOT EXISTS WholesaleApplication_status_idx ON WholesaleApplication(status);
-    CREATE INDEX IF NOT EXISTS WholesaleApplication_createdAt_idx ON WholesaleApplication(createdAt);
-  `);
-}
-
-function ensureCouponTables() {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS Coupon (
-      id TEXT PRIMARY KEY,
-      code TEXT NOT NULL UNIQUE,
-      type TEXT NOT NULL,
-      value INTEGER NOT NULL,
-      isActive INTEGER NOT NULL DEFAULT 1,
-      minSubtotalCents INTEGER,
-      usageLimit INTEGER,
-      usageCount INTEGER NOT NULL DEFAULT 0,
-      perCustomerLimit INTEGER,
-      startsAt DATETIME,
-      endsAt DATETIME,
-      allowWholesaleCustomers INTEGER NOT NULL DEFAULT 0,
-      createdAt DATETIME NOT NULL,
-      updatedAt DATETIME NOT NULL
-    );
-    CREATE UNIQUE INDEX IF NOT EXISTS Coupon_code_key ON Coupon(code);
-    CREATE INDEX IF NOT EXISTS Coupon_code_idx ON Coupon(code);
-    CREATE INDEX IF NOT EXISTS Coupon_isActive_idx ON Coupon(isActive);
-    CREATE INDEX IF NOT EXISTS Coupon_startsAt_idx ON Coupon(startsAt);
-    CREATE INDEX IF NOT EXISTS Coupon_endsAt_idx ON Coupon(endsAt);
-  `);
-
-  const orderColumns = db.prepare('PRAGMA table_info("Order")').all().map((column) => column.name);
-  const orderAdditions = [
-    ["couponId", "TEXT"],
-    ["couponCode", "TEXT"],
-    ["couponType", "TEXT"],
-    ["couponValue", "INTEGER"],
-    ["couponUsageRecorded", "INTEGER NOT NULL DEFAULT 0"]
-  ];
-
-  orderAdditions.forEach(([name, definition]) => {
-    if (!orderColumns.includes(name)) {
-      db.exec(`ALTER TABLE "Order" ADD COLUMN ${name} ${definition};`);
-    }
-  });
-
-  db.exec('CREATE INDEX IF NOT EXISTS "Order_couponId_idx" ON "Order"(couponId);');
-}
-
 function id(prefix, index) {
   return `${prefix}_${String(index + 1).padStart(3, "0")}`;
 }
@@ -663,114 +253,121 @@ function defaultStock(index) {
 }
 
 async function main() {
-  resetLegacyProductTable();
-  createTables();
-  ensureProductColumns();
-  ensureOrderTables();
-  ensureWholesaleTables();
-  ensureCouponTables();
-  db.exec('DELETE FROM InventoryAdjustment; DELETE FROM OrderItem; DELETE FROM "Order"; DELETE FROM WholesaleApplication; DELETE FROM Customer; DELETE FROM Coupon; DELETE FROM Product; DELETE FROM Problem; DELETE FROM Equipment; DELETE FROM EngineModel;');
+  const now = new Date();
 
-  const now = new Date().toISOString();
-  const insertProduct = db.prepare(`
-    INSERT INTO Product (
-      id, slug, name, subtitle, sku, category, brand, shortDescription, description, status,
-      priceRange, priceCents, currency, compareAtPriceCents, wholesalePriceCents, costPriceCents,
-      allowCoupons, stock, lowStockThreshold, weightGrams, lengthMm, widthMm, heightMm, wholesaleAvailable,
-      isFeatured, isHotSeller, fitmentType, fitmentNote,
-      tags, compatibleModels, compatibleEquipment, problemsSolved, kitIncludes,
-      notCompatibleWith, specifications, faqs, images, image,
-      seoTitle, seoDescription, seoKeywords, ogImage, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
+  // 清空(子表先删；带 onDelete:Cascade 的关系会自动级联删除 OrderEvent/Shipment/ReturnRequest/OrderItem/CustomerAddress)
+  await prisma.orderItem.deleteMany();
+  await prisma.inventoryAdjustment.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.wholesaleApplication.deleteMany();
+  await prisma.customer.deleteMany();
+  await prisma.coupon.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.problem.deleteMany();
+  await prisma.equipment.deleteMany();
+  await prisma.engineModel.deleteMany();
 
-  products.forEach((product, index) => {
+  // ---- Products ----
+  const productRecords = products.map((product, index) => {
     const priceCents = product.priceCents || 0;
-    insertProduct.run(
-      id("product", index),
-      product.slug,
-      product.name,
-      product.subtitle || null,
-      product.sku || defaultSku(product, index),
-      product.category,
-      product.brand || "RepairKit Supply",
-      product.shortDescription,
-      product.description || product.shortDescription,
-      product.status || "ACTIVE",
-      product.priceRange,
+    return {
+      id: id("product", index),
+      slug: product.slug,
+      name: product.name,
+      subtitle: product.subtitle || null,
+      sku: product.sku || defaultSku(product, index),
+      category: product.category,
+      brand: product.brand || "RepairKit Supply",
+      shortDescription: product.shortDescription,
+      description: product.description || product.shortDescription,
+      status: product.status || "ACTIVE",
+      priceRange: product.priceRange,
       priceCents,
-      product.currency || "usd",
-      product.compareAtPriceCents || null,
-      product.wholesalePriceCents || Math.max(0, priceCents - 400),
-      product.costPriceCents || Math.max(0, Math.round(priceCents * 0.55)),
-      product.allowCoupons === false ? 0 : 1,
-      product.stock ?? defaultStock(index),
-      product.lowStockThreshold || 6,
-      product.weightGrams || null,
-      product.lengthMm || null,
-      product.widthMm || null,
-      product.heightMm || null,
-      product.wholesaleAvailable ? 1 : 0,
-      index < 5 ? 1 : 0,
-      product.tags.includes("Best Seller") || product.tags.includes("Main Profit Kit") ? 1 : 0,
-      product.fitmentType || "SPECIFIC",
-      product.fitmentNote || null,
-      JSON.stringify(product.tags),
-      JSON.stringify(product.compatibleModels),
-      JSON.stringify(product.compatibleEquipment),
-      JSON.stringify(product.problemsSolved),
-      JSON.stringify(product.kitIncludes),
-      product.notCompatibleWith ? JSON.stringify(product.notCompatibleWith) : null,
-      product.specifications ? JSON.stringify(product.specifications) : null,
-      product.faqs ? JSON.stringify(product.faqs) : null,
-      product.images ? JSON.stringify(product.images) : null,
-      product.image || null,
-      product.seoTitle || product.name,
-      product.seoDescription || product.shortDescription,
-      product.seoKeywords || product.tags.join(", "),
-      product.ogImage || product.image || null,
-      now,
-      now
-    );
+      currency: product.currency || "usd",
+      compareAtPriceCents: product.compareAtPriceCents || null,
+      wholesalePriceCents: product.wholesalePriceCents || Math.max(0, priceCents - 400),
+      costPriceCents: product.costPriceCents || Math.max(0, Math.round(priceCents * 0.55)),
+      allowCoupons: product.allowCoupons !== false,
+      stock: product.stock ?? defaultStock(index),
+      lowStockThreshold: product.lowStockThreshold || 6,
+      weightGrams: product.weightGrams || null,
+      lengthMm: product.lengthMm || null,
+      widthMm: product.widthMm || null,
+      heightMm: product.heightMm || null,
+      wholesaleAvailable: Boolean(product.wholesaleAvailable),
+      isFeatured: index < 5,
+      isHotSeller: product.tags.includes("Best Seller") || product.tags.includes("Main Profit Kit"),
+      fitmentType: product.fitmentType || "SPECIFIC",
+      fitmentNote: product.fitmentNote || null,
+      tags: JSON.stringify(product.tags),
+      compatibleModels: JSON.stringify(product.compatibleModels),
+      compatibleEquipment: JSON.stringify(product.compatibleEquipment),
+      problemsSolved: JSON.stringify(product.problemsSolved),
+      kitIncludes: JSON.stringify(product.kitIncludes),
+      notCompatibleWith: product.notCompatibleWith ? JSON.stringify(product.notCompatibleWith) : null,
+      specifications: product.specifications ? JSON.stringify(product.specifications) : null,
+      faqs: product.faqs ? JSON.stringify(product.faqs) : null,
+      images: product.images ? JSON.stringify(product.images) : null,
+      image: product.image || null,
+      seoTitle: product.seoTitle || product.name,
+      seoDescription: product.seoDescription || product.shortDescription,
+      seoKeywords: product.seoKeywords || product.tags.join(", "),
+      ogImage: product.ogImage || product.image || null,
+      createdAt: now,
+      updatedAt: now
+    };
+  });
+  await prisma.product.createMany({ data: productRecords });
+
+  // ---- Initial inventory adjustments ----
+  await prisma.inventoryAdjustment.createMany({
+    data: productRecords.map((product, index) => ({
+      id: id("inventory", index),
+      productId: product.id,
+      type: "INITIAL",
+      quantityDelta: product.stock,
+      stockBefore: 0,
+      stockAfter: product.stock,
+      reason: "Initial seed inventory",
+      reference: "SEED",
+      createdBy: "system",
+      createdAt: now
+    }))
   });
 
-  const inventoryProducts = db.prepare("SELECT id, stock FROM Product ORDER BY rowid ASC").all();
-  const insertInventoryAdjustment = db.prepare(`
-    INSERT INTO InventoryAdjustment (
-      id, productId, type, quantityDelta, stockBefore, stockAfter, reason, reference, createdBy, createdAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-  inventoryProducts.forEach((product, index) => {
-    insertInventoryAdjustment.run(
-      id("inventory", index),
-      product.id,
-      "INITIAL",
-      product.stock,
-      0,
-      product.stock,
-      "Initial seed inventory",
-      "SEED",
-      "system",
-      now
-    );
+  // ---- Reference data: problems / equipment / engine models ----
+  await prisma.problem.createMany({
+    data: problems.map(([slug, title, description], index) => ({
+      id: id("problem", index),
+      slug,
+      title,
+      description,
+      createdAt: now
+    }))
+  });
+  await prisma.equipment.createMany({
+    data: equipment.map(([slug, name, description], index) => ({
+      id: id("equipment", index),
+      slug,
+      name,
+      description,
+      createdAt: now
+    }))
+  });
+  await prisma.engineModel.createMany({
+    data: models.map(([slug, name, description, compatibilityNote], index) => ({
+      id: id("model", index),
+      slug,
+      name,
+      description,
+      compatibilityNote,
+      createdAt: now
+    }))
   });
 
-  const insertProblem = db.prepare("INSERT INTO Problem (id, slug, title, description, createdAt) VALUES (?, ?, ?, ?, ?)");
-  problems.forEach(([slug, title, description], index) => {
-    insertProblem.run(id("problem", index), slug, title, description, now);
-  });
+  const productRows = productRecords.slice(0, 6);
 
-  const insertEquipment = db.prepare("INSERT INTO Equipment (id, slug, name, description, createdAt) VALUES (?, ?, ?, ?, ?)");
-  equipment.forEach(([slug, name, description], index) => {
-    insertEquipment.run(id("equipment", index), slug, name, description, now);
-  });
-
-  const insertModel = db.prepare("INSERT INTO EngineModel (id, slug, name, description, compatibilityNote, createdAt) VALUES (?, ?, ?, ?, ?, ?)");
-  models.forEach(([slug, name, description, compatibilityNote], index) => {
-    insertModel.run(id("model", index), slug, name, description, compatibilityNote, now);
-  });
-
-  const productRows = db.prepare("SELECT id, slug, name, sku, priceCents, currency, image FROM Product ORDER BY rowid ASC LIMIT 6").all();
+  // ---- Sample customers + orders (demo data) ----
   const sampleOrders = [
     {
       orderNumber: "RK-20260604-1001",
@@ -785,7 +382,7 @@ async function main() {
       paymentStatus: "PAID",
       orderStatus: "PROCESSING",
       fulfillmentStatus: "UNFULFILLED",
-      paidAt: now,
+      paidAt: now.toISOString(),
       items: [
         { productIndex: 0, quantity: 2 },
         { productIndex: 4, quantity: 1 }
@@ -805,9 +402,7 @@ async function main() {
       paymentStatus: "PENDING",
       orderStatus: "PROCESSING",
       fulfillmentStatus: "UNFULFILLED",
-      items: [
-        { productIndex: 1, quantity: 1 }
-      ],
+      items: [{ productIndex: 1, quantity: 1 }],
       internalNote: "Waiting for Stripe payment confirmation."
     },
     {
@@ -824,7 +419,7 @@ async function main() {
       orderStatus: "SHIPPED",
       fulfillmentStatus: "SHIPPED",
       paidAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      shippedAt: now,
+      shippedAt: now.toISOString(),
       shippingCarrier: "DHL",
       trackingNumber: "DHL-RK-778899",
       trackingUrl: "https://www.dhl.com/",
@@ -836,33 +431,28 @@ async function main() {
     }
   ];
 
-  const insertCustomer = db.prepare(`
-    INSERT INTO Customer (
-      id, email, name, phone, whatsapp, country, city, address, postalCode,
-      status, role, tags, internalNote, wholesaleApprovedAt, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-  sampleOrders.forEach((order, orderIndex) => {
-    insertCustomer.run(
-      id("customer", orderIndex),
-      order.customerEmail.toLowerCase(),
-      order.customerName,
-      order.customerPhone,
-      order.customerWhatsapp,
-      order.country,
-      order.city,
-      order.shippingAddress,
-      order.postalCode,
-      orderIndex === 2 ? "VIP" : "ACTIVE",
-      orderIndex === 2 ? "WHOLESALE" : "CUSTOMER",
-      JSON.stringify(orderIndex === 2 ? ["Wholesale", "Repair Shop"] : ["Retail"]),
-      orderIndex === 2 ? "Approved wholesale customer." : null,
-      orderIndex === 2 ? new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString() : null,
-      new Date(Date.now() - (orderIndex + 1) * 24 * 60 * 60 * 1000).toISOString(),
-      now
-    );
+  await prisma.customer.createMany({
+    data: sampleOrders.map((order, orderIndex) => ({
+      id: id("customer", orderIndex),
+      email: order.customerEmail.toLowerCase(),
+      name: order.customerName,
+      phone: order.customerPhone,
+      whatsapp: order.customerWhatsapp,
+      country: order.country,
+      city: order.city,
+      address: order.shippingAddress,
+      postalCode: order.postalCode,
+      status: orderIndex === 2 ? "VIP" : "ACTIVE",
+      role: orderIndex === 2 ? "WHOLESALE" : "CUSTOMER",
+      tags: JSON.stringify(orderIndex === 2 ? ["Wholesale", "Repair Shop"] : ["Retail"]),
+      internalNote: orderIndex === 2 ? "Approved wholesale customer." : null,
+      wholesaleApprovedAt: orderIndex === 2 ? new Date(Date.now() - 4 * 24 * 60 * 60 * 1000) : null,
+      createdAt: new Date(Date.now() - (orderIndex + 1) * 24 * 60 * 60 * 1000),
+      updatedAt: now
+    }))
   });
 
+  // ---- Wholesale applications ----
   const wholesaleApplications = [
     {
       customerId: null,
@@ -917,127 +507,79 @@ async function main() {
     }
   ];
 
-  const insertWholesaleApplication = db.prepare(`
-    INSERT INTO WholesaleApplication (
-      id, customerId, companyName, contactName, country, whatsapp, email, businessType,
-      productInterest, estimatedMonthlyQuantity, message, status, adminNote, reviewedBy,
-      reviewedAt, notificationStatus, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  wholesaleApplications.forEach((application, applicationIndex) => {
-    insertWholesaleApplication.run(
-      id("wholesale", applicationIndex),
-      application.customerId,
-      application.companyName,
-      application.contactName,
-      application.country,
-      application.whatsapp,
-      application.email.toLowerCase(),
-      application.businessType,
-      JSON.stringify(application.productInterest),
-      application.estimatedMonthlyQuantity,
-      application.message,
-      application.status,
-      application.adminNote,
-      application.reviewedBy,
-      application.reviewedAt,
-      application.notificationStatus,
-      new Date(Date.now() - applicationIndex * 20 * 60 * 60 * 1000).toISOString(),
-      now
-    );
+  await prisma.wholesaleApplication.createMany({
+    data: wholesaleApplications.map((application, applicationIndex) => ({
+      id: id("wholesale", applicationIndex),
+      customerId: application.customerId,
+      companyName: application.companyName,
+      contactName: application.contactName,
+      country: application.country,
+      whatsapp: application.whatsapp,
+      email: application.email.toLowerCase(),
+      businessType: application.businessType,
+      productInterest: JSON.stringify(application.productInterest),
+      estimatedMonthlyQuantity: application.estimatedMonthlyQuantity,
+      message: application.message,
+      status: application.status,
+      adminNote: application.adminNote,
+      reviewedBy: application.reviewedBy,
+      reviewedAt: application.reviewedAt ? new Date(application.reviewedAt) : null,
+      notificationStatus: application.notificationStatus,
+      createdAt: new Date(Date.now() - applicationIndex * 20 * 60 * 60 * 1000),
+      updatedAt: now
+    }))
   });
 
+  // ---- Coupons ----
   const coupons = [
     {
       id: "coupon_welcome10",
       code: "WELCOME10",
       type: "PERCENTAGE",
       value: 10,
-      isActive: 1,
+      isActive: true,
       minSubtotalCents: 0,
       usageLimit: 500,
       usageCount: 1,
       perCustomerLimit: 1,
-      startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      endsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-      allowWholesaleCustomers: 0
+      startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+      allowWholesaleCustomers: false
     },
     {
       id: "coupon_freeship50",
       code: "FREESHIP50",
       type: "FREE_SHIPPING",
       value: 0,
-      isActive: 1,
+      isActive: true,
       minSubtotalCents: 5000,
       usageLimit: 200,
       usageCount: 0,
       perCustomerLimit: 1,
-      startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      endsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-      allowWholesaleCustomers: 1
+      startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+      allowWholesaleCustomers: true
     },
     {
       id: "coupon_wholesale5",
       code: "WHOLESALE5",
       type: "PERCENTAGE",
       value: 5,
-      isActive: 1,
+      isActive: true,
       minSubtotalCents: 10000,
       usageLimit: null,
       usageCount: 0,
       perCustomerLimit: null,
-      startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      startsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       endsAt: null,
-      allowWholesaleCustomers: 1
+      allowWholesaleCustomers: true
     }
   ];
+  await prisma.coupon.createMany({ data: coupons });
 
-  const insertCoupon = db.prepare(`
-    INSERT INTO Coupon (
-      id, code, type, value, isActive, minSubtotalCents, usageLimit, usageCount,
-      perCustomerLimit, startsAt, endsAt, allowWholesaleCustomers, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  coupons.forEach((coupon) => {
-    insertCoupon.run(
-      coupon.id,
-      coupon.code,
-      coupon.type,
-      coupon.value,
-      coupon.isActive,
-      coupon.minSubtotalCents,
-      coupon.usageLimit,
-      coupon.usageCount,
-      coupon.perCustomerLimit,
-      coupon.startsAt,
-      coupon.endsAt,
-      coupon.allowWholesaleCustomers,
-      now,
-      now
-    );
-  });
-
-  const insertOrder = db.prepare(`
-    INSERT INTO "Order" (
-      id, orderNumber, customerId, couponId, couponCode, couponType, couponValue, couponUsageRecorded,
-      customerName, customerEmail, customerPhone, customerWhatsapp,
-      country, city, shippingAddress, postalCode, currency, subtotalCents, shippingCents,
-      taxCents, discountCents, totalCents, paymentMethod, paymentStatus, orderStatus,
-      fulfillmentStatus, stripeCheckoutSessionId, stripePaymentIntentId, paidAt,
-      shippingCarrier, trackingNumber, trackingUrl, shippedAt, internalNote, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  const insertOrderItem = db.prepare(`
-    INSERT INTO OrderItem (
-      id, orderId, productId, productName, productSlug, sku, unitPriceCents, quantity,
-      subtotalCents, image, createdAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  sampleOrders.forEach((order, orderIndex) => {
+  // ---- Orders + order items ----
+  for (let orderIndex = 0; orderIndex < sampleOrders.length; orderIndex++) {
+    const order = sampleOrders[orderIndex];
     const orderItems = order.items.map((item) => {
       const product = productRows[item.productIndex] || productRows[0];
       return {
@@ -1052,72 +594,75 @@ async function main() {
     const discountCents = orderIndex === 0 ? Math.round(subtotalCents * 0.1) : 0;
     const totalCents = subtotalCents + shippingCents + taxCents - discountCents;
     const orderId = id("order", orderIndex);
-    const createdAt = new Date(Date.now() - orderIndex * 18 * 60 * 60 * 1000).toISOString();
+    const createdAt = new Date(Date.now() - orderIndex * 18 * 60 * 60 * 1000);
 
-    insertOrder.run(
-      orderId,
-      order.orderNumber,
-      id("customer", orderIndex),
-      orderIndex === 0 ? "coupon_welcome10" : null,
-      orderIndex === 0 ? "WELCOME10" : null,
-      orderIndex === 0 ? "PERCENTAGE" : null,
-      orderIndex === 0 ? 10 : null,
-      orderIndex === 0 ? 1 : 0,
-      order.customerName,
-      order.customerEmail,
-      order.customerPhone,
-      order.customerWhatsapp,
-      order.country,
-      order.city,
-      order.shippingAddress,
-      order.postalCode,
-      "usd",
-      subtotalCents,
-      shippingCents,
-      taxCents,
-      discountCents,
-      totalCents,
-      "stripe",
-      order.paymentStatus,
-      order.orderStatus,
-      order.fulfillmentStatus,
-      order.paymentStatus === "PENDING" ? `cs_test_seed_${orderIndex + 1}` : null,
-      order.paymentStatus === "PAID" ? `pi_seed_${orderIndex + 1}` : null,
-      order.paidAt || null,
-      order.shippingCarrier || null,
-      order.trackingNumber || null,
-      order.trackingUrl || null,
-      order.shippedAt || null,
-      order.internalNote,
-      createdAt,
-      now
-    );
-
-    orderItems.forEach((item, itemIndex) => {
-      insertOrderItem.run(
-        id(`order_item_${orderIndex + 1}`, itemIndex),
-        orderId,
-        item.product.id,
-        item.product.name,
-        item.product.slug,
-        item.product.sku,
-        item.product.priceCents,
-        item.quantity,
-        item.subtotalCents,
-        item.product.image || null,
-        createdAt
-      );
+    await prisma.order.create({
+      data: {
+        id: orderId,
+        orderNumber: order.orderNumber,
+        customerId: id("customer", orderIndex),
+        couponId: orderIndex === 0 ? "coupon_welcome10" : null,
+        couponCode: orderIndex === 0 ? "WELCOME10" : null,
+        couponType: orderIndex === 0 ? "PERCENTAGE" : null,
+        couponValue: orderIndex === 0 ? 10 : null,
+        couponUsageRecorded: orderIndex === 0,
+        customerName: order.customerName,
+        customerEmail: order.customerEmail,
+        customerPhone: order.customerPhone,
+        customerWhatsapp: order.customerWhatsapp,
+        country: order.country,
+        city: order.city,
+        shippingAddress: order.shippingAddress,
+        postalCode: order.postalCode,
+        currency: "usd",
+        subtotalCents,
+        shippingCents,
+        taxCents,
+        discountCents,
+        totalCents,
+        paymentMethod: "stripe",
+        paymentStatus: order.paymentStatus,
+        orderStatus: order.orderStatus,
+        fulfillmentStatus: order.fulfillmentStatus,
+        stripeCheckoutSessionId: order.paymentStatus === "PENDING" ? `cs_test_seed_${orderIndex + 1}` : null,
+        stripePaymentIntentId: order.paymentStatus === "PAID" ? `pi_seed_${orderIndex + 1}` : null,
+        paidAt: order.paidAt ? new Date(order.paidAt) : null,
+        shippingCarrier: order.shippingCarrier || null,
+        trackingNumber: order.trackingNumber || null,
+        trackingUrl: order.trackingUrl || null,
+        shippedAt: order.shippedAt ? new Date(order.shippedAt) : null,
+        internalNote: order.internalNote,
+        createdAt,
+        updatedAt: now,
+        items: {
+          create: orderItems.map((item, itemIndex) => ({
+            id: id(`order_item_${orderIndex + 1}`, itemIndex),
+            productId: item.product.id,
+            productName: item.product.name,
+            productSlug: item.product.slug,
+            sku: item.product.sku,
+            unitPriceCents: item.product.priceCents,
+            quantity: item.quantity,
+            subtotalCents: item.subtotalCents,
+            image: item.product.image || null,
+            createdAt
+          }))
+        }
+      }
     });
-  });
+  }
 }
 
 main()
   .then(() => {
-    console.log(`Seeded ${products.length} products, 3 customers, 3 wholesale applications, 3 coupons, 3 orders, ${products.length} inventory records, ${problems.length} problems, ${equipment.length} equipment types and ${models.length} models.`);
-    db.close();
+    console.log(
+      `Seeded ${products.length} products, 3 customers, 3 wholesale applications, 3 coupons, 3 orders, ` +
+        `${products.length} inventory records, ${problems.length} problems, ${equipment.length} equipment types and ${models.length} models.`
+    );
+    return prisma.$disconnect();
   })
-  .catch((error) => {
+  .catch(async (error) => {
     console.error(error);
-    db.close();
+    await prisma.$disconnect();
     process.exit(1);
   });

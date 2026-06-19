@@ -24,7 +24,7 @@ export default async function AdminCouponsPage({
 
   const where = {
     AND: [
-      q ? { code: { contains: q } } : {},
+      q ? { code: { contains: q, mode: "insensitive" as const } } : {},
       type ? { type } : {},
       status === "ACTIVE"
         ? { isActive: true }

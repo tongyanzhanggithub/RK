@@ -1,0 +1,28 @@
+# 本地开发用 PostgreSQL —— 与生产(阿里云 RDS PostgreSQL)同引擎，避免"本地能跑线上炸"。
+# 用法：
+#   docker compose -f docker-compose.dev.yml up -d     # 启动
+#   npx prisma db push                                  # 建表
+#   npm run db:seed                                     # 写入种子数据
+#   docker compose -f docker-compose.dev.yml down       # 停止(保留数据)
+#   docker compose -f docker-compose.dev.yml down -v    # 停止并清空数据
+services:
+  postgres:
+    image: postgres:16
+    container_name: rk-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rk
+      POSTGRES_PASSWORD: rk_dev_password
+      POSTGRES_DB: rk
+    ports:
+      - "5432:5432"
+    volumes:
+      - rk_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rk -d rk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  rk_pgdata:

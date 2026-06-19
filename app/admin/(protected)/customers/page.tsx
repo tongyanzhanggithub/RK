@@ -38,9 +38,9 @@ export default async function AdminCustomersPage({
           q
             ? {
                 OR: [
-                  { name: { contains: q } },
-                  { email: { contains: q } },
-                  { phone: { contains: q } }
+                  { name: { contains: q, mode: "insensitive" as const } },
+                  { email: { contains: q, mode: "insensitive" as const } },
+                  { phone: { contains: q, mode: "insensitive" as const } }
                 ]
               }
             : {},
