@@ -9,6 +9,7 @@ import { RegionSwitcher } from "@/components/region-switcher";
 import { useLanguage } from "@/components/language-provider";
 import { MyEngineChip } from "@/components/my-engine-chip";
 import { SearchBox } from "@/components/search-box";
+import { Logo } from "@/components/logo";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 
 export function SiteHeader() {
@@ -37,12 +38,8 @@ export function SiteHeader() {
         </div>
       </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-4 lg:grid-cols-[280px_1fr_auto] lg:items-center">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center bg-navy text-xl font-black text-white">PV</span>
-          <span>
-            <strong className="block text-xl leading-tight">Partavio</strong>
-            <small className="font-bold uppercase text-steel">{h.tagline}</small>
-          </span>
+        <Link href="/" className="flex items-center gap-3" aria-label="Partavio home">
+          <Logo />
         </Link>
         <SearchBox />
         <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">

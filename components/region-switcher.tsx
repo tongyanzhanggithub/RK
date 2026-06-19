@@ -18,7 +18,7 @@ export function RegionSwitcher({ className = "" }: { className?: string }) {
       >
         {COUNTRIES.map((c) => (
           <option key={c.code} value={c.code} className="text-ink">
-            {c.name}{c.currency !== "USD" ? ` · ${c.currency}` : ""}
+            {c.name} · {c.currency}
           </option>
         ))}
       </select>

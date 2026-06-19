@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Mail, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { CONTACT_EMAIL, GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
+import { Logo } from "@/components/logo";
 
 export function SiteFooter() {
   const { dict } = useLanguage();
@@ -14,7 +15,7 @@ export function SiteFooter() {
     <footer className="bg-ink px-4 py-12 text-white">
       <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <strong className="text-xl">Partavio</strong>
+          <Logo light />
           <p className="mt-2 max-w-md text-sm leading-6 text-white/70">{f.description}</p>
           <p className="mt-4 text-sm leading-6 text-white/70">{f.logistics}</p>
         </div>

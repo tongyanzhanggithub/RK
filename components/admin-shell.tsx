@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BarChart3, Boxes, FileText, FileSpreadsheet, GalleryHorizontalEnd, LayoutDashboard, MessageSquareQuote, Package, RotateCcw, Settings, ShoppingBag, Star, Stethoscope, Tag, Target, Ticket, Users } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/auth-actions";
+import { LogoMark } from "@/components/logo";
 
 const activeItems = [
   ["仪表盘", "/admin/dashboard", LayoutDashboard],
@@ -30,7 +31,7 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
       <aside className="border-r border-line bg-ink text-white">
         <div className="border-b border-white/10 p-5">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center bg-safety text-xl font-black text-ink">PV</span>
+            <LogoMark size={44} />
             <span>
               <strong className="block text-lg leading-tight">管理后台</strong>
               <small className="font-bold uppercase text-white/60">Partavio</small>

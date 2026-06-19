@@ -44,7 +44,7 @@ export type Country = { code: string; name: string; currency: string; vat?: stri
 // Curated list covering the store's target markets + majors. Anything not listed
 // falls back to International (USD). `vat` is a short display note only.
 export const COUNTRIES: Country[] = [
-  { code: "INTL", name: "International (USD)", currency: "USD" },
+  { code: "INTL", name: "International", currency: "USD" },
   { code: "US", name: "United States", currency: "USD" },
   { code: "GB", name: "United Kingdom", currency: "GBP", vat: "Prices exclude 20% UK VAT" },
   // Middle East
