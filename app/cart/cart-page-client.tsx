@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, ShieldCheck, TicketPercent, Trash2 } from "lucide-react";
+import { Banknote, Minus, Plus, ShieldCheck, TicketPercent, Trash2 } from "lucide-react";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { TrustBadges } from "@/components/trust-badges";
 import { useCart } from "@/components/cart-provider";
@@ -60,6 +60,9 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
   const shippingCents = SHIPPING_CENTS;
   const discountCents = appliedCoupon?.discountCents || 0;
   const estimatedTotal = subtotal + shippingCents - discountCents;
+  // Nudge likely-wholesale orders toward bank transfer (T/T), which avoids card
+  // processing fees. Threshold in USD cents, or a high quantity.
+  const isBulkOrder = subtotal >= 15000 || totalQuantity >= 10;
 
   const cartSlugs = new Set(lines.map((line) => line.product.slug));
   const cartModels = new Set(lines.flatMap((line) => line.product.compatibleModels));
@@ -334,6 +337,19 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                   {c.gfit_summary.replace("{n}", String(guaranteedCount))}
                 </Link>
               )}
+              {isBulkOrder && (
+                <Link
+                  href="/quote"
+                  className="mt-6 flex items-start gap-2 border border-navy bg-panel p-3 text-sm leading-5 hover:bg-white"
+                >
+                  <Banknote size={18} className="mt-0.5 shrink-0 text-navy" />
+                  <span>
+                    <span className="font-black text-navy">{c.bulk_title}</span>
+                    <span className="mt-0.5 block font-bold text-steel">{c.bulk_desc}</span>
+                    <span className="mt-1 block font-black text-navy underline">{c.bulk_cta} →</span>
+                  </span>
+                </Link>
+              )}
               {paymentOptions.length === 0 ? (
                 <p className="mt-6 border border-amber-300 bg-amber-50 p-3 text-sm font-bold text-amber-800">
                   暂未配置支付方式，请联系我们下单。
@@ -356,7 +372,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                       className={`${base} ${tone} ${index === 0 ? "mt-6" : ""}`}
                     >
                       {!isPaypal && <ShieldCheck size={18} />}
-                      {busy ? c.checking_out : isPaypal ? "PayPal" : option.label}
+                      {busy ? c.checking_out : isPaypal ? "PayPal" : c.checkout_btn}
                     </button>
                   );
                 })
