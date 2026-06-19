@@ -29,7 +29,14 @@ const CURRENCIES: Record<string, CurrencyInfo> = {
   PHP: { symbol: "₱", rate: 58, decimals: 2 },
   SGD: { symbol: "S$", rate: 1.35, decimals: 2, chargeable: true },
   INR: { symbol: "₹", rate: 83, decimals: 2 },
-  PKR: { symbol: "₨", rate: 278, decimals: 0 }
+  PKR: { symbol: "₨", rate: 278, decimals: 0 },
+  OMR: { symbol: "OMR ", rate: 0.385, decimals: 3 },
+  BHD: { symbol: "BHD ", rate: 0.376, decimals: 3 },
+  EGP: { symbol: "EGP ", rate: 49, decimals: 2 },
+  JOD: { symbol: "JOD ", rate: 0.709, decimals: 3 },
+  IQD: { symbol: "IQD ", rate: 1310, decimals: 0 },
+  KGS: { symbol: "KGS ", rate: 87, decimals: 0 },
+  TJS: { symbol: "TJS ", rate: 10.9, decimals: 2 }
 };
 
 export type Country = { code: string; name: string; currency: string; vat?: string };
@@ -45,16 +52,16 @@ export const COUNTRIES: Country[] = [
   { code: "SA", name: "Saudi Arabia", currency: "SAR", vat: "Prices exclude 15% VAT" },
   { code: "QA", name: "Qatar", currency: "QAR" },
   { code: "KW", name: "Kuwait", currency: "KWD" },
-  { code: "OM", name: "Oman", currency: "USD" },
-  { code: "BH", name: "Bahrain", currency: "USD" },
-  { code: "EG", name: "Egypt", currency: "USD" },
-  { code: "JO", name: "Jordan", currency: "USD" },
-  { code: "IQ", name: "Iraq", currency: "USD" },
+  { code: "OM", name: "Oman", currency: "OMR" },
+  { code: "BH", name: "Bahrain", currency: "BHD" },
+  { code: "EG", name: "Egypt", currency: "EGP" },
+  { code: "JO", name: "Jordan", currency: "JOD" },
+  { code: "IQ", name: "Iraq", currency: "IQD" },
   // Central Asia
   { code: "KZ", name: "Kazakhstan", currency: "KZT" },
   { code: "UZ", name: "Uzbekistan", currency: "UZS" },
-  { code: "KG", name: "Kyrgyzstan", currency: "USD" },
-  { code: "TJ", name: "Tajikistan", currency: "USD" },
+  { code: "KG", name: "Kyrgyzstan", currency: "KGS" },
+  { code: "TJ", name: "Tajikistan", currency: "TJS" },
   // Southeast Asia
   { code: "MY", name: "Malaysia", currency: "MYR", vat: "Prices exclude SST" },
   { code: "ID", name: "Indonesia", currency: "IDR", vat: "Prices exclude 11% PPN" },
