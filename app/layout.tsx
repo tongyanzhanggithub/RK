@@ -10,6 +10,8 @@ import { RegionProvider } from "@/components/region-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
+import { RTL_LOCALES } from "@/lib/i18n";
+import { getServerLocale } from "@/lib/locale";
 import { getServerCountry } from "@/lib/region-server";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
@@ -41,11 +43,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const country = getServerCountry();
+  const locale = getServerLocale();
+  const dir = RTL_LOCALES.includes(locale) ? "rtl" : "ltr";
   return (
-    <html lang="en">
+    <html lang={locale} dir={dir}>
       <body>
         <Analytics />
-        <LanguageProvider>
+        <LanguageProvider initialLocale={locale}>
           <RegionProvider initialCountryCode={country.code} chargeEnabled={process.env.STRIPE_MULTICURRENCY === "1"}>
             <EngineProvider>
               <CartProvider>

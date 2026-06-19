@@ -1,4 +1,7 @@
-export type Locale = "en" | "zh";
+export type Locale = "en" | "zh" | "ar" | "ru";
+
+/** Right-to-left locales (Arabic). */
+export const RTL_LOCALES: Locale[] = ["ar"];
 
 export const LOCALE_COOKIE = "rk-locale";
 
@@ -746,9 +749,82 @@ const zh: typeof en = {
   }
 };
 
-const dicts = { en, zh } as const;
-
 export type Dict = typeof en;
+
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
+
+// Deep-merge translated sections over the full English dict, so ar/ru are
+// structurally complete (English fallback for anything not yet translated).
+function deepMerge<T>(base: T, overrides: DeepPartial<T>): T {
+  const out: any = { ...(base as any) };
+  for (const key of Object.keys(overrides as any)) {
+    const o = (overrides as any)[key];
+    const b = (base as any)[key];
+    out[key] = o && typeof o === "object" && !Array.isArray(o) && b && typeof b === "object"
+      ? deepMerge(b, o)
+      : o;
+  }
+  return out as T;
+}
+
+// 阿拉伯语(RTL):翻译高频导航/页眉/Cookie;其余暂用英文兜底,可后续补全。
+const arOverrides: DeepPartial<Dict> = {
+  locale: "ar" as Locale,
+  header: {
+    topbar_left: "قطع غيار المحركات والمحركات الكاملة مباشرة من المصنع — تشونغتشينغ، الصين",
+    topbar_right: "نخدم الشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا",
+    tagline: "مورّد قطع غيار المحركات مباشرة من المصنع",
+    quote: "اطلب عرض سعر"
+  },
+  nav: {
+    home: "الرئيسية",
+    products: "المنتجات",
+    engines: "تسوّق حسب المحرك",
+    problems: "استكشاف الأعطال",
+    guides: "أدلة الإصلاح",
+    wholesale: "الجملة / طلب عرض سعر",
+    cart: "السلة",
+    account: "حسابي"
+  },
+  cookie: {
+    text: "نستخدم ملفات تعريف الارتباط لتشغيل الموقع (السلة واللغة)، وبموافقتك، لإحصاءات أساسية.",
+    accept: "موافق",
+    decline: "رفض",
+    learn_more: "سياسة الخصوصية"
+  }
+};
+
+// Русский: переведены навигация/шапка/cookie; остальное пока на английском (можно дополнить).
+const ruOverrides: DeepPartial<Dict> = {
+  locale: "ru" as Locale,
+  header: {
+    topbar_left: "Запчасти и двигатели напрямую с завода — Чунцин, Китай",
+    topbar_right: "Обслуживаем Ближний Восток, Центральную Азию и Юго-Восточную Азию",
+    tagline: "Поставщик запчастей для двигателей напрямую с завода",
+    quote: "Запросить цену"
+  },
+  nav: {
+    home: "Главная",
+    products: "Товары",
+    engines: "Подбор по двигателю",
+    problems: "Устранение неисправностей",
+    guides: "Руководства по ремонту",
+    wholesale: "Опт / запрос цены",
+    cart: "Корзина",
+    account: "Аккаунт"
+  },
+  cookie: {
+    text: "Мы используем файлы cookie для работы сайта (корзина, язык) и, с вашего согласия, для базовой аналитики.",
+    accept: "Принять",
+    decline: "Отклонить",
+    learn_more: "Политика конфиденциальности"
+  }
+};
+
+const ar: Dict = deepMerge(en, arOverrides);
+const ru: Dict = deepMerge(en, ruOverrides);
+
+const dicts: Record<Locale, Dict> = { en, zh, ar, ru };
 
 export function getDict(locale: Locale): Dict {
   return dicts[locale] ?? dicts.en;

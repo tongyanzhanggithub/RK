@@ -1,26 +1,30 @@
 "use client";
 
 import { useLanguage } from "@/components/language-provider";
+import type { Locale } from "@/lib/i18n";
+
+const LOCALES: [Locale, string][] = [
+  ["en", "EN"],
+  ["zh", "中"],
+  ["ar", "ع"],
+  ["ru", "RU"]
+];
 
 export function LanguageSwitcher() {
   const { locale, setLocale } = useLanguage();
 
   return (
     <div className="inline-flex border border-white/30 text-xs font-black">
-      <button
-        type="button"
-        onClick={() => setLocale("en")}
-        className={`px-2 py-1 ${locale === "en" ? "bg-safety text-ink" : "text-white hover:bg-white/10"}`}
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        onClick={() => setLocale("zh")}
-        className={`px-2 py-1 ${locale === "zh" ? "bg-safety text-ink" : "text-white hover:bg-white/10"}`}
-      >
-        中
-      </button>
+      {LOCALES.map(([code, label]) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => setLocale(code)}
+          className={`px-2 py-1 ${locale === code ? "bg-safety text-ink" : "text-white hover:bg-white/10"}`}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 }
