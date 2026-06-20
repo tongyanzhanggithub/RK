@@ -32,8 +32,12 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   const slide = slides[index];
 
   return (
+    // translate="no" + notranslate: opt this autoplaying region out of browser
+    // auto-translate, which rewrites text nodes and crashes React's slide-swap
+    // (removeChild NotFoundError). Hero copy is already localized via our i18n.
     <section
-      className="hero-gradient relative overflow-hidden px-4 py-20 text-white"
+      translate="no"
+      className="hero-gradient notranslate relative overflow-hidden px-4 py-20 text-white"
       aria-roledescription="carousel"
       aria-label="Featured highlights"
       onMouseEnter={() => setPaused(true)}
