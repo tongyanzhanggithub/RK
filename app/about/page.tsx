@@ -41,7 +41,7 @@ export default function AboutPage() {
         <section className="mt-8 border border-line bg-panel p-6">
           <h2 className="text-2xl font-black">How we work</h2>
           <p className="mt-3 leading-7 text-steel">
-            Retail trial orders go through Stripe checkout and ship by international courier. Wholesale buyers send a
+            Retail trial orders go through secure online checkout and ship by international courier. Wholesale buyers send a
             model list on WhatsApp and receive factory pricing, MOQ, carton plans and freight options — usually the
             same day. OEM and private-label packaging are available for established partners.
           </p>

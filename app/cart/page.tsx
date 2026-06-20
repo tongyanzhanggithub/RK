@@ -5,7 +5,7 @@ import { getStoreProducts } from "@/lib/product-store";
 
 export const metadata: Metadata = {
   title: "Cart",
-  description: "Review repair kits and continue to secure Stripe checkout."
+  description: "Review repair kits and continue to secure checkout."
 };
 
 export const dynamic = "force-dynamic";

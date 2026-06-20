@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Checkout Success",
-  description: "Stripe checkout completed successfully."
+  description: "Checkout completed successfully."
 };
 
 export default async function CheckoutSuccessPage({

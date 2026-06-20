@@ -156,7 +156,7 @@ const en = {
   cart: {
     badge: "Secure checkout",
     heading: "Cart",
-    subtext: "Review repair kits before secure Stripe checkout. Prices are sample-order prices; bulk quotes can be handled later.",
+    subtext: "Review repair kits before secure checkout. Prices are sample-order prices; bulk quotes can be handled later.",
     empty_heading: "Your cart is empty",
     empty_sub: "Add repair kits from the product list or product detail page.",
     browse: "Browse Products",
@@ -219,11 +219,11 @@ const en = {
     refunded: "Payment Refunded",
     in_progress: "Confirmation In Progress",
     thanks: "Thanks for your order",
-    msg_paid: "Stripe confirmed your payment and the order is ready for processing.",
-    msg_failed: "Stripe could not complete this payment. Please contact us or place the order again.",
-    msg_refunded: "Stripe reports that this order has been refunded.",
+    msg_paid: "Your payment was confirmed and the order is ready for processing.",
+    msg_failed: "The payment could not be completed. Please contact us or place the order again.",
+    msg_refunded: "This order has been refunded.",
     msg_pending:
-      "Checkout is complete. Stripe payment confirmation may take a moment, and the order will update automatically.",
+      "Checkout is complete. Payment confirmation may take a moment, and the order will update automatically.",
     order_number: "Order Number",
     payment_status: "Payment Status",
     order_total: "Order Total",
@@ -303,18 +303,18 @@ const en = {
     terms: [
       { h: "1. Who you are buying from", p: "This store is operated by the company named above (the \"Company\", \"we\", \"us\"). By browsing or ordering you accept these terms." },
       { h: "2. Orders & acceptance", p: "An order is an offer to buy. A contract forms when we confirm the order. We may decline or cancel an order (e.g. pricing error, stock, suspected fraud) and refund any payment taken." },
-      { h: "3. Prices & payment", p: "Retail prices are shown per listing; wholesale pricing is quoted separately. Card payments are processed securely by Stripe — we never see or store your full card details. Taxes/duties may apply by destination." },
+      { h: "3. Prices & payment", p: "Retail prices are shown per listing; wholesale pricing is quoted separately. Card payments are processed securely by our payment provider — we never see or store your full card details. Taxes/duties may apply by destination." },
       { h: "4. Shipping & delivery", p: "Delivery times and methods are described on our Shipping Policy page. Risk passes on delivery; title passes once payment clears." },
       { h: "5. Returns & warranty", p: "Returns and our fitment guarantee are described on the Returns & Warranty and Guaranteed Fit pages. Statutory consumer rights are not affected." },
       { h: "6. Acceptable use & IP", p: "Do not misuse the site or attempt to disrupt it. Site content, logos and product data are owned by the Company or its suppliers and may not be copied without permission." },
       { h: "7. Liability & governing law", p: "Nothing here limits liability that cannot be limited by law. Otherwise our liability for any order is limited to the amount you paid for it. Disputes are governed by the laws of the Company's registered jurisdiction." }
     ],
     privacy: [
-      { h: "1. Information we collect", p: "Contact details (name, email, phone/WhatsApp), shipping address, order history, and messages you send us. Payment card data is collected directly by Stripe, not by us." },
+      { h: "1. Information we collect", p: "Contact details (name, email, phone/WhatsApp), shipping address, order history, and messages you send us. Payment card data is collected directly by our payment provider, not by us." },
       { h: "2. How we use it", p: "To process and ship orders, provide support, prevent fraud, meet legal/customs obligations, and (if you opt in) send order updates." },
-      { h: "3. Payments", p: "Card payments are handled by Stripe under their privacy terms. We receive only the result (paid/failed) and limited details needed to manage your order — never your full card number." },
+      { h: "3. Payments", p: "Card payments are handled by our payment provider under their privacy terms. We receive only the result (paid/failed) and limited details needed to manage your order — never your full card number." },
       { h: "4. Cookies & analytics", p: "We use a small session cookie for login/language and your cart (stored in your browser). If analytics is enabled, aggregate, non-identifying usage data may be collected; no advertising profiles are sold." },
-      { h: "5. Sharing", p: "We share data only with providers needed to fulfil your order (e.g. Stripe for payment, carriers for delivery). We do not sell your personal data." },
+      { h: "5. Sharing", p: "We share data only with providers needed to fulfil your order (e.g. our payment provider, carriers for delivery). We do not sell your personal data." },
       { h: "6. Retention & your rights", p: "We keep order records as required for tax/accounting. You may request access to, correction of, or deletion of your data by emailing us; we respond within a reasonable period." },
       { h: "7. Contact", p: "Questions about your data? Email us using the address on the Contact page." }
     ]
@@ -364,7 +364,7 @@ const en = {
   cancel: {
     badge: "Checkout Canceled",
     heading: "Your cart was kept",
-    body: "No payment was completed. You can review quantities, remove items or try Stripe Checkout again.",
+    body: "No payment was completed. You can review quantities, remove items or try checkout again.",
     back_to_cart: "Back to Cart"
   },
   finder: {
@@ -530,7 +530,7 @@ const zh: typeof en = {
   cart: {
     badge: "安全结账",
     heading: "购物车",
-    subtext: "通过 Stripe 安全结账前请确认维修套件。价格为试样订单价格；批量报价可后续处理。",
+    subtext: "安全结账前请确认维修套件。价格为试样订单价格；批量报价可后续处理。",
     empty_heading: "购物车为空",
     empty_sub: "请从产品列表或产品详情页添加维修套件。",
     browse: "浏览产品",
@@ -588,10 +588,10 @@ const zh: typeof en = {
     refunded: "已退款",
     in_progress: "确认处理中",
     thanks: "感谢您的订单",
-    msg_paid: "Stripe 已确认您的付款，订单正在处理中。",
-    msg_failed: "Stripe 无法完成此次付款，请联系我们或重新下单。",
-    msg_refunded: "Stripe 报告此订单已退款。",
-    msg_pending: "结账已完成。Stripe 付款确认可能需要片刻，订单将自动更新。",
+    msg_paid: "您的付款已确认，订单正在处理中。",
+    msg_failed: "本次付款未能完成，请联系我们或重新下单。",
+    msg_refunded: "此订单已退款。",
+    msg_pending: "结账已完成。付款确认可能需要片刻，订单将自动更新。",
     order_number: "订单编号",
     payment_status: "付款状态",
     order_total: "订单总额",
@@ -671,18 +671,18 @@ const zh: typeof en = {
     terms: [
       { h: "1. 你在向谁购买", p: "本店由上方所列公司（“本公司”“我们”）运营。浏览或下单即表示你接受本条款。" },
       { h: "2. 订单与受理", p: "下单为购买要约，我们确认订单后合同成立。我们可拒绝或取消订单（如标价错误、缺货、疑似欺诈）并退还已收款项。" },
-      { h: "3. 价格与支付", p: "零售价见各商品页，批发价单独报价。银行卡支付由 Stripe 安全处理 —— 我们不会看到或存储你的完整卡号。按目的地可能产生税费/关税。" },
+      { h: "3. 价格与支付", p: "零售价见各商品页，批发价单独报价。银行卡支付由支付服务商安全处理 —— 我们不会看到或存储你的完整卡号。按目的地可能产生税费/关税。" },
       { h: "4. 运输与配送", p: "配送时效与方式见《配送政策》页。风险于交付时转移；款项结清后所有权转移。" },
       { h: "5. 退货与保修", p: "退货与适配保证见《退换及保修》和《保证适配》页。法定消费者权利不受影响。" },
       { h: "6. 使用规范与知识产权", p: "请勿滥用或干扰本网站。站内内容、标识与产品数据归本公司或其供应商所有，未经许可不得复制。" },
       { h: "7. 责任与适用法律", p: "法律规定不可限制的责任不受本条款限制；除此之外，我们对任一订单的责任以你为该订单支付的金额为限。争议适用本公司注册地法律。" }
     ],
     privacy: [
-      { h: "1. 我们收集的信息", p: "联系信息（姓名、邮箱、电话/WhatsApp）、收货地址、订单记录以及你发给我们的消息。银行卡信息由 Stripe 直接收集，我们不经手。" },
+      { h: "1. 我们收集的信息", p: "联系信息（姓名、邮箱、电话/WhatsApp）、收货地址、订单记录以及你发给我们的消息。银行卡信息由支付服务商直接收集，我们不经手。" },
       { h: "2. 信息用途", p: "用于处理与发运订单、提供支持、防范欺诈、履行法律/海关义务，以及（在你同意时）发送订单通知。" },
-      { h: "3. 支付", p: "银行卡支付由 Stripe 按其隐私条款处理。我们仅获得结果（成功/失败）及管理订单所需的有限信息 —— 绝不包含完整卡号。" },
+      { h: "3. 支付", p: "银行卡支付由支付服务商按其隐私条款处理。我们仅获得结果（成功/失败）及管理订单所需的有限信息 —— 绝不包含完整卡号。" },
       { h: "4. Cookie 与分析", p: "我们使用少量会话 Cookie 用于登录/语言，购物车存于你的浏览器。若启用了分析，仅收集聚合、不可识别个人的使用数据；不出售广告画像。" },
-      { h: "5. 信息共享", p: "我们仅与履行订单所必需的服务商共享数据（如 Stripe 支付、承运商配送），不出售你的个人数据。" },
+      { h: "5. 信息共享", p: "我们仅与履行订单所必需的服务商共享数据（如支付服务商、承运商配送），不出售你的个人数据。" },
       { h: "6. 留存与你的权利", p: "出于税务/会计要求我们会保留订单记录。你可发邮件要求查阅、更正或删除你的数据，我们将在合理期限内回应。" },
       { h: "7. 联系", p: "关于数据的问题？请用《联系我们》页上的邮箱与我们联系。" }
     ]
@@ -732,7 +732,7 @@ const zh: typeof en = {
   cancel: {
     badge: "结账已取消",
     heading: "您的购物车已保留",
-    body: "未完成任何付款。您可以重新确认数量、删除商品或再次尝试 Stripe 结账。",
+    body: "未完成任何付款。您可以重新确认数量、删除商品或再次尝试结账。",
     back_to_cart: "返回购物车"
   },
   finder: {

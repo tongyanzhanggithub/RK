@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Checkout Canceled",
-  description: "Stripe checkout was canceled."
+  description: "Checkout was canceled."
 };
 
 export default function CheckoutCancelPage() {
