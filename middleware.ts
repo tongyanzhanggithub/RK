@@ -28,6 +28,11 @@ function edgeCountry(request: NextRequest) {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  // Expose the path to server components (root layout reads this to skip the
+  // storefront chrome on /admin pages).
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", pathname);
+
   if (pathname.startsWith("/admin")) {
     // Enforce IP allowlist (if configured) on the entire admin area, login included.
     if (ADMIN_IP_ALLOWLIST.length > 0) {
@@ -43,12 +48,12 @@ export function middleware(request: NextRequest) {
         const loginUrl = request.nextUrl.clone();
         loginUrl.pathname = "/admin/login";
         loginUrl.searchParams.set("next", pathname);
-        return NextResponse.rewrite(loginUrl);
+        return NextResponse.rewrite(loginUrl, { request: { headers: requestHeaders } });
       }
     }
   }
 
-  const response = NextResponse.next();
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
 
   // Seed the region cookie once from edge geo. Manual switching overwrites it
   // client-side; we never override an existing value.

@@ -89,7 +89,7 @@ export default async function AdminDashboardPage() {
         <div>
           <p className="font-black uppercase text-brand">仪表盘</p>
           <h1 className="text-4xl font-black">后台总览</h1>
-          <p className="mt-3 text-steel">Admin 第 5 阶段新增了批发申请、审核决策与批发客户角色。</p>
+          <p className="mt-3 text-steel">店铺经营概览：销售、订单、库存、客户与批发申请一览。</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/admin/orders" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">

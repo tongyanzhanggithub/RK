@@ -10,6 +10,7 @@ import { RegionProvider } from "@/components/region-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
+import { headers } from "next/headers";
 import { RTL_LOCALES } from "@/lib/i18n";
 import { getServerLocale } from "@/lib/locale";
 import { getServerCountry } from "@/lib/region-server";
@@ -45,6 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const country = getServerCountry();
   const locale = getServerLocale();
   const dir = RTL_LOCALES.includes(locale) ? "rtl" : "ltr";
+  // The admin area has its own shell — render it without the storefront chrome.
+  const isAdmin = (headers().get("x-pathname") || "").startsWith("/admin");
   return (
     <html lang={locale} dir={dir}>
       <body>
@@ -54,11 +57,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <EngineProvider>
               <CartProvider>
                 <QuoteProvider>
-                  <SiteHeader />
-                  {children}
-                  <SiteFooter />
-                  <WhatsAppFloat />
-                  <CookieConsent />
+                  {isAdmin ? (
+                    children
+                  ) : (
+                    <>
+                      <SiteHeader />
+                      {children}
+                      <SiteFooter />
+                      <WhatsAppFloat />
+                      <CookieConsent />
+                    </>
+                  )}
                 </QuoteProvider>
               </CartProvider>
             </EngineProvider>
