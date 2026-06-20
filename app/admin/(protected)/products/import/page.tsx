@@ -14,7 +14,7 @@ export default function AdminProductImportPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">产品</p>
+          <p className="font-black uppercase text-brand">产品</p>
           <h1 className="text-4xl font-black">批量导入产品</h1>
           <p className="mt-3 max-w-3xl text-steel">
             按 <strong>slug</strong> 匹配：已存在则更新，不存在则新增。先「导出 CSV」拿到模板最稳妥。

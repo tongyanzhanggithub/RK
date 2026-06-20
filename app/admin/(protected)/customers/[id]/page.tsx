@@ -37,7 +37,7 @@ export default async function AdminCustomerDetailPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">客户</p>
+          <p className="font-black uppercase text-brand">客户</p>
           <h1 className="text-4xl font-black">{customer.name}</h1>
           <p className="mt-3 text-steel">{customer.email}</p>
         </div>

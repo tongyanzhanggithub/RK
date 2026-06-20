@@ -24,7 +24,7 @@ export default async function AddressesPage() {
       <div className="mx-auto max-w-3xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-safety">My account</p>
+            <p className="font-black uppercase text-brand">My account</p>
             <h1 className="text-4xl font-black">Shipping addresses</h1>
             <p className="mt-2 text-steel">Save the addresses you ship to — the default one is used first at checkout.</p>
           </div>
@@ -34,7 +34,7 @@ export default async function AddressesPage() {
         </div>
 
         <div className="mt-6">
-          <Link href="/account/addresses/new" className="inline-flex h-11 items-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400">
+          <Link href="/account/addresses/new" className="inline-flex h-11 items-center gap-2 bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
             <Plus size={18} /> Add address
           </Link>
         </div>

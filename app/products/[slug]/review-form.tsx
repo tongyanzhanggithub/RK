@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex min-h-[2.75rem] items-center justify-center bg-safety px-5 py-1.5 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
+      className="inline-flex min-h-[2.75rem] items-center justify-center bg-brand px-5 py-1.5 font-black text-white hover:bg-[#1c54bf] disabled:opacity-60"
     >
       {pending ? "Submitting..." : "Submit review"}
     </button>
@@ -46,7 +46,7 @@ export function ReviewForm({ productSlug }: { productSlug: string }) {
             aria-label={`${i} star${i > 1 ? "s" : ""}`}
             className="p-0.5"
           >
-            <Star size={24} className={i <= rating ? "fill-safety text-safety" : "fill-none text-steel"} />
+            <Star size={24} className={i <= rating ? "fill-brand text-brand" : "fill-none text-steel"} />
           </button>
         ))}
       </div>

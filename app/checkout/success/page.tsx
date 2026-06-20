@@ -48,7 +48,7 @@ export default async function CheckoutSuccessPage({
         ) : (
           <Clock3 className="mx-auto text-amber-600" size={56} />
         )}
-        <p className="mt-5 font-black uppercase text-safety">{statusLabel}</p>
+        <p className="mt-5 font-black uppercase text-brand">{statusLabel}</p>
         <h1 className="mt-2 text-4xl font-black">{ck.thanks}</h1>
         <p className="mt-4 text-steel">{statusMessage}</p>
         {order && (
@@ -95,7 +95,7 @@ export default async function CheckoutSuccessPage({
           </div>
         )}
         <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Link href="/products" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+          <Link href="/products" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
             {dict.common.continue_shopping}
           </Link>
           <Link href="/" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-panel">

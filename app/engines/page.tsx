@@ -34,7 +34,7 @@ export default async function EnginesPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
-        <p className="font-black uppercase text-safety">{e.badge}</p>
+        <p className="font-black uppercase text-brand">{e.badge}</p>
         <h1 className="mt-1 text-4xl font-black">{e.main_heading}</h1>
         <p className="mt-3 max-w-3xl text-steel">{e.main_sub}</p>
         <div className="mt-8">

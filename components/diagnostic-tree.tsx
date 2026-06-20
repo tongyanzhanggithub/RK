@@ -66,7 +66,7 @@ export function DiagnosticTree({
           <button
             type="button"
             onClick={() => setStarted(true)}
-            className="mt-4 inline-flex h-11 items-center gap-2 bg-safety px-5 font-black text-ink hover:bg-amber-400"
+            className="mt-4 inline-flex h-11 items-center gap-2 bg-brand px-5 font-black text-white hover:bg-[#1c54bf]"
           >
             {strings.start} <ArrowRight size={16} />
           </button>

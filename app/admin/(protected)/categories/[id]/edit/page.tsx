@@ -26,7 +26,7 @@ export default async function EditCategoryPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">分类</p>
+          <p className="font-black uppercase text-brand">分类</p>
           <h1 className="text-4xl font-black">{category.name}</h1>
           <p className="mt-3 text-steel">编辑分类名称、slug、排序与显示状态。</p>
         </div>

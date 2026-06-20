@@ -27,7 +27,7 @@ export default async function AdminReturnsPage() {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">退货</p>
+          <p className="font-black uppercase text-brand">退货</p>
           <h1 className="text-4xl font-black">退货 / 售后管理</h1>
           <p className="mt-3 text-steel">处理 RMA：批准、收货、退款 / 换货。在订单详情页推进每一笔。</p>
         </div>

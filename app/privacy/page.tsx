@@ -13,7 +13,7 @@ export default function PrivacyPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-3xl">
-        <p className="font-black uppercase text-safety">{L.privacy_title}</p>
+        <p className="font-black uppercase text-brand">{L.privacy_title}</p>
         <h1 className="mt-1 text-4xl font-black">{L.privacy_title}</h1>
         <p className="mt-3 text-lg leading-8 text-steel">{L.privacy_intro}</p>
         <div className="mt-8 grid gap-6">

@@ -150,7 +150,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-safety">{c.badge}</p>
+            <p className="font-black uppercase text-brand">{c.badge}</p>
             <h1 className="text-4xl font-black">{c.heading}</h1>
             <p className="mt-3 max-w-3xl text-steel">{c.subtext}</p>
           </div>
@@ -163,7 +163,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
           <section className="mt-8 border border-line bg-white p-8">
             <h2 className="text-2xl font-black">{c.empty_heading}</h2>
             <p className="mt-3 text-steel">{c.empty_sub}</p>
-            <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+            <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
               {c.browse}
             </Link>
           </section>
@@ -177,7 +177,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                       <span className="text-2xl font-black text-navy">{product.name.split(" ")[0]}</span>
                     </Link>
                     <div>
-                      <p className="text-sm font-black uppercase text-safety">{product.category}</p>
+                      <p className="text-sm font-black uppercase text-brand">{product.category}</p>
                       <Link href={`/products/${product.slug}`} className="mt-1 block text-xl font-black hover:text-navy">
                         {product.name}
                       </Link>
@@ -379,10 +379,10 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                   const busy = pendingProvider === option.id;
                   const isPaypal = option.id === "paypal";
                   const base =
-                    "mt-3 inline-flex min-h-[3rem] w-full items-center justify-center gap-2 px-4 py-2 text-center font-black leading-tight disabled:cursor-not-allowed disabled:opacity-60";
+                    "mt-3 inline-flex min-h-[3rem] rounded-lg w-full items-center justify-center gap-2 px-4 py-2 text-center font-black leading-tight disabled:cursor-not-allowed disabled:opacity-60";
                   const tone = isPaypal
                     ? "bg-[#ffc439] text-[#003087] hover:brightness-95"
-                    : "bg-safety text-ink hover:bg-amber-400";
+                    : "bg-brand text-white hover:bg-[#1c54bf]";
                   return (
                     <button
                       key={option.id}
@@ -400,7 +400,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
               <button
                 type="button"
                 onClick={clearCart}
-                className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center border border-line px-4 py-2 text-center font-black leading-tight text-navy hover:bg-panel"
+                className="mt-3 inline-flex min-h-[2.75rem] rounded-lg w-full items-center justify-center border border-line px-4 py-2 text-center font-black leading-tight text-navy hover:bg-panel"
               >
                 {c.clear_cart}
               </button>

@@ -23,7 +23,7 @@ export default async function GuidesPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
-        <p className="font-black uppercase text-safety">{g.badge}</p>
+        <p className="font-black uppercase text-brand">{g.badge}</p>
         <h1 className="mt-1 text-4xl font-black">{g.main_heading}</h1>
         <p className="mt-3 max-w-3xl text-steel">{g.main_sub}</p>
 

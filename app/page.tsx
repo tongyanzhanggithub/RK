@@ -115,9 +115,9 @@ export default async function HomePage() {
       {/* 3 — Region strip */}
       <section className="border-b border-line bg-navy px-4 py-5 text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-black">
-          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-safety" /> Middle East</span>
-          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-safety" /> Central Asia</span>
-          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-safety" /> Southeast Asia</span>
+          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> Middle East</span>
+          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> Central Asia</span>
+          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> Southeast Asia</span>
           <span className="text-white/60">·</span>
           <span>Complete engines · Spare parts · Repair kits · OEM</span>
         </div>
@@ -128,7 +128,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="font-black uppercase text-safety">{hp.bestseller_badge}</p>
+              <p className="font-black uppercase text-brand">{hp.bestseller_badge}</p>
               <h2 className="text-3xl font-black">{hp.bestseller_title}</h2>
             </div>
             <Link href="/products" className="inline-flex items-center gap-1 font-black text-navy hover:underline">
@@ -148,7 +148,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="font-black uppercase text-safety">{hp.category_badge}</p>
+              <p className="font-black uppercase text-brand">{hp.category_badge}</p>
               <h2 className="text-3xl font-black">{hp.category_title}</h2>
             </div>
             <Link href="/products" className="font-black text-navy">{dict.common.view_catalog}</Link>
@@ -178,10 +178,10 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="font-black uppercase text-safety">{hp.engine_badge}</p>
+              <p className="font-black uppercase text-brand">{hp.engine_badge}</p>
               <h2 className="text-3xl font-black">{hp.engine_title}</h2>
             </div>
-            <Link href="/engines" className="inline-flex items-center gap-1 font-black text-safety hover:underline">
+            <Link href="/engines" className="inline-flex items-center gap-1 font-black text-brand hover:underline">
               {hp.engine_view_all} <ArrowRight size={16} />
             </Link>
           </div>
@@ -190,9 +190,9 @@ export default async function HomePage() {
               <Link
                 key={model.slug}
                 href={`/engines/${model.slug}`}
-                className="group flex items-center gap-3 border border-white/15 bg-white/5 p-4 hover:border-safety hover:bg-white/10"
+                className="group flex items-center gap-3 border border-white/15 bg-white/5 p-4 hover:border-brand hover:bg-white/10"
               >
-                <Cog size={22} className="shrink-0 text-safety" />
+                <Cog size={22} className="shrink-0 text-brand" />
                 <span>
                   <strong className="block leading-tight">{model.name}</strong>
                   <span className="mt-0.5 block text-xs font-bold text-white/55">{model.commonEquipment[0]}</span>
@@ -208,7 +208,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="font-black uppercase text-safety">{hp.problem_badge}</p>
+              <p className="font-black uppercase text-brand">{hp.problem_badge}</p>
               <h2 className="text-3xl font-black">{hp.problem_title}</h2>
             </div>
             <Link href="/problems" className="font-black text-navy">{hp.problem_view_all}</Link>
@@ -237,13 +237,13 @@ export default async function HomePage() {
       <section className="border-b border-line bg-panel px-4 py-14">
         <div className="mx-auto max-w-7xl">
           <div className="mb-8">
-            <p className="font-black uppercase text-safety">{hp.supply_badge}</p>
+            <p className="font-black uppercase text-brand">{hp.supply_badge}</p>
             <h2 className="text-3xl font-black">{hp.supply_title}</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {supplyAdvantages.map(([Icon, title, copy], index) => (
               <div key={title as string} className="relative border border-line bg-white p-6 pl-7 shadow-sm">
-                <span className="absolute left-0 top-0 h-full w-1.5 bg-safety" />
+                <span className="absolute left-0 top-0 h-full w-1.5 bg-brand" />
                 <div className="flex items-center justify-between">
                   <Icon className="text-navy" size={28} />
                   <span className="text-2xl font-black text-line">{String(index + 1).padStart(2, "0")}</span>
@@ -261,13 +261,13 @@ export default async function HomePage() {
         <section className="border-b border-line bg-white px-4 py-14">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6">
-              <p className="font-black uppercase text-safety">{hp.testimonial_badge}</p>
+              <p className="font-black uppercase text-brand">{hp.testimonial_badge}</p>
               <h2 className="text-3xl font-black">{hp.testimonial_title}</h2>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {testimonials.map((testimonial) => (
                 <figure key={testimonial.id} className="grid content-start gap-3 border border-line bg-panel p-6">
-                  <span className="inline-flex items-center gap-0.5 text-safety">
+                  <span className="inline-flex items-center gap-0.5 text-brand">
                     {Array.from({ length: testimonial.rating }).map((_, index) => (
                       <Star key={index} size={15} fill="currentColor" />
                     ))}
@@ -292,7 +292,7 @@ export default async function HomePage() {
       <section className="bg-ink px-4 py-16 text-white">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <p className="font-black uppercase text-safety">{hp.cta_section_badge}</p>
+            <p className="font-black uppercase text-brand">{hp.cta_section_badge}</p>
             <h2 className="mt-2 max-w-2xl text-3xl font-black">{hp.cta_section_title}</h2>
             <p className="mt-3 max-w-2xl leading-7 text-white/75">{hp.cta_section_body}</p>
           </div>
@@ -301,7 +301,7 @@ export default async function HomePage() {
               href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 bg-safety px-6 font-black text-ink"
+              className="inline-flex h-12 items-center gap-2 bg-brand px-6 font-black text-white"
             >
               <MessageCircle size={18} /> {hp.cta_whatsapp}
             </a>

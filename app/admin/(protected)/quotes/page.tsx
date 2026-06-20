@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const STATUS: Record<string, { label: string; cls: string }> = {
-  NEW: { label: "待报价", cls: "bg-safety/25 text-ink" },
+  NEW: { label: "待报价", cls: "bg-brand/25 text-ink" },
   QUOTED: { label: "已报价", cls: "bg-blue-100 text-blue-800" },
   CLOSED: { label: "已关闭", cls: "bg-gray-100 text-gray-700" }
 };
@@ -22,7 +22,7 @@ export default async function AdminQuotesPage() {
   return (
     <main>
       <div>
-        <p className="font-black uppercase text-safety">询价单</p>
+        <p className="font-black uppercase text-brand">询价单</p>
         <h1 className="text-4xl font-black">批量询价单</h1>
         <p className="mt-3 text-steel">买家在前台用「加入询价单」拼好的多产品询价，集中在这里报价跟进。</p>
       </div>

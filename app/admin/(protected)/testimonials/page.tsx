@@ -19,7 +19,7 @@ export default async function AdminTestimonialsPage({ searchParams }: { searchPa
   return (
     <main>
       <div>
-        <p className="font-black uppercase text-safety">用户评价</p>
+        <p className="font-black uppercase text-brand">用户评价</p>
         <h1 className="text-4xl font-black">客户评价</h1>
         <p className="mt-3 text-steel">
           已发布的评价会显示在首页。记录来自 WhatsApp 和订单的真实买家反馈。
@@ -45,7 +45,7 @@ export default async function AdminTestimonialsPage({ searchParams }: { searchPa
                     <strong>{testimonial.authorName}</strong>
                     {testimonial.company && <span className="text-sm text-steel">· {testimonial.company}</span>}
                     <span className="text-sm text-steel">· {testimonial.country}</span>
-                    <span className="inline-flex items-center gap-0.5 text-safety">
+                    <span className="inline-flex items-center gap-0.5 text-brand">
                       {Array.from({ length: testimonial.rating }).map((_, index) => (
                         <Star key={index} size={13} fill="currentColor" />
                       ))}

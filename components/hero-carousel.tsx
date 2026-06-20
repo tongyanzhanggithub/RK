@@ -33,7 +33,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
   return (
     <section
-      className="industrial-grid relative border-b border-line bg-panel px-4 py-16"
+      className="hero-gradient relative overflow-hidden px-4 py-20 text-white"
       aria-roledescription="carousel"
       aria-label="Featured highlights"
       onMouseEnter={() => setPaused(true)}
@@ -43,28 +43,33 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
     >
       <div key={index} className="animate-fade mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_440px] lg:items-center">
         <div>
-          <p className="mb-4 font-black uppercase text-safety">{slide.badge}</p>
-          <h1 className="max-w-4xl text-4xl font-black leading-[1.04] text-ink md:text-6xl">{slide.title}</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-steel">{slide.subtitle}</p>
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-wide text-[#9cc0ff] ring-1 ring-white/15">
+            {slide.badge}
+          </p>
+          <h1 className="max-w-4xl text-4xl font-black leading-[1.05] text-white md:text-6xl">{slide.title}</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">{slide.subtitle}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             {slide.primary.external ? (
               <a
                 href={slide.primary.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+                className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 font-black text-navy shadow-lg transition hover:bg-[#eaf0fb]"
               >
                 {slide.primary.whatsapp && <MessageCircle size={18} />} {slide.primary.label}
               </a>
             ) : (
-              <Link href={slide.primary.href} className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink">
+              <Link
+                href={slide.primary.href}
+                className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 font-black text-navy shadow-lg transition hover:bg-[#eaf0fb]"
+              >
                 {slide.primary.label} <ArrowRight size={18} />
               </Link>
             )}
             {slide.secondary && (
               <Link
                 href={slide.secondary.href}
-                className="inline-flex h-12 items-center gap-2 border border-navy px-5 font-black text-navy hover:bg-white"
+                className="inline-flex h-12 items-center gap-2 rounded-full border border-white/40 px-6 font-black text-white transition hover:bg-white/10"
               >
                 {slide.secondary.label} <ArrowRight size={18} />
               </Link>
@@ -72,12 +77,12 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
           </div>
         </div>
 
-        <div className="border border-line bg-white p-5 shadow-soft">
-          <h2 className="text-xl font-black">{slide.panelTitle}</h2>
+        <div className="rounded-2xl bg-white p-6 text-ink shadow-card-lg">
+          <h2 className="text-xl font-black text-[#0b2545]">{slide.panelTitle}</h2>
           <div className="mt-5 grid gap-3">
             {slide.bullets.map((item) => (
-              <div key={item} className="flex items-start gap-3 border border-line p-4 font-bold">
-                <CheckCircle2 className="mt-0.5 shrink-0 text-safety" size={18} />
+              <div key={item} className="flex items-start gap-3 rounded-xl bg-[#f5f8fd] p-4 font-bold">
+                <CheckCircle2 className="mt-0.5 shrink-0 text-brand" size={18} />
                 <span>{item}</span>
               </div>
             ))}
@@ -86,7 +91,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       </div>
 
       {count > 1 && (
-        <div className="mx-auto mt-8 flex max-w-7xl items-center justify-between">
+        <div className="mx-auto mt-10 flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-2" role="tablist" aria-label="Slides">
             {slides.map((_, i) => (
               <button
@@ -96,7 +101,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 aria-selected={i === index}
                 aria-label={`Go to slide ${i + 1}`}
                 onClick={() => go(i)}
-                className={`h-2.5 transition-all ${i === index ? "w-7 bg-navy" : "w-2.5 bg-navy/30 hover:bg-navy/50"}`}
+                className={`h-2.5 rounded-full transition-all ${i === index ? "w-7 bg-white" : "w-2.5 bg-white/40 hover:bg-white/60"}`}
               />
             ))}
           </div>
@@ -105,7 +110,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
               type="button"
               onClick={() => go(index - 1)}
               aria-label="Previous slide"
-              className="grid h-10 w-10 place-items-center border border-navy text-navy hover:bg-navy hover:text-white"
+              className="grid h-10 w-10 place-items-center rounded-full border border-white/40 text-white transition hover:bg-white/15"
             >
               <ChevronLeft size={18} />
             </button>
@@ -113,7 +118,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
               type="button"
               onClick={() => go(index + 1)}
               aria-label="Next slide"
-              className="grid h-10 w-10 place-items-center border border-navy text-navy hover:bg-navy hover:text-white"
+              className="grid h-10 w-10 place-items-center rounded-full border border-white/40 text-white transition hover:bg-white/15"
             >
               <ChevronRight size={18} />
             </button>

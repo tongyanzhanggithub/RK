@@ -22,11 +22,11 @@ export default async function AdminCategoriesPage() {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">分类</p>
+          <p className="font-black uppercase text-brand">分类</p>
           <h1 className="text-4xl font-black">分类管理</h1>
           <p className="mt-3 text-steel">维护产品分类的名称、排序与显示状态，用于前台导航与筛选。</p>
         </div>
-        <Link href="/admin/categories/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+        <Link href="/admin/categories/new" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
           新增分类
         </Link>
       </div>

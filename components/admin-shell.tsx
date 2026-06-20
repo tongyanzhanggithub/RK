@@ -65,7 +65,7 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
         <header className="sticky top-0 z-30 border-b border-line bg-white/95 px-4 py-3 backdrop-blur">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-black uppercase text-safety">管理后台 第五阶段</p>
+              <p className="text-sm font-black uppercase text-brand">管理后台 第五阶段</p>
               <p className="text-sm text-steel">批发申请与优惠券管理</p>
             </div>
             <div className="flex items-center gap-3">

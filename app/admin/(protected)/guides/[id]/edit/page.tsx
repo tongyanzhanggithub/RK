@@ -26,7 +26,7 @@ export default async function EditGuidePage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">维修指南</p>
+          <p className="font-black uppercase text-brand">维修指南</p>
           <h1 className="text-4xl font-black">{guide.title}</h1>
           <p className="mt-3 text-steel">编辑标题、正文、状态与 SEO。</p>
         </div>

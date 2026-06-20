@@ -10,7 +10,7 @@ function SubmitButton({ mode }: { mode: "login" | "register" }) {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
+      className="inline-flex h-12 w-full items-center justify-center gap-2 bg-brand px-4 font-black text-white hover:bg-[#1c54bf] disabled:opacity-60"
     >
       {mode === "login" ? <LogIn size={18} /> : <UserPlus size={18} />}
       {pending ? "Please wait..." : mode === "login" ? "Sign In" : "Create Account"}

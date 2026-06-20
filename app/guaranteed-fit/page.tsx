@@ -23,7 +23,7 @@ export default function GuaranteedFitPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-4xl">
-        <p className="inline-flex items-center gap-2 font-black uppercase text-safety">
+        <p className="inline-flex items-center gap-2 font-black uppercase text-brand">
           <ShieldCheck size={18} /> {g.badge}
         </p>
         <h1 className="mt-1 text-4xl font-black">{g.title}</h1>
@@ -50,7 +50,7 @@ export default function GuaranteedFitPage() {
           <p className="max-w-xl font-bold leading-6 text-steel">{g.note}</p>
           <Link
             href="/products"
-            className="inline-flex h-12 items-center gap-2 bg-safety px-6 font-black text-ink hover:bg-amber-400"
+            className="inline-flex h-12 items-center gap-2 bg-brand px-6 font-black text-white hover:bg-[#1c54bf]"
           >
             {g.cta} <ArrowRight size={18} />
           </Link>

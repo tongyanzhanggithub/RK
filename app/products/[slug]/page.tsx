@@ -141,7 +141,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
         <div className="mt-5 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <ProductGallery product={product} />
           <div>
-            <p className="font-black uppercase text-safety">{product.category}</p>
+            <p className="font-black uppercase text-brand">{product.category}</p>
             <h1 className="mt-2 text-4xl font-black">{product.name}</h1>
             {reviewCount > 0 && (
               <a href="#reviews" className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-steel hover:text-navy">
@@ -150,7 +150,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             )}
             <p className="mt-4 text-lg leading-8 text-steel">{product.shortDescription}</p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {product.tags.map((tag) => <span key={tag} className="bg-safety/15 px-3 py-1 text-sm font-black">{tag}</span>)}
+              {product.tags.map((tag) => <span key={tag} className="bg-brand/15 px-3 py-1 text-sm font-black">{tag}</span>)}
             </div>
             <div className="mt-6">
               <FitmentChecker

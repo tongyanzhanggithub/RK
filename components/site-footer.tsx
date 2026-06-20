@@ -20,7 +20,7 @@ export function SiteFooter() {
           <p className="mt-4 text-sm leading-6 text-white/70">{f.logistics}</p>
         </div>
         <div>
-          <strong className="block text-sm uppercase tracking-wide text-safety">{f.navigate}</strong>
+          <strong className="block text-sm uppercase tracking-wide text-brand">{f.navigate}</strong>
           <div className="mt-3 grid gap-2 text-sm font-bold text-white/80">
             <Link href="/">{nav.home}</Link>
             <Link href="/products">{nav.products}</Link>
@@ -30,7 +30,7 @@ export function SiteFooter() {
             <Link href="/wholesale">{nav.wholesale}</Link>
             <Link href="/cart">{f.cart_link}</Link>
           </div>
-          <strong className="mt-5 block text-sm uppercase tracking-wide text-safety">{f.policies}</strong>
+          <strong className="mt-5 block text-sm uppercase tracking-wide text-brand">{f.policies}</strong>
           <div className="mt-3 grid gap-2 text-sm font-bold text-white/80">
             <Link href="/guaranteed-fit">{dict.gfit.title}</Link>
             <Link href="/shipping">{f.shipping}</Link>
@@ -42,17 +42,17 @@ export function SiteFooter() {
           </div>
         </div>
         <div>
-          <strong className="block text-sm uppercase tracking-wide text-safety">{f.quote}</strong>
+          <strong className="block text-sm uppercase tracking-wide text-brand">{f.quote}</strong>
           <div className="mt-3 grid gap-3 text-sm font-bold">
             <a
               href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-white hover:text-safety"
+              className="inline-flex items-center gap-2 text-white hover:text-brand"
             >
               <MessageCircle size={16} /> WhatsApp
             </a>
-            <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 text-white hover:text-safety">
+            <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 text-white hover:text-brand">
               <Mail size={16} /> {CONTACT_EMAIL}
             </a>
           </div>

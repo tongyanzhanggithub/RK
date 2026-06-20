@@ -14,7 +14,7 @@ export function CartNavLink() {
     >
       <ShoppingCart size={17} />
       Cart
-      <span className="grid min-h-5 min-w-5 place-items-center bg-safety px-1 text-xs text-ink">
+      <span className="grid min-h-5 min-w-5 place-items-center bg-brand px-1 text-xs text-white">
         {totalQuantity}
       </span>
     </Link>

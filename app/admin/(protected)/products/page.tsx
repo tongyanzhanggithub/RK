@@ -64,7 +64,7 @@ export default async function AdminProductsPage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">产品</p>
+          <p className="font-black uppercase text-brand">产品</p>
           <h1 className="text-4xl font-black">产品管理</h1>
           <p className="mt-3 text-steel">搜索、筛选、编辑并归档维修套件产品。</p>
         </div>
@@ -75,7 +75,7 @@ export default async function AdminProductsPage({
           <Link href="/admin/products/import" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
             批量导入
           </Link>
-          <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+          <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
             新增产品
           </Link>
         </div>
@@ -192,5 +192,5 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function SmallFlag({ label }: { label: string }) {
-  return <span className="bg-safety/15 px-2 py-1 text-[11px] font-black text-ink">{label}</span>;
+  return <span className="bg-brand/15 px-2 py-1 text-[11px] font-black text-ink">{label}</span>;
 }

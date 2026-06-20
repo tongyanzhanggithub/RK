@@ -36,7 +36,7 @@ export default function ContactPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-3xl">
-        <p className="font-black uppercase text-safety">{L.contact_title}</p>
+        <p className="font-black uppercase text-brand">{L.contact_title}</p>
         <h1 className="mt-1 text-4xl font-black">{L.contact_title}</h1>
         <p className="mt-3 max-w-2xl text-lg leading-8 text-steel">{L.contact_intro}</p>
 
@@ -62,7 +62,7 @@ export default function ContactPage() {
           href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex h-12 items-center gap-2 bg-safety px-6 font-black text-ink hover:bg-amber-400"
+          className="mt-6 inline-flex h-12 items-center gap-2 bg-brand px-6 font-black text-white hover:bg-[#1c54bf]"
         >
           <MessageCircle size={18} /> WhatsApp
         </a>

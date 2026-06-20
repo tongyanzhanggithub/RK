@@ -17,13 +17,13 @@ export default async function AdminHeroPage({ searchParams }: { searchParams?: {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">首页</p>
+          <p className="font-black uppercase text-brand">首页</p>
           <h1 className="text-4xl font-black">首页轮播 (Hero)</h1>
           <p className="mt-3 max-w-2xl text-steel">
             编辑首页顶部大图的标题、卖点和按钮。<strong>没有任何启用的幻灯片时,首页会回退到内置多语言默认</strong>。
           </p>
         </div>
-        <Link href="/admin/hero/new" className="inline-flex h-11 items-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+        <Link href="/admin/hero/new" className="inline-flex h-11 items-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
           + 新建幻灯片
         </Link>
       </div>

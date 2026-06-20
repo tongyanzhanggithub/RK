@@ -132,7 +132,7 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
             <p className="mt-4 text-lg font-black">{p.no_results}</p>
             <p className="mx-auto mt-2 max-w-md text-steel">{p.no_results_sub}</p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link href="/products" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+              <Link href="/products" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
                 {p.clear_all}
               </Link>
               <a

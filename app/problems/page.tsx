@@ -21,7 +21,7 @@ export default async function ProblemsPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
-        <p className="font-black uppercase text-safety">{pr.badge}</p>
+        <p className="font-black uppercase text-brand">{pr.badge}</p>
         <h1 className="mt-1 text-4xl font-black">{pr.main_heading}</h1>
         <p className="mt-3 max-w-3xl text-steel">{pr.main_sub}</p>
         <div className="mt-8">
@@ -51,7 +51,7 @@ export default async function ProblemsPage() {
               href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+              className="inline-flex h-12 items-center gap-2 bg-brand px-5 font-black text-white"
             >
               <MessageCircle size={18} /> {pr.cta_btn}
             </a>

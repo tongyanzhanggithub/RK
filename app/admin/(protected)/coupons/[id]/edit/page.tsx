@@ -26,7 +26,7 @@ export default async function EditCouponPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">优惠券</p>
+          <p className="font-black uppercase text-brand">优惠券</p>
           <h1 className="text-4xl font-black">{coupon.code}</h1>
           <p className="mt-3 text-steel">编辑优惠券状态、面值、使用限制和有效期。</p>
         </div>

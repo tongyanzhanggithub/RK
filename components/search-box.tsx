@@ -92,7 +92,7 @@ export function SearchBox() {
           className="min-w-0 px-4 py-3 outline-none"
           placeholder="Search 168F, GX160, water pump seal, recoil starter..."
         />
-        <button className="inline-flex items-center gap-2 bg-navy px-4 font-bold text-white" type="button" onClick={submit}>
+        <button className="inline-flex items-center gap-2 bg-brand px-4 font-bold text-white transition hover:bg-[#1c54bf]" type="button" onClick={submit}>
           <Search size={18} /> Search
         </button>
       </div>

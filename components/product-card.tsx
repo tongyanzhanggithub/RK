@@ -13,9 +13,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 
 export function ProductCard({ product, activeModel }: { product: Product; activeModel?: string }) {
   return (
-    <article className="grid min-h-[360px] border border-line bg-white p-5 shadow-sm">
+    <article className="grid min-h-[360px] rounded-2xl border border-line bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-card-lg">
       <div>
-        <div className="relative mb-4 aspect-[4/3] overflow-hidden bg-panel industrial-grid">
+        <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-xl bg-panel industrial-grid">
           {product.image || product.images?.[0]?.url ? (
             <Image
               src={(product.image || product.images?.[0]?.url) as string}
@@ -32,7 +32,7 @@ export function ProductCard({ product, activeModel }: { product: Product; active
         </div>
         <div className="mb-3 flex flex-wrap gap-2">
           {product.tags.slice(0, 3).map((tag) => (
-            <span key={tag} className="bg-safety/15 px-2 py-1 text-xs font-black text-ink">
+            <span key={tag} className="rounded-md bg-brand/10 px-2 py-1 text-xs font-black text-[#0b2545]">
               {tag}
             </span>
           ))}
@@ -76,7 +76,7 @@ export function ProductCard({ product, activeModel }: { product: Product; active
           </span>
           <small className="font-bold text-steel">Wholesale by volume</small>
         </span>
-        <Link className="bg-navy px-4 py-2 text-sm font-black text-white" href={`/products/${product.slug}`}>
+        <Link className="rounded-lg bg-navy px-4 py-2 text-sm font-black text-white" href={`/products/${product.slug}`}>
           View Details
         </Link>
       </div>

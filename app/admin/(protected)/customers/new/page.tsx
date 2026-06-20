@@ -15,7 +15,7 @@ export default function AdminNewCustomerPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">客户</p>
+          <p className="font-black uppercase text-brand">客户</p>
           <h1 className="text-4xl font-black">新增客户</h1>
           <p className="mt-3 text-steel">
             添加在网站之外下单的买家——WhatsApp 成交、银行转账、展会联系人。

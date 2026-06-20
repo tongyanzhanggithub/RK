@@ -49,7 +49,7 @@ export default async function AdminInventoryPage({
   return (
     <main>
       <div>
-        <p className="font-black uppercase text-safety">库存</p>
+        <p className="font-black uppercase text-brand">库存</p>
         <h1 className="text-4xl font-black">库存管理</h1>
         <p className="mt-3 text-steel">监控库存、识别短缺并记录每一次库存调整。</p>
       </div>

@@ -23,7 +23,7 @@ export default function AdminLoginPage({ searchParams }: { searchParams?: { next
           </span>
         </Link>
         <div className="mt-8">
-          <p className="font-black uppercase text-safety">仅限管理员</p>
+          <p className="font-black uppercase text-brand">仅限管理员</p>
           <h1 className="mt-2 text-3xl font-black">登录</h1>
           <p className="mt-3 text-sm leading-6 text-steel">
             只有 ADMIN 用户才能访问产品管理和仪表盘页面。

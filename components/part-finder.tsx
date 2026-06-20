@@ -96,7 +96,7 @@ export function PartFinder({ compact = false }: { compact?: boolean }) {
         <button
           type="button"
           onClick={findParts}
-          className="inline-flex h-11 items-center justify-center gap-2 self-end bg-safety px-5 font-black text-ink hover:bg-amber-400"
+          className="inline-flex h-11 items-center justify-center gap-2 self-end bg-brand px-5 font-black text-white hover:bg-[#1c54bf]"
         >
           <Search size={17} /> {f.find_btn}
         </button>

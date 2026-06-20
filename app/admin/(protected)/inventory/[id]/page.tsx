@@ -33,7 +33,7 @@ export default async function AdminInventoryDetailPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">库存</p>
+          <p className="font-black uppercase text-brand">库存</p>
           <h1 className="text-4xl font-black">{product.name}</h1>
           <p className="mt-3 text-steel">{product.sku} · {product.category}</p>
         </div>

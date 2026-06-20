@@ -40,7 +40,7 @@ export default async function AdminQuoteDetailPage({
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">询价单</p>
+          <p className="font-black uppercase text-brand">询价单</p>
           <h1 className="text-4xl font-black">{quote.company || quote.contactName}</h1>
           <p className="mt-3 text-steel">{quote.contactName} · {quote.country} · {quote.createdAt.toLocaleString("zh-CN")}</p>
         </div>
@@ -91,7 +91,7 @@ export default async function AdminQuoteDetailPage({
             <div className="mt-4 grid gap-2">
               <a href={`mailto:${quote.email}`} className="inline-flex h-10 items-center justify-center border border-navy px-3 text-sm font-black text-navy hover:bg-panel">邮件回复</a>
               {replyOnWhatsApp && (
-                <a href={replyOnWhatsApp} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center justify-center bg-safety px-3 text-sm font-black text-ink hover:bg-amber-400">WhatsApp 回复</a>
+                <a href={replyOnWhatsApp} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center justify-center bg-brand px-3 text-sm font-black text-white hover:bg-[#1c54bf]">WhatsApp 回复</a>
               )}
             </div>
           </section>

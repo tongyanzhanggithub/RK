@@ -15,7 +15,7 @@ export function InquiryButton({ name, sku, url, className = "", label = "Get Who
       href={whatsappLink(productInquiryMessage({ name, sku, url }))}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex min-h-[2.75rem] items-center justify-center gap-1.5 bg-[#25D366] px-3 py-1.5 text-center font-black leading-tight text-white transition hover:brightness-95 ${className}`}
+      className={`inline-flex min-h-[2.75rem] rounded-lg items-center justify-center gap-1.5 bg-[#25D366] px-3 py-1.5 text-center font-black leading-tight text-white transition hover:brightness-95 ${className}`}
     >
       <MessageCircle size={18} /> {label}
     </a>

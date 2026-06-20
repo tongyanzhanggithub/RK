@@ -87,7 +87,7 @@ export default async function AdminCustomersPage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">客户</p>
+          <p className="font-black uppercase text-brand">客户</p>
           <h1 className="text-4xl font-black">客户管理</h1>
           <p className="mt-3 text-steel">查看客户资料、购买历史、消费价值与内部分类。</p>
         </div>
@@ -100,7 +100,7 @@ export default async function AdminCustomersPage({
           </a>
           <Link
             href="/admin/customers/new"
-            className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400"
+            className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]"
           >
             + 新增客户
           </Link>
@@ -192,7 +192,7 @@ function Metric({ label, value }: { label: string; value: string }) {
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const color = status === "VIP" ? "bg-safety/25 text-ink" : status === "BLOCKED" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800";
+  const color = status === "VIP" ? "bg-brand/25 text-ink" : status === "BLOCKED" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800";
   return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(CUSTOMER_STATUS, status)}</span>;
 }
 

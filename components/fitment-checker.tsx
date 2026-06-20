@@ -147,7 +147,7 @@ export function FitmentChecker({
   }
 
   return (
-    <div className="border border-safety/60 bg-safety/10 p-4">
+    <div className="border border-brand/60 bg-brand/10 p-4">
       <p className="inline-flex items-start gap-2 font-black text-ink">
         <CircleAlert size={18} className="mt-0.5 shrink-0" /> Not confirmed for your {myEngine}
       </p>

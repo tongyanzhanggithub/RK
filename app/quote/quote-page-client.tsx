@@ -24,7 +24,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-4 font-black text-ink hover:bg-amber-400 disabled:opacity-60"
+      className="inline-flex h-12 w-full items-center justify-center gap-2 bg-brand px-4 font-black text-white hover:bg-[#1c54bf] disabled:opacity-60"
     >
       <Send size={18} /> {pending ? "Sending..." : "Send Quote Request"}
     </button>
@@ -71,7 +71,7 @@ export function QuotePageClient({ products }: { products: ProductLite[] }) {
             We&apos;ll review your list and reply with wholesale pricing, MOQ and freight — usually the same day.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/products" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+            <Link href="/products" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
               Continue Browsing
             </Link>
             <Link href="/" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-panel">
@@ -86,7 +86,7 @@ export function QuotePageClient({ products }: { products: ProductLite[] }) {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
-        <p className="font-black uppercase text-safety">Wholesale</p>
+        <p className="font-black uppercase text-brand">Wholesale</p>
         <h1 className="text-4xl font-black">Request a Quote</h1>
         <p className="mt-3 max-w-3xl text-steel">
           Build one list of everything you need with quantities, and send it for wholesale pricing in a single request —
@@ -97,7 +97,7 @@ export function QuotePageClient({ products }: { products: ProductLite[] }) {
           <section className="mt-8 border border-line bg-white p-8">
             <h2 className="text-2xl font-black">Your quote list is empty</h2>
             <p className="mt-3 text-steel">Browse the catalog and click &quot;Add to quote&quot; on the parts you need.</p>
-            <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+            <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
               Browse Products
             </Link>
           </section>
@@ -125,7 +125,7 @@ export function QuotePageClient({ products }: { products: ProductLite[] }) {
                       )}
                     </Link>
                     <div>
-                      <p className="text-xs font-black uppercase text-safety">{product.category}</p>
+                      <p className="text-xs font-black uppercase text-brand">{product.category}</p>
                       <Link href={`/products/${product.slug}`} className="font-black hover:text-navy">{product.name}</Link>
                       {product.sku && <p className="text-xs text-steel">SKU: {product.sku}</p>}
                     </div>

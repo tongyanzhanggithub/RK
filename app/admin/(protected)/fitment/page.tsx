@@ -33,7 +33,7 @@ export default async function AdminFitmentPage() {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">适配数据</p>
+          <p className="font-black uppercase text-brand">适配数据</p>
           <h1 className="text-4xl font-black">适配健康度</h1>
           <p className="mt-3 max-w-3xl text-steel">
             适配数据做得<strong>全</strong>又<strong>准</strong>，才能吃到长尾订单（eBay Fitment 思路）。

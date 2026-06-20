@@ -21,7 +21,7 @@ export default async function AdminReviewsPage() {
   return (
     <main>
       <div>
-        <p className="font-black uppercase text-safety">产品评价</p>
+        <p className="font-black uppercase text-brand">产品评价</p>
         <h1 className="text-4xl font-black">评价审核</h1>
         <p className="mt-3 text-steel">
           客户在产品页提交的评价默认“待审核”，通过后才显示在前台。
@@ -42,7 +42,7 @@ export default async function AdminReviewsPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <strong>{review.authorName}</strong>
                   {review.country && <span className="text-sm text-steel">· {review.country}</span>}
-                  <span className="inline-flex items-center gap-0.5 text-safety">
+                  <span className="inline-flex items-center gap-0.5 text-brand">
                     {Array.from({ length: review.rating }).map((_, index) => (
                       <Star key={index} size={13} fill="currentColor" />
                     ))}

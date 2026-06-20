@@ -22,7 +22,7 @@ export default async function NewProductPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">产品</p>
+          <p className="font-black uppercase text-brand">产品</p>
           <h1 className="text-4xl font-black">新增产品</h1>
           <p className="mt-3 text-steel">创建产品并保存到数据库。</p>
         </div>

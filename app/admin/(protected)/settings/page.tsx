@@ -15,7 +15,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
   return (
     <main>
       <div className="mb-8">
-        <p className="font-black uppercase text-safety">设置</p>
+        <p className="font-black uppercase text-brand">设置</p>
         <h1 className="text-4xl font-black">站点设置</h1>
         <p className="mt-3 text-steel">店铺名称、联系方式、币种与公告栏等基础信息，保存后存入数据库。</p>
       </div>

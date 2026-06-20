@@ -4,12 +4,12 @@ import Link from "next/link";
 type ButtonVariant = "primary" | "outline" | "ghost";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-safety text-ink hover:bg-amber-400",
+  primary: "bg-brand text-white hover:bg-[#1c54bf]",
   outline: "border border-navy text-navy hover:bg-panel",
   ghost: "text-navy hover:bg-panel"
 };
 
-const base = "inline-flex min-h-[2.75rem] items-center justify-center gap-2 px-4 py-2 text-center font-black leading-tight transition-colors";
+const base = "inline-flex min-h-[2.75rem] rounded-lg items-center justify-center gap-2 px-4 py-2 text-center font-black leading-tight transition-colors";
 
 export function Button({ variant = "primary", className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }) {
   return <button className={`${base} ${variants[variant]} ${className}`} {...props} />;

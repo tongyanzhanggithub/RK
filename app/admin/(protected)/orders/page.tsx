@@ -73,14 +73,14 @@ export default async function AdminOrdersPage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">订单</p>
+          <p className="font-black uppercase text-brand">订单</p>
           <h1 className="text-4xl font-black">订单管理</h1>
           <p className="mt-3 text-steel">查看订单、履约状态、物流详情和内部备注。</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/admin/orders/new"
-            className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400"
+            className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]"
           >
             手动建单
           </Link>

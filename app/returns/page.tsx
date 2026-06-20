@@ -17,7 +17,7 @@ export default function ReturnsPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-4xl">
-        <p className="font-black uppercase text-safety">Policies</p>
+        <p className="font-black uppercase text-brand">Policies</p>
         <h1 className="mt-1 text-4xl font-black">Returns &amp; Warranty</h1>
         <p className="mt-3 text-steel">Plain rules, no fine print: if we shipped the wrong or defective part, we fix it.</p>
 
@@ -74,7 +74,7 @@ export default function ReturnsPage() {
             href={claimLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+            className="mt-4 inline-flex h-12 items-center gap-2 bg-brand px-5 font-black text-white"
           >
             <MessageCircle size={18} /> Start a claim on WhatsApp
           </a>

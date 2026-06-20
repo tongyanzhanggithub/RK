@@ -13,7 +13,7 @@ export default function ShippingPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-4xl">
-        <p className="font-black uppercase text-safety">Policies</p>
+        <p className="font-black uppercase text-brand">Policies</p>
         <h1 className="mt-1 text-4xl font-black">Shipping Policy</h1>
         <p className="mt-3 text-steel">How we ship retail trial orders and wholesale cartons, and what to expect.</p>
 
@@ -43,7 +43,7 @@ export default function ShippingPage() {
               </span>
             </li>
           </ul>
-          <p className="mt-4 border-l-4 border-safety bg-panel p-4 text-sm font-bold">
+          <p className="mt-4 border-l-4 border-brand bg-panel p-4 text-sm font-bold">
             A tracking number is sent to your email once the parcel ships. Import duties or taxes charged by your
             country, if any, are the buyer&apos;s responsibility.
           </p>
@@ -76,7 +76,7 @@ export default function ShippingPage() {
             href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+            className="inline-flex h-12 items-center gap-2 bg-brand px-5 font-black text-white"
           >
             <MessageCircle size={18} /> Ask about shipping
           </a>

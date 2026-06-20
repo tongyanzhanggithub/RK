@@ -55,7 +55,7 @@ export default async function AdminWholesalePage({
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">批发</p>
+          <p className="font-black uppercase text-brand">批发</p>
           <h1 className="text-4xl font-black">批发申请</h1>
           <p className="mt-3 text-steel">审核企业买家并开通批发客户权限。</p>
         </div>
@@ -156,6 +156,6 @@ function Metric({ label, value }: { label: string; value: string }) {
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const color = status === "APPROVED" ? "bg-green-100 text-green-800" : status === "REJECTED" ? "bg-red-100 text-red-800" : "bg-safety/25 text-ink";
+  const color = status === "APPROVED" ? "bg-green-100 text-green-800" : status === "REJECTED" ? "bg-red-100 text-red-800" : "bg-brand/25 text-ink";
   return <span className={`inline-flex px-2 py-1 text-xs font-black ${color}`}>{zhLabel(WHOLESALE_STATUS, status)}</span>;
 }

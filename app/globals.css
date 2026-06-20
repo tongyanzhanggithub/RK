@@ -11,8 +11,8 @@ html {
 }
 
 body {
-  background: #f4f6f3;
-  color: #18212b;
+  background: #f5f8fd;
+  color: #0d1b2a;
 }
 
 * {
@@ -21,14 +21,14 @@ body {
 
 /* Visible keyboard focus for accessibility (mouse clicks stay clean). */
 :focus-visible {
-  outline: 2px solid #0f2d3f;
+  outline: 2px solid #2b6cf6;
   outline-offset: 2px;
 }
 
 /* Brand-coloured text selection. */
 ::selection {
-  background: #ffd23f;
-  color: #18212b;
+  background: #cfe0fb;
+  color: #0b2545;
 }
 
 /* Respect users who prefer less motion. */
@@ -47,9 +47,34 @@ body {
 
 .industrial-grid {
   background-image:
-    linear-gradient(rgba(15, 45, 63, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 45, 63, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(43, 108, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43, 108, 246, 0.05) 1px, transparent 1px);
   background-size: 28px 28px;
+}
+
+/* Modern tech-blue brand gradient (hero, feature panels).
+   Grid lines are baked into the same `background` stack as the gradient —
+   keeping them in a separate rule would override the gradient entirely. */
+.hero-gradient {
+  background-color: #0b2545;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(120% 140% at 85% 15%, rgba(43, 108, 246, 0.65) 0%, transparent 55%),
+    linear-gradient(135deg, #0b2545 0%, #123876 55%, #1c54bf 100%);
+  background-size:
+    32px 32px,
+    32px 32px,
+    auto,
+    auto;
+}
+
+/* Soft elevation for cards in the modern theme. */
+.shadow-card {
+  box-shadow: 0 12px 32px -16px rgba(11, 37, 69, 0.22);
+}
+.shadow-card-lg {
+  box-shadow: 0 24px 60px -24px rgba(11, 37, 69, 0.32);
 }
 
 /* Consistent micro-interactions: smooth state changes + a subtle press. */

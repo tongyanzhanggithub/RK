@@ -37,7 +37,7 @@ export default async function AccountPage() {
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-safety">My account</p>
+            <p className="font-black uppercase text-brand">My account</p>
             <h1 className="text-4xl font-black">Welcome, {customer.name.split(" ")[0]}</h1>
             <p className="mt-2 text-steel">{customer.email}</p>
           </div>
@@ -58,7 +58,7 @@ export default async function AccountPage() {
           <Stat icon={Package} label="Paid orders" value={String(paidCount)} />
           <div className="border border-line bg-white p-5">
             <p className="text-sm font-bold text-steel">Need parts?</p>
-            <Link href="/products" className="mt-3 inline-flex h-10 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+            <Link href="/products" className="mt-3 inline-flex h-10 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
               Browse products
             </Link>
           </div>
@@ -71,7 +71,7 @@ export default async function AccountPage() {
               <Package className="mx-auto text-steel" size={40} />
               <p className="mt-3 font-black">No orders yet</p>
               <p className="mt-1 text-steel">When you place an order with this email, it will appear here.</p>
-              <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+              <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
                 Start shopping
               </Link>
             </div>

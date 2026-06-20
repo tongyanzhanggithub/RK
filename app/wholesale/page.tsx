@@ -17,14 +17,14 @@ export default function WholesalePage({ searchParams }: { searchParams?: { submi
       <section className="border-b border-line bg-ink px-4 py-14 text-white">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
           <div>
-            <p className="font-black uppercase text-safety">Wholesale &amp; RFQ</p>
+            <p className="font-black uppercase text-brand">Wholesale &amp; RFQ</p>
             <h1 className="mt-3 text-4xl font-black leading-tight md:text-5xl">Request a wholesale quote</h1>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+                className="inline-flex h-12 items-center gap-2 bg-brand px-5 font-black text-white"
               >
                 <MessageCircle size={18} /> Quote on WhatsApp
               </a>
@@ -67,7 +67,7 @@ export default function WholesalePage({ searchParams }: { searchParams?: { submi
           </div>
 
           <div className="mt-6 flex items-start gap-3 border border-navy bg-white p-5">
-            <span className="mt-0.5 shrink-0 bg-safety px-2 py-1 text-xs font-black uppercase text-ink">Sample policy</span>
+            <span className="mt-0.5 shrink-0 bg-brand px-2 py-1 text-xs font-black uppercase text-white">Sample policy</span>
             <p className="text-sm font-bold leading-6">
               We offer <strong>free samples to verified resellers</strong>. To keep this fair and fast, we confirm your business
               first — a company website, online store, or shop address is all we need. Not a reseller yet?{" "}
@@ -80,7 +80,7 @@ export default function WholesalePage({ searchParams }: { searchParams?: { submi
       <section id="application" className="px-4 py-14">
         <div className="mx-auto grid max-w-7xl gap-10 xl:grid-cols-[380px_1fr]">
           <aside>
-            <p className="font-black uppercase text-safety">RFQ form</p>
+            <p className="font-black uppercase text-brand">RFQ form</p>
             <h2 className="mt-2 text-3xl font-black">Tell us what you sell or repair</h2>
             <p className="mt-4 leading-7 text-steel">
               We review the product fit, expected quantity and destination market, then reply with a quote and activate a wholesale customer profile.

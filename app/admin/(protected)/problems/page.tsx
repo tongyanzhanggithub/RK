@@ -20,11 +20,11 @@ export default async function AdminProblemsPage() {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">故障排查</p>
+          <p className="font-black uppercase text-brand">故障排查</p>
           <h1 className="text-4xl font-black">故障排查管理</h1>
           <p className="mt-3 text-steel">管理故障症状、常见原因、检查步骤、推荐维修件与交互式诊断树。</p>
         </div>
-        <Link href="/admin/problems/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+        <Link href="/admin/problems/new" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
           新增故障
         </Link>
       </div>

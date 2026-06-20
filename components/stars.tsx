@@ -6,7 +6,7 @@ export function Stars({ rating, size = 16, className = "" }: { rating: number; s
   return (
     <span className={`inline-flex ${className}`} aria-label={`${rating.toFixed(1)} out of 5 stars`}>
       {[1, 2, 3, 4, 5].map((i) => (
-        <Star key={i} size={size} className={i <= full ? "fill-safety text-safety" : "fill-none text-line"} />
+        <Star key={i} size={size} className={i <= full ? "fill-brand text-brand" : "fill-none text-line"} />
       ))}
     </span>
   );

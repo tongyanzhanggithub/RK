@@ -107,7 +107,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
 
         <div className="mt-4 grid gap-8 lg:grid-cols-[1fr_380px]">
           <div>
-            <p className="font-black uppercase text-safety">Fix by symptom</p>
+            <p className="font-black uppercase text-brand">Fix by symptom</p>
             <h1 className="mt-1 text-4xl font-black">{problem.title}</h1>
             <div className="mt-4 flex flex-wrap gap-2">
               <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-black ${difficultyColor}`}>
@@ -160,7 +160,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
 
             <section className="mt-6 border border-line bg-white p-6">
               <h2 className="inline-flex items-center gap-2 text-xl font-black">
-                <CircleAlert className="text-safety" size={22} /> Common causes
+                <CircleAlert className="text-brand" size={22} /> Common causes
               </h2>
               <ul className="mt-4 grid gap-2 md:grid-cols-2">
                 {problem.commonCauses.map((cause) => (
@@ -241,7 +241,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
               href={inquiry}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 bg-safety px-5 font-black text-ink"
+              className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 bg-brand px-5 font-black text-white"
             >
               <MessageCircle size={18} /> Diagnose via WhatsApp
             </a>
@@ -262,7 +262,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
 
         <section className="mt-12">
           <div className="mb-6">
-            <p className="font-black uppercase text-safety">Recommended fix</p>
+            <p className="font-black uppercase text-brand">Recommended fix</p>
             <h2 className="inline-flex items-center gap-2 text-3xl font-black">
               <CheckCircle2 className="text-navy" size={28} /> Kits that solve this problem
             </h2>
@@ -272,7 +272,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
               {recommended.map((product, index) => (
                 <div key={product.slug} className="relative">
                   {index === 0 && (
-                    <span className="absolute -top-3 left-4 z-10 bg-safety px-3 py-1 text-xs font-black uppercase text-ink">
+                    <span className="absolute -top-3 left-4 z-10 bg-brand px-3 py-1 text-xs font-black uppercase text-white">
                       {pr.best_match}
                     </span>
                   )}

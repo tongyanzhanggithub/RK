@@ -18,7 +18,7 @@ export default async function AccountRegisterPage() {
   return (
     <main className="grid min-h-[70vh] place-items-center px-4 py-12">
       <section className="w-full max-w-md border border-line bg-white p-7 shadow-soft">
-        <p className="font-black uppercase text-safety">Customer account</p>
+        <p className="font-black uppercase text-brand">Customer account</p>
         <h1 className="mt-2 text-3xl font-black">Create an account</h1>
         <p className="mt-3 text-sm leading-6 text-steel">
           Track orders, reorder faster and keep your details on file. Already have an account?{" "}

@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
           </span>
         </Link>
         <div className="mt-8">
-          <p className="font-black uppercase text-safety">密码重置</p>
+          <p className="font-black uppercase text-brand">密码重置</p>
           <h1 className="mt-2 text-3xl font-black">忘记密码？</h1>
           <p className="mt-3 text-sm leading-6 text-steel">
             输入您的管理员邮箱，我们将发送重置链接。链接有效期为 30 分钟。

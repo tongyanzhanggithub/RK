@@ -14,7 +14,7 @@ export default async function NewOrderPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">订单</p>
+          <p className="font-black uppercase text-brand">订单</p>
           <h1 className="text-4xl font-black">手动建单</h1>
           <p className="mt-3 text-steel">用于批发电汇(T/T)等不走 Stripe 的订单。</p>
         </div>

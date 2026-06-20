@@ -15,7 +15,7 @@ export default function AdminNewProblemPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">故障排查</p>
+          <p className="font-black uppercase text-brand">故障排查</p>
           <h1 className="text-4xl font-black">新增故障</h1>
         </div>
         <Link href="/admin/problems" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">

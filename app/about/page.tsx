@@ -20,7 +20,7 @@ export default function AboutPage() {
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-5xl">
-        <p className="font-black uppercase text-safety">About us</p>
+        <p className="font-black uppercase text-brand">About us</p>
         <h1 className="mt-1 text-4xl font-black">A parts supplier that speaks repair</h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-steel">
           Partavio sells small engine repair kits, spare parts and complete 168F / GX160-style engines directly
@@ -50,7 +50,7 @@ export default function AboutPage() {
               href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+              className="inline-flex h-12 items-center gap-2 bg-brand px-5 font-black text-white"
             >
               <MessageCircle size={18} /> Talk to us on WhatsApp
             </a>

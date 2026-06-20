@@ -70,7 +70,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
           <span className="text-ink">{guide.title}</span>
         </nav>
 
-        <p className="mt-4 font-black uppercase text-safety">{g.badge}</p>
+        <p className="mt-4 font-black uppercase text-brand">{g.badge}</p>
         <h1 className="mt-1 text-4xl font-black leading-tight">{guide.title}</h1>
         {guide.excerpt && <p className="mt-3 text-lg leading-8 text-steel">{guide.excerpt}</p>}
 
@@ -103,7 +103,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
               href={inquiry}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center gap-2 bg-safety px-5 font-black text-ink"
+              className="inline-flex h-11 items-center gap-2 bg-brand px-5 font-black text-white"
             >
               <MessageCircle size={18} /> WhatsApp
             </a>

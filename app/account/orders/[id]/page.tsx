@@ -53,7 +53,7 @@ export default async function CustomerOrderDetailPage({ params }: { params: { id
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="font-black uppercase text-safety">Order</p>
+            <p className="font-black uppercase text-brand">Order</p>
             <h1 className="text-3xl font-black">{order.orderNumber}</h1>
             <p className="mt-1 text-steel">
               {order.createdAt.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}

@@ -22,7 +22,7 @@ export default function ResetPasswordPage({ searchParams }: { searchParams?: { t
           </span>
         </Link>
         <div className="mt-8">
-          <p className="font-black uppercase text-safety">密码重置</p>
+          <p className="font-black uppercase text-brand">密码重置</p>
           <h1 className="mt-2 text-3xl font-black">设置新密码</h1>
           <p className="mt-3 text-sm leading-6 text-steel">
             请设置一个至少 8 个字符的新密码。保存后，需在所有设备上重新登录。

@@ -89,7 +89,7 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
 
         <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-safety">Shop by engine</p>
+            <p className="font-black uppercase text-brand">Shop by engine</p>
             <h1 className="mt-1 text-4xl font-black">{model.name} parts &amp; repair kits</h1>
             <p className="mt-3 max-w-3xl text-lg leading-8 text-steel">{model.description}</p>
             <p className="mt-2 text-sm font-bold text-steel">
@@ -105,7 +105,7 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
           <StatCard value={specificParts.length + universalParts.length} label="total parts available" tone="plain" />
         </div>
 
-        <div className="mt-6 flex items-start gap-3 border border-safety/60 bg-safety/10 p-4">
+        <div className="mt-6 flex items-start gap-3 border border-brand/60 bg-brand/10 p-4">
           <CircleAlert className="mt-0.5 shrink-0 text-ink" size={20} />
           <p className="font-bold leading-6">
             <span className="font-black uppercase">Before you order:</span> {model.compatibilityNote}{" "}
@@ -174,7 +174,7 @@ export default async function EngineModelPage({ params }: { params: { slug: stri
                 href={inquiry}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center gap-2 bg-safety px-5 font-black text-ink"
+                className="inline-flex h-12 items-center gap-2 bg-brand px-5 font-black text-white"
               >
                 <MessageCircle size={18} /> WhatsApp Quote
               </a>

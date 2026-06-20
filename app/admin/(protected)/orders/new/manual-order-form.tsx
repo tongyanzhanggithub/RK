@@ -9,7 +9,7 @@ type Item = { slug: string; name: string; sku: string; priceCents: number };
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="inline-flex h-12 items-center justify-center bg-safety px-6 font-black text-ink hover:bg-amber-400 disabled:opacity-60">
+    <button type="submit" disabled={pending} className="inline-flex h-12 items-center justify-center bg-brand px-6 font-black text-white hover:bg-[#1c54bf] disabled:opacity-60">
       {pending ? "创建中…" : "创建订单"}
     </button>
   );

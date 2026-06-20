@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
           key={code}
           type="button"
           onClick={() => setLocale(code)}
-          className={`px-2 py-1 ${locale === code ? "bg-safety text-ink" : "text-white hover:bg-white/10"}`}
+          className={`px-2 py-1 ${locale === code ? "bg-brand text-white" : "text-white hover:bg-white/10"}`}
         >
           {label}
         </button>

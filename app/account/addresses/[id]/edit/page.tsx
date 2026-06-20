@@ -25,7 +25,7 @@ export default async function EditAddressPage({ params }: { params: { id: string
       <div className="mx-auto max-w-3xl">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-safety">My account</p>
+            <p className="font-black uppercase text-brand">My account</p>
             <h1 className="text-4xl font-black">Edit address</h1>
           </div>
           <Link href="/account/addresses" className="inline-flex h-11 items-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel">

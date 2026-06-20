@@ -13,7 +13,7 @@ export default function NewCouponPage() {
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">优惠券</p>
+          <p className="font-black uppercase text-brand">优惠券</p>
           <h1 className="text-4xl font-black">新增优惠券</h1>
           <p className="mt-3 text-steel">创建带使用限制和有效期控制的结算优惠券。</p>
         </div>

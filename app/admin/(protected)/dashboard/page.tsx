@@ -87,7 +87,7 @@ export default async function AdminDashboardPage() {
     <main>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-black uppercase text-safety">仪表盘</p>
+          <p className="font-black uppercase text-brand">仪表盘</p>
           <h1 className="text-4xl font-black">后台总览</h1>
           <p className="mt-3 text-steel">Admin 第 5 阶段新增了批发申请、审核决策与批发客户角色。</p>
         </div>
@@ -98,7 +98,7 @@ export default async function AdminDashboardPage() {
           <Link href="/admin/inventory" className="inline-flex h-11 items-center justify-center border border-navy px-4 font-black text-navy hover:bg-white">
             查看库存
           </Link>
-          <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-safety px-4 font-black text-ink hover:bg-amber-400">
+          <Link href="/admin/products/new" className="inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
             新增产品
           </Link>
         </div>

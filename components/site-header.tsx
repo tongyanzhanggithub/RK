@@ -55,7 +55,7 @@ export function SiteHeader() {
             href={whatsappLink(GENERAL_INQUIRY_MESSAGE)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 bg-safety px-4 font-black text-ink"
+            className="inline-flex h-11 items-center justify-center gap-2 bg-brand px-4 font-black text-white"
           >
             <MessageCircle size={18} /> {h.quote}
           </a>
