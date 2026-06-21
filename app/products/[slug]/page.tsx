@@ -15,7 +15,7 @@ import { TrustBadges } from "@/components/trust-badges";
 import { ReviewForm } from "./review-form";
 import { getProduct } from "@/data/products";
 import { engineHrefForModelText, problemHrefForTitle } from "@/lib/discovery-links";
-import { JsonLd } from "@/components/json-ld";
+import { JsonLd, jsonLdString } from "@/components/json-ld";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
 import { getServerDict } from "@/lib/locale";
@@ -133,7 +133,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
 
   return (
     <main className="px-4 py-10">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <JsonLd data={breadcrumb} />
       {faqLd && <JsonLd data={faqLd} />}
       <div className="mx-auto max-w-7xl">
