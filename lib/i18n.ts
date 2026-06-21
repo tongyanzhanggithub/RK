@@ -209,6 +209,29 @@ const en = {
     trust_warranty: "30-day warranty on defects",
     trust_secure: "Secure card payment"
   },
+  about_page: {
+    badge: "About us",
+    title: "A parts supplier that speaks repair",
+    intro:
+      "Partavio sells small engine repair kits, spare parts and complete 168F / GX160-style engines directly from the factory floor in Chongqing, China. We exist for the repair shop that needs the right carburetor the first time, and the distributor who wants one supplier for the full range.",
+    fact1_title: "Factory-direct from Chongqing",
+    fact1_body:
+      "We source from China's largest motorcycle and small-engine manufacturing cluster — the ecosystem behind Loncin, Zongshen and Lifan engines.",
+    fact2_title: "Built around real repairs",
+    fact2_body:
+      "Our kits are assembled around actual field failures — hard starting, broken recoil starters, leaking pump seals — not random parts bundles.",
+    fact3_title: "Export-focused",
+    fact3_body:
+      "We serve repair shops, distributors and dealers across the Middle East, Central Asia and Southeast Asia with sea, rail and courier logistics.",
+    fact4_title: "Fitment-first service",
+    fact4_body:
+      "Every order can be fitment-checked for free over WhatsApp before you pay. If we confirm fit and it doesn't fit, replacement is on us.",
+    how_title: "How we work",
+    how_body:
+      "Retail trial orders go through secure online checkout and ship by international courier. Wholesale buyers send a model list on WhatsApp and receive factory pricing, MOQ, carton plans and freight options — usually the same day. OEM and private-label packaging are available for established partners.",
+    cta_whatsapp: "Talk to us on WhatsApp",
+    cta_wholesale: "Apply for Wholesale"
+  },
   cart: {
     badge: "Secure checkout",
     heading: "Cart",
@@ -638,6 +661,25 @@ const zh: typeof en = {
     trust_delivery: "7–15 个工作日送达",
     trust_warranty: "缺陷享 30 天保修",
     trust_secure: "安全刷卡支付"
+  },
+  about_page: {
+    badge: "关于我们",
+    title: "一个真正懂维修的配件供应商",
+    intro:
+      "Partavio 直接从中国重庆的工厂供应小型发动机维修套件、配件与 168F / GX160 类整机。我们服务的是「第一次就要拿到对的化油器」的维修店,以及「想用一个供应商搞定全品类」的经销商。",
+    fact1_title: "重庆工厂直供",
+    fact1_body: "我们采购自中国最大的摩托车与小型发动机制造集群 —— 隆鑫、宗申、力帆等发动机背后的同一生态。",
+    fact2_title: "围绕真实维修打造",
+    fact2_body: "我们的套件是围绕实际现场故障组装的 —— 启动困难、启动器损坏、水泵油封渗漏 —— 而非随意拼凑的零件包。",
+    fact3_title: "专注出口",
+    fact3_body: "我们以海运、铁路与快递物流,服务中东、中亚与东南亚的维修店、分销商和经销商。",
+    fact4_title: "适配优先服务",
+    fact4_body: "每一单都可在付款前通过 WhatsApp 免费做适配核对。若我们确认适配却仍不合适,换货由我们承担。",
+    how_title: "我们怎么合作",
+    how_body:
+      "零售试样订单走安全在线结账并由国际快递发出。批发买家通过 WhatsApp 发来型号清单,即可获得工厂价、起订量、装箱方案与运费选项 —— 通常当天回复。长期合作伙伴可享 OEM 与贴牌包装。",
+    cta_whatsapp: "通过 WhatsApp 联系我们",
+    cta_wholesale: "申请批发资格"
   },
   cart: {
     badge: "安全结账",
@@ -1084,6 +1126,29 @@ const arOverrides: DeepPartial<Dict> = {
     trust_warranty: "ضمان 30 يومًا ضد العيوب",
     trust_secure: "دفع آمن بالبطاقة"
   },
+  about_page: {
+    badge: "من نحن",
+    title: "مورّد قطع غيار يفهم لغة الإصلاح",
+    intro:
+      "تبيع Partavio أطقم إصلاح المحركات الصغيرة وقطع الغيار والمحركات الكاملة من طراز 168F / GX160 مباشرةً من المصنع في تشونغتشينغ بالصين. نحن هنا من أجل ورشة الإصلاح التي تريد المكربن الصحيح من المرة الأولى، والموزّع الذي يريد مورّدًا واحدًا لكامل التشكيلة.",
+    fact1_title: "تصنيع مباشر من تشونغتشينغ",
+    fact1_body:
+      "نحصل على منتجاتنا من أكبر تجمّع لتصنيع الدراجات النارية والمحركات الصغيرة في الصين — المنظومة وراء محركات Loncin وZongshen وLifan.",
+    fact2_title: "مبنية على إصلاحات حقيقية",
+    fact2_body:
+      "تُجمَّع أطقمنا حول الأعطال الميدانية الفعلية — صعوبة التشغيل، تلف بادئ الحبل، تسرّب حشيات المضخة — وليست حزم قطع عشوائية.",
+    fact3_title: "موجّهة للتصدير",
+    fact3_body:
+      "نخدم ورش الإصلاح والموزّعين والتجّار في الشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا عبر الشحن البحري والسكك الحديدية والبريد السريع.",
+    fact4_title: "خدمة الملاءمة أولًا",
+    fact4_body:
+      "يمكن فحص ملاءمة كل طلب مجانًا عبر WhatsApp قبل الدفع. وإذا أكّدنا الملاءمة ولم تناسب، فالاستبدال على حسابنا.",
+    how_title: "كيف نعمل",
+    how_body:
+      "تمرّ طلبات التجزئة التجريبية عبر دفع آمن عبر الإنترنت وتُشحن بالبريد الدولي. يرسل مشترو الجملة قائمة الطُرز عبر WhatsApp ويحصلون على أسعار المصنع والحد الأدنى للطلب وخطط الكراتين وخيارات الشحن — عادةً في اليوم نفسه. التغليف بعلامة OEM والعلامة الخاصة متاح للشركاء الدائمين.",
+    cta_whatsapp: "تواصل معنا عبر WhatsApp",
+    cta_wholesale: "تقدّم بطلب جملة"
+  },
   cart: {
     badge: "دفع آمن",
     heading: "السلة",
@@ -1364,6 +1429,29 @@ const ruOverrides: DeepPartial<Dict> = {
     trust_delivery: "Доставка 7–15 рабочих дней",
     trust_warranty: "Гарантия 30 дней на дефекты",
     trust_secure: "Безопасная оплата картой"
+  },
+  about_page: {
+    badge: "О нас",
+    title: "Поставщик запчастей, который говорит на языке ремонта",
+    intro:
+      "Partavio продаёт ремкомплекты для малых двигателей, запчасти и двигатели в сборе типа 168F / GX160 напрямую с завода в Чунцине (Китай). Мы работаем для мастерской, которой нужен правильный карбюратор с первого раза, и для дистрибьютора, которому нужен один поставщик на весь ассортимент.",
+    fact1_title: "Напрямую с завода в Чунцине",
+    fact1_body:
+      "Мы закупаем в крупнейшем в Китае кластере по производству мотоциклов и малых двигателей — экосистеме, стоящей за двигателями Loncin, Zongshen и Lifan.",
+    fact2_title: "Создано на основе реальных ремонтов",
+    fact2_body:
+      "Наши комплекты собраны вокруг реальных полевых отказов — трудный запуск, сломанный стартер, протекающие сальники насоса — а не случайные наборы деталей.",
+    fact3_title: "Ориентация на экспорт",
+    fact3_body:
+      "Мы обслуживаем мастерские, дистрибьюторов и дилеров на Ближнем Востоке, в Центральной Азии и Юго-Восточной Азии морской, ж/д и курьерской логистикой.",
+    fact4_title: "Сначала совместимость",
+    fact4_body:
+      "Совместимость каждого заказа можно бесплатно проверить в WhatsApp до оплаты. Если мы подтвердили совместимость, а деталь не подошла — замена за наш счёт.",
+    how_title: "Как мы работаем",
+    how_body:
+      "Розничные пробные заказы проходят через безопасную онлайн-оплату и отправляются международной курьерской службой. Оптовые покупатели присылают список моделей в WhatsApp и получают заводские цены, MOQ, планы упаковки и варианты доставки — обычно в тот же день. Для постоянных партнёров доступна OEM- и упаковка под собственным брендом.",
+    cta_whatsapp: "Напишите нам в WhatsApp",
+    cta_wholesale: "Подать заявку на опт"
   },
   cart: {
     badge: "Безопасная оплата",
