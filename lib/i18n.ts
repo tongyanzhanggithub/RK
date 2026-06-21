@@ -162,7 +162,11 @@ const en = {
     compatible_equipment_col: "Compatible Equipment",
     inquiry: "Inquire on WhatsApp",
     save_pct: "Save {n}%",
-    recently_viewed: "Recently viewed"
+    recently_viewed: "Recently viewed",
+    see_description: "See product description",
+    reviews_title: "Customer Reviews",
+    reviews_summary: "/ 5 · {n} reviews",
+    no_reviews: "No reviews yet — be the first to review this part."
   },
   card: {
     models: "Models:",
@@ -588,7 +592,11 @@ const zh: typeof en = {
     compatible_equipment_col: "兼容设备",
     inquiry: "WhatsApp 询价",
     save_pct: "节省 {n}%",
-    recently_viewed: "最近浏览"
+    recently_viewed: "最近浏览",
+    see_description: "见产品说明",
+    reviews_title: "用户评价",
+    reviews_summary: "/ 5 · {n} 条评价",
+    no_reviews: "暂无评价 —— 来做第一个评价的人。"
   },
   card: {
     models: "型号：",
@@ -1029,7 +1037,11 @@ const arOverrides: DeepPartial<Dict> = {
     compatible_equipment_col: "المعدّات المتوافقة",
     inquiry: "استفسر عبر واتساب",
     save_pct: "وفّر {n}%",
-    recently_viewed: "شوهدت مؤخرًا"
+    recently_viewed: "شوهدت مؤخرًا",
+    see_description: "انظر وصف المنتج",
+    reviews_title: "آراء العملاء",
+    reviews_summary: "/ 5 · {n} مراجعة",
+    no_reviews: "لا توجد مراجعات بعد — كن أول من يقيّم هذا المنتج."
   },
   card: {
     models: "الطُرز:",
@@ -1306,7 +1318,11 @@ const ruOverrides: DeepPartial<Dict> = {
     compatible_equipment_col: "Совместимая техника",
     inquiry: "Спросить в WhatsApp",
     save_pct: "Экономия {n}%",
-    recently_viewed: "Недавно просмотренные"
+    recently_viewed: "Недавно просмотренные",
+    see_description: "См. описание товара",
+    reviews_title: "Отзывы покупателей",
+    reviews_summary: "/ 5 · {n} отзывов",
+    no_reviews: "Отзывов пока нет — оставьте первый отзыв об этом товаре."
   },
   card: {
     models: "Модели:",

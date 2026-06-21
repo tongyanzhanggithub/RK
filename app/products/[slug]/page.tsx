@@ -137,7 +137,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       <JsonLd data={breadcrumb} />
       {faqLd && <JsonLd data={faqLd} />}
       <div className="mx-auto max-w-7xl">
-        <Link href="/products" className="font-bold text-navy">Back to products</Link>
+        <Link href="/products" className="font-bold text-navy">{dict.common.back_to_products}</Link>
         <div className="mt-5 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <ProductGallery product={product} />
           <div>
@@ -165,7 +165,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
               />
             </div>
             <div className="mt-6">
-              <p className="text-sm font-black uppercase text-steel">Retail reference</p>
+              <p className="text-sm font-black uppercase text-steel">{dict.product.retail_label}</p>
               <p className="flex flex-wrap items-baseline gap-3">
                 <Price cents={product.priceCents} showUsd className="text-3xl font-black" />
                 {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
@@ -174,12 +174,12 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                       {formatMoney(product.compareAtPriceCents, product.currency)}
                     </span>
                     <span className="bg-red-100 px-2 py-0.5 text-sm font-black text-red-800">
-                      Save {Math.round((1 - product.priceCents / product.compareAtPriceCents) * 100)}%
+                      {dict.product.save_pct.replace("{n}", String(Math.round((1 - product.priceCents / product.compareAtPriceCents) * 100)))}
                     </span>
                   </>
                 )}
               </p>
-              <p className="mt-1 text-sm font-bold text-navy">Wholesale price by volume — request a quote below</p>
+              <p className="mt-1 text-sm font-bold text-navy">{dict.product.wholesale_note}</p>
               {shipCountry.vat && <p className="mt-1 text-xs text-steel">{shipCountry.vat}.</p>}
               <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} className="mt-2" />
             </div>
@@ -195,44 +195,42 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 <InquiryButton name={product.name} sku={product.sku} url={productUrl} className="min-w-52 justify-self-start" />
               </div>
             </div>
-            <p className="mt-3 text-sm font-bold text-steel">
-              Wholesale buyers: chat on WhatsApp for MOQ, carton plan and T/T pricing. The cart is for small trial orders by card.
-            </p>
+            <p className="mt-3 text-sm font-bold text-steel">{dict.product.wholesale_buyers}</p>
             <TrustBadges className="mt-5 border-t border-line pt-4 sm:grid-cols-2" />
           </div>
         </div>
 
         <section className="mt-10 grid gap-6 lg:grid-cols-3">
           <LinkedInfoBlock
-            title="Compatible Models"
+            title={dict.product.compatible_models}
             items={product.compatibleModels.map((model) => ({ label: model, href: engineHrefForModelText(model) }))}
           />
           <LinkedInfoBlock
-            title="Compatible Equipment"
+            title={dict.product.compatible_equipment}
             items={product.compatibleEquipment.map((item) => ({ label: item, href: null }))}
           />
           <LinkedInfoBlock
-            title="Problems Solved"
+            title={dict.product.problems_solved}
             items={product.problemsSolved.map((problem) => ({ label: problem, href: problemHrefForTitle(problem) }))}
           />
         </section>
 
         <section className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr]">
           <div className="border border-line bg-white p-6">
-            <h2 className="text-2xl font-black">Kit Includes</h2>
+            <h2 className="text-2xl font-black">{dict.product.kit_includes}</h2>
             <ul className="mt-4 grid gap-2">
               {product.kitIncludes.map((item) => <li key={item} className="border-b border-line pb-2">{item}</li>)}
             </ul>
           </div>
           {product.compatibleModels.length > 0 && (
             <div className="border border-line bg-white p-6">
-              <h2 className="text-2xl font-black">Compatibility Table</h2>
+              <h2 className="text-2xl font-black">{dict.product.compatibility_table}</h2>
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full min-w-[420px] text-left text-sm">
                   <thead className="bg-panel">
                     <tr>
-                      <th className="p-3">Engine Model</th>
-                      <th className="p-3">Compatible Equipment</th>
+                      <th className="p-3">{dict.product.engine_model_col}</th>
+                      <th className="p-3">{dict.product.compatible_equipment_col}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -249,7 +247,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                               model
                             )}
                           </td>
-                          <td className="p-3">{product.compatibleEquipment.join(", ") || "See product description"}</td>
+                          <td className="p-3">{product.compatibleEquipment.join(", ") || dict.product.see_description}</td>
                         </tr>
                       );
                     })}
@@ -263,7 +261,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
         <section className="mt-10 grid gap-6 lg:grid-cols-3">
           {product.notCompatibleWith && product.notCompatibleWith.length > 0 && (
             <LinkedInfoBlock
-              title="Not Compatible With"
+              title={dict.product.not_compatible}
               items={product.notCompatibleWith.map((item) => ({ label: item, href: null }))}
             />
           )}
@@ -280,8 +278,8 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
 
         {relatedProducts.length > 0 && (
           <section className="mt-10">
-            <h2 className="text-2xl font-black">Frequently Needed Together</h2>
-            <p className="mt-1 text-steel">Kits for the same engines plus universal workshop parts.</p>
+            <h2 className="text-2xl font-black">{dict.product.related_title}</h2>
+            <p className="mt-1 text-steel">{dict.product.related_sub}</p>
             <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {relatedProducts.map((item) => (
                 <ProductCard key={item.slug} product={item} />
@@ -310,15 +308,15 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
         )}
 
         <section id="reviews" className="mt-10 border-t border-line pt-8">
-          <h2 className="text-2xl font-black">Customer Reviews</h2>
+          <h2 className="text-2xl font-black">{dict.product.reviews_title}</h2>
           {reviewCount > 0 ? (
             <div className="mt-2 flex items-center gap-3">
               <Stars rating={avgRating} size={20} />
               <span className="font-black">{avgRating.toFixed(1)}</span>
-              <span className="text-steel">/ 5 · {reviewCount} review{reviewCount > 1 ? "s" : ""}</span>
+              <span className="text-steel">{dict.product.reviews_summary.replace("{n}", String(reviewCount))}</span>
             </div>
           ) : (
-            <p className="mt-2 text-steel">No reviews yet — be the first to review this part.</p>
+            <p className="mt-2 text-steel">{dict.product.no_reviews}</p>
           )}
           <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_380px]">
             <div className="grid gap-4">
