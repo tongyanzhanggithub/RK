@@ -406,6 +406,8 @@ model HeroSlide {
   badge           String
   title           String
   subtitle        String
+  image           String?
+  linkHref        String?
   primaryLabel    String
   primaryHref     String
   primaryExternal Boolean  @default(false)

@@ -107,6 +107,8 @@ export default async function HomePage() {
         badge: s.badge,
         title: s.title,
         subtitle: s.subtitle,
+        image: s.image,
+        linkHref: s.linkHref,
         primary: { label: s.primaryLabel, href: s.primaryHref, external: s.primaryExternal || undefined, whatsapp: s.primaryWhatsapp || undefined },
         secondary: s.secondaryLabel && s.secondaryHref ? { label: s.secondaryLabel, href: s.secondaryHref } : undefined,
         panelTitle: s.panelTitle,

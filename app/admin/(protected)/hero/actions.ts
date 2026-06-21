@@ -16,6 +16,8 @@ function dataFromForm(fd: FormData) {
     badge: text(fd, "badge"),
     title: text(fd, "title"),
     subtitle: text(fd, "subtitle"),
+    image: text(fd, "image") || null,
+    linkHref: text(fd, "linkHref") || null,
     primaryLabel: text(fd, "primaryLabel"),
     primaryHref: text(fd, "primaryHref") || "/products",
     primaryExternal: fd.get("primaryExternal") === "on",
@@ -43,7 +45,7 @@ function revalidate() {
 export async function createHeroSlide(_prev: HeroFormState, fd: FormData): Promise<HeroFormState> {
   await requireAdmin();
   const d = dataFromForm(fd);
-  if (!d.title || !d.primaryLabel || !d.panelTitle) return { error: "标题、主按钮文字、面板标题为必填。" };
+  if (!d.title) return { error: "大标题为必填。" };
   await prisma.heroSlide.create({ data: d });
   revalidate();
   redirect("/admin/hero?saved=1");
@@ -52,7 +54,7 @@ export async function createHeroSlide(_prev: HeroFormState, fd: FormData): Promi
 export async function updateHeroSlide(id: string, _prev: HeroFormState, fd: FormData): Promise<HeroFormState> {
   await requireAdmin();
   const d = dataFromForm(fd);
-  if (!d.title || !d.primaryLabel || !d.panelTitle) return { error: "标题、主按钮文字、面板标题为必填。" };
+  if (!d.title) return { error: "大标题为必填。" };
   await prisma.heroSlide.update({ where: { id }, data: d });
   revalidate();
   redirect("/admin/hero?saved=1");

@@ -1,12 +1,15 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
+import { MainImageUpload } from "@/components/admin-image-upload";
 import type { HeroFormState } from "@/app/admin/(protected)/hero/actions";
 
 type SlideDefaults = {
   badge: string;
   title: string;
   subtitle: string;
+  image: string | null;
+  linkHref: string | null;
   primaryLabel: string;
   primaryHref: string;
   primaryExternal: boolean;
@@ -56,10 +59,23 @@ export function HeroForm({
         <textarea name="subtitle" rows={2} defaultValue={slide?.subtitle || ""} className={field} />
       </label>
 
+      <div className="grid gap-2 border border-line bg-panel/40 p-4">
+        <MainImageUpload name="image" label="背景图 / 促销图(可选)" defaultValue={slide?.image || ""} />
+        <p className="text-xs leading-5 text-steel">
+          建议尺寸 <strong>1600 × 600 px</strong>(宽幅横图),格式 <strong>JPG / WebP</strong>,大小 <strong>&lt; 500KB</strong>。
+          留空则用默认蓝色渐变背景。上传后整张轮播会以此图为背景,文案叠加在左侧。
+        </p>
+      </div>
+      <label className={labelCls}>
+        整图点击跳转链接(可选,如活动页 /promo)
+        <input name="linkHref" defaultValue={slide?.linkHref || ""} className={field} placeholder="/products?category=Complete%20Engines" />
+        <span className="text-xs font-normal text-steel">填了之后,点击轮播图任意空白处都会跳到这个链接(按钮仍各自有效)。</span>
+      </label>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <label className={labelCls}>
-          主按钮文字 *
-          <input name="primaryLabel" required defaultValue={slide?.primaryLabel || ""} className={field} placeholder="Find my parts" />
+          主按钮文字(可选)
+          <input name="primaryLabel" defaultValue={slide?.primaryLabel || ""} className={field} placeholder="Find my parts" />
         </label>
         <label className={labelCls}>
           主按钮链接
@@ -84,8 +100,8 @@ export function HeroForm({
       </div>
 
       <label className={labelCls}>
-        右侧面板标题 *
-        <input name="panelTitle" required defaultValue={slide?.panelTitle || ""} className={field} placeholder="Fitment you can trust" />
+        右侧面板标题(可选,促销图模式下可留空)
+        <input name="panelTitle" defaultValue={slide?.panelTitle || ""} className={field} placeholder="Fitment you can trust" />
       </label>
       <label className={labelCls}>
         面板卖点(每行一条)
