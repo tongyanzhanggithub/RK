@@ -49,7 +49,7 @@ export function ProductsFilter({ categories, equipmentOptions, problems }: Produ
             }
           }}
           className="border border-line px-3 py-2 outline-none focus:border-navy"
-          placeholder="Search kits..."
+          placeholder={p.search_ph}
         />
         <FilterSelect label={p.filter_categories} value={currentValue("category")} options={categories} onChange={(value) => apply("category", value)} />
         <FilterSelect label={p.filter_equipment} value={currentValue("equipment")} options={equipmentOptions} onChange={(value) => apply("equipment", value)} />

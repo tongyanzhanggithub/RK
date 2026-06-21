@@ -12,6 +12,7 @@ export function RegionSwitcher({ className = "" }: { className?: string }) {
   return (
     <label className={`inline-flex items-center gap-1.5 border border-line bg-white px-2 ${className}`} title={t.ship_to_title}>
       <Globe2 size={15} className="shrink-0 text-navy" />
+      <span className="shrink-0 whitespace-nowrap text-xs font-bold text-steel">{t.ship_to_prefix}</span>
       <select
         value={country.code}
         onChange={(event) => setCountry(event.target.value)}
