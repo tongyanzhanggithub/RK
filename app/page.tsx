@@ -47,10 +47,10 @@ export default async function HomePage() {
     : [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]);
 
   const supplyAdvantages = [
-    [Factory, hp.supply_badge, "Sourced from China's largest motorcycle and small-engine parts cluster — the same ecosystem behind Loncin, Zongshen and Lifan engines."],
-    [Boxes, "Full range, one supplier", "Complete engines, spare parts and repair kits in a single order. Consolidate your sourcing and cut freight per unit."],
-    [BadgeCheck, "OEM / ODM & custom kitting", "Private-label packaging and custom carton mixes built for your local market and brand."],
-    [Ship, "Export-ready logistics", "Sea LCL/FCL and China–Central Asia rail. Full export documentation, T/T payment terms for reviewed buyers."]
+    [Factory, hp.supply_badge, hp.adv1_body],
+    [Boxes, hp.adv2_title, hp.adv2_body],
+    [BadgeCheck, hp.adv3_title, hp.adv3_body],
+    [Ship, hp.adv4_title, hp.adv4_body]
   ];
 
   const heroSlides: HeroSlide[] = [
@@ -115,11 +115,11 @@ export default async function HomePage() {
       {/* 3 — Region strip */}
       <section className="border-b border-line bg-navy px-4 py-5 text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-black">
-          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> Middle East</span>
-          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> Central Asia</span>
-          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> Southeast Asia</span>
+          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> {hp.region_me}</span>
+          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> {hp.region_ca}</span>
+          <span className="inline-flex items-center gap-2"><Globe2 size={16} className="text-brand" /> {hp.region_sea}</span>
           <span className="text-white/60">·</span>
-          <span>Complete engines · Spare parts · Repair kits · OEM</span>
+          <span>{hp.region_tagline}</span>
         </div>
       </section>
 

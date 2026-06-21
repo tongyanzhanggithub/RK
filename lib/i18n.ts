@@ -102,7 +102,18 @@ const en = {
     cta_section_body:
       "Tell us the engine models or part numbers you need. We reply with wholesale pricing, MOQ, carton plan and freight options by WhatsApp.",
     cta_whatsapp: "WhatsApp Us",
-    cta_apply: "Apply for Wholesale"
+    cta_apply: "Apply for Wholesale",
+    adv1_body: "Sourced from China's largest motorcycle and small-engine parts cluster — the same ecosystem behind Loncin, Zongshen and Lifan engines.",
+    adv2_title: "Full range, one supplier",
+    adv2_body: "Complete engines, spare parts and repair kits in a single order. Consolidate your sourcing and cut freight per unit.",
+    adv3_title: "OEM / ODM & custom kitting",
+    adv3_body: "Private-label packaging and custom carton mixes built for your local market and brand.",
+    adv4_title: "Export-ready logistics",
+    adv4_body: "Sea LCL/FCL and China–Central Asia rail. Full export documentation, T/T payment terms for reviewed buyers.",
+    region_me: "Middle East",
+    region_ca: "Central Asia",
+    region_sea: "Southeast Asia",
+    region_tagline: "Complete engines · Spare parts · Repair kits · OEM"
   },
   products: {
     heading: "Repair Kit Products",
@@ -519,7 +530,18 @@ const zh: typeof en = {
     cta_section_body:
       "告诉我们您需要的发动机型号或零件编号，我们通过WhatsApp回复批发价格、起订量、装箱方案及运输选项。",
     cta_whatsapp: "WhatsApp 咨询",
-    cta_apply: "申请批发资格"
+    cta_apply: "申请批发资格",
+    adv1_body: "采购自中国最大的摩托车与小型发动机零部件产业集群 —— 隆鑫、宗申、力帆等发动机背后的同一生态。",
+    adv2_title: "全品类，一站采购",
+    adv2_body: "整机、配件与维修套件一单搞定。集中采购，降低单位运费。",
+    adv3_title: "OEM / ODM 与定制装配",
+    adv3_body: "为你本地市场和品牌定制的贴牌包装与混装方案。",
+    adv4_title: "出口级物流",
+    adv4_body: "海运拼箱/整柜与中国–中亚铁路。完整出口单证，审核客户支持电汇账期。",
+    region_me: "中东",
+    region_ca: "中亚",
+    region_sea: "东南亚",
+    region_tagline: "整机 · 配件 · 维修套件 · OEM"
   },
   products: {
     heading: "维修套件产品",
@@ -947,7 +969,18 @@ const arOverrides: DeepPartial<Dict> = {
     cta_section_body:
       "أخبرنا بطُرز المحركات أو أرقام القطع التي تحتاجها. نردّ بأسعار الجملة والحد الأدنى وخطة الكراتين وخيارات الشحن عبر واتساب.",
     cta_whatsapp: "راسلنا على واتساب",
-    cta_apply: "تقدّم بطلب جملة"
+    cta_apply: "تقدّم بطلب جملة",
+    adv1_body: "مصدرها أكبر تجمّع لقطع غيار الدراجات النارية والمحركات الصغيرة في الصين — المنظومة ذاتها وراء محركات Loncin وZongshen وLifan.",
+    adv2_title: "تشكيلة كاملة، مورّد واحد",
+    adv2_body: "محركات كاملة وقطع غيار وأطقم إصلاح في طلب واحد. وحّد مصادرك وخفّض الشحن للوحدة.",
+    adv3_title: "OEM / ODM وتجميع مخصّص",
+    adv3_body: "تغليف بعلامتك الخاصة وخلطات كراتين مخصّصة لسوقك وعلامتك.",
+    adv4_title: "لوجستيات جاهزة للتصدير",
+    adv4_body: "شحن بحري LCL/FCL وسكة حديد الصين–آسيا الوسطى. مستندات تصدير كاملة وشروط دفع T/T للعملاء المعتمدين.",
+    region_me: "الشرق الأوسط",
+    region_ca: "آسيا الوسطى",
+    region_sea: "جنوب شرق آسيا",
+    region_tagline: "محركات كاملة · قطع غيار · أطقم إصلاح · OEM"
   },
   products: {
     heading: "منتجات أطقم الإصلاح",
@@ -1213,7 +1246,18 @@ const ruOverrides: DeepPartial<Dict> = {
     cta_section_body:
       "Сообщите модели двигателей или номера деталей. Ответим оптовой ценой, MOQ, планом коробок и вариантами доставки в WhatsApp.",
     cta_whatsapp: "Написать в WhatsApp",
-    cta_apply: "Подать заявку на опт"
+    cta_apply: "Подать заявку на опт",
+    adv1_body: "Поставки из крупнейшего в Китае кластера запчастей для мотоциклов и малых двигателей — той же экосистемы, что стоит за двигателями Loncin, Zongshen и Lifan.",
+    adv2_title: "Полный ассортимент, один поставщик",
+    adv2_body: "Двигатели в сборе, запчасти и ремкомплекты в одном заказе. Консолидируйте закупки и снизьте фрахт на единицу.",
+    adv3_title: "OEM / ODM и индивидуальная комплектация",
+    adv3_body: "Упаковка под вашим брендом и индивидуальные смешанные короба под ваш рынок.",
+    adv4_title: "Логистика, готовая к экспорту",
+    adv4_body: "Морские LCL/FCL и ж/д Китай–Центральная Азия. Полный пакет экспортных документов, оплата T/T для проверенных покупателей.",
+    region_me: "Ближний Восток",
+    region_ca: "Центральная Азия",
+    region_sea: "Юго-Восточная Азия",
+    region_tagline: "Двигатели · Запчасти · Ремкомплекты · OEM"
   },
   products: {
     heading: "Ремкомплекты",
