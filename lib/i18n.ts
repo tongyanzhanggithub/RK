@@ -417,10 +417,6 @@ const en = {
     questions: "Questions? Contact us on",
     whatsapp_link: "WhatsApp"
   },
-  about: {
-    heading: "About Partavio",
-    subheading: "Factory-direct from Chongqing's engine-parts cluster"
-  },
   shipping: {
     heading: "Shipping Policy"
   },
@@ -964,10 +960,6 @@ const zh: typeof en = {
     whatsapp_btn: "WhatsApp 确认",
     questions: "有疑问？联系我们",
     whatsapp_link: "WhatsApp"
-  },
-  about: {
-    heading: "关于 Partavio",
-    subheading: "重庆发动机零配件产业集群工厂直供"
   },
   shipping: {
     heading: "运输政策"

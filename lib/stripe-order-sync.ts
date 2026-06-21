@@ -223,7 +223,7 @@ export async function syncChargeRefund(charge: Stripe.Charge, event: StripeEvent
   return updated;
 }
 
-export async function syncChargeRisk(charge: Stripe.Charge, event: StripeEventReference) {
+export async function syncChargeRisk(charge: Stripe.Charge, _event: StripeEventReference) {
   const paymentIntentId = objectId(charge.payment_intent);
   if (!paymentIntentId) return null;
   const order = await prisma.order.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
