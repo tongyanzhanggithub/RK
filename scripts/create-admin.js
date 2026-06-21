@@ -28,13 +28,21 @@ async function main() {
   const normalizedEmail = email.toLowerCase();
   const passwordHash = hashPassword(password);
 
+  // Role: ADMIN_ROLE env wins; otherwise the very first admin becomes SUPER_ADMIN
+  // so there's always someone who can manage the team.
+  const existing = await prisma.adminUser.count();
+  const role =
+    (process.env.ADMIN_ROLE || "").toUpperCase() === "SUPER_ADMIN" || (!process.env.ADMIN_ROLE && existing === 0)
+      ? "SUPER_ADMIN"
+      : "ADMIN";
+
   const user = await prisma.adminUser.upsert({
     where: { email: normalizedEmail },
-    update: { name, passwordHash, role: "ADMIN" },
-    create: { email: normalizedEmail, name, passwordHash, role: "ADMIN" }
+    update: { name, passwordHash, role },
+    create: { email: normalizedEmail, name, passwordHash, role }
   });
 
-  console.log(`Upserted ADMIN user: ${user.email}`);
+  console.log(`Upserted ${role} user: ${user.email}`);
 }
 
 main()

@@ -4,10 +4,12 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { ADMIN_SESSION_COOKIE } from "@/lib/admin-constants";
 
+export type AdminRole = "ADMIN" | "SUPER_ADMIN";
+
 type AdminSessionPayload = {
   sub: string;
   email: string;
-  role: "ADMIN";
+  role: AdminRole;
   /** Fingerprint of the password hash at login time — changing the password revokes existing sessions. */
   pwd: string;
   exp: number;
@@ -72,7 +74,7 @@ export function verifyAdminToken(token: string | undefined): AdminSessionPayload
 
   try {
     const payload = JSON.parse(Buffer.from(encodedPayload, "base64url").toString("utf8")) as AdminSessionPayload;
-    if (payload.role !== "ADMIN") return null;
+    if (payload.role !== "ADMIN" && payload.role !== "SUPER_ADMIN") return null;
     if (payload.exp < Math.floor(Date.now() / 1000)) return null;
     return payload;
   } catch {
@@ -85,7 +87,8 @@ export async function getCurrentAdmin() {
   const payload = verifyAdminToken(token);
   if (!payload) return null;
   const admin = await prisma.adminUser.findUnique({ where: { id: payload.sub } });
-  if (!admin || admin.role !== "ADMIN") return null;
+  if (!admin || !admin.isActive) return null;
+  if (admin.role !== "ADMIN" && admin.role !== "SUPER_ADMIN") return null;
   if (payload.pwd !== passwordFingerprint(admin.passwordHash)) return null;
   return admin;
 }
@@ -93,6 +96,18 @@ export async function getCurrentAdmin() {
 export async function requireAdmin() {
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
+  return admin;
+}
+
+export function isSuperAdmin(admin: { role: string } | null | undefined) {
+  return admin?.role === "SUPER_ADMIN";
+}
+
+/** Guard for super-admin-only areas (team management, audit log). */
+export async function requireSuperAdmin() {
+  const admin = await getCurrentAdmin();
+  if (!admin) redirect("/admin/login");
+  if (admin.role !== "SUPER_ADMIN") redirect("/admin/dashboard");
   return admin;
 }
 

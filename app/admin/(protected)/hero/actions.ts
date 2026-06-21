@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
+import { logAdminAction } from "@/lib/admin-audit";
 import { prisma } from "@/lib/db";
 
 export type HeroFormState = { error?: string };
@@ -43,26 +44,29 @@ function revalidate() {
 }
 
 export async function createHeroSlide(_prev: HeroFormState, fd: FormData): Promise<HeroFormState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const d = dataFromForm(fd);
   if (!d.title) return { error: "大标题为必填。" };
   await prisma.heroSlide.create({ data: d });
+  await logAdminAction(admin, "hero.create", d.title);
   revalidate();
   redirect("/admin/hero?saved=1");
 }
 
 export async function updateHeroSlide(id: string, _prev: HeroFormState, fd: FormData): Promise<HeroFormState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const d = dataFromForm(fd);
   if (!d.title) return { error: "大标题为必填。" };
   await prisma.heroSlide.update({ where: { id }, data: d });
+  await logAdminAction(admin, "hero.update", d.title);
   revalidate();
   redirect("/admin/hero?saved=1");
 }
 
 export async function deleteHeroSlide(id: string) {
-  await requireAdmin();
-  await prisma.heroSlide.delete({ where: { id } });
+  const admin = await requireAdmin();
+  const removed = await prisma.heroSlide.delete({ where: { id } });
+  await logAdminAction(admin, "hero.delete", removed.title);
   revalidate();
 }
 

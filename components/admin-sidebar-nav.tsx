@@ -15,11 +15,13 @@ import {
   Settings,
   ShoppingBag,
   Star,
+  ScrollText,
   Stethoscope,
   Tag,
   Target,
   Ticket,
-  Users
+  Users,
+  UserCog
 } from "lucide-react";
 
 const items: [string, string, typeof Tag][] = [
@@ -42,27 +44,41 @@ const items: [string, string, typeof Tag][] = [
   ["设置", "/admin/settings", Settings]
 ];
 
-export function AdminSidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+const superItems: [string, string, typeof Tag][] = [
+  ["团队管理", "/admin/team", UserCog],
+  ["操作日志", "/admin/activity", ScrollText]
+];
+
+export function AdminSidebarNav({ onNavigate, isSuperAdmin = false }: { onNavigate?: () => void; isSuperAdmin?: boolean }) {
   const pathname = usePathname();
+  const renderItem = ([label, href, Icon]: [string, string, typeof Tag]) => {
+    const active = pathname === href || pathname.startsWith(`${href}/`);
+    return (
+      <Link
+        key={href}
+        href={href}
+        onClick={onNavigate}
+        aria-current={active ? "page" : undefined}
+        className={`flex items-center gap-3 px-3 py-3 text-sm font-black transition-colors ${
+          active ? "bg-brand text-white" : "text-white/85 hover:bg-white/10"
+        }`}
+      >
+        <Icon size={18} />
+        {label}
+      </Link>
+    );
+  };
+
   return (
     <nav className="grid gap-1 p-3">
-      {items.map(([label, href, Icon]) => {
-        const active = pathname === href || pathname.startsWith(`${href}/`);
-        return (
-          <Link
-            key={href}
-            href={href}
-            onClick={onNavigate}
-            aria-current={active ? "page" : undefined}
-            className={`flex items-center gap-3 px-3 py-3 text-sm font-black transition-colors ${
-              active ? "bg-brand text-white" : "text-white/85 hover:bg-white/10"
-            }`}
-          >
-            <Icon size={18} />
-            {label}
-          </Link>
-        );
-      })}
+      {items.map(renderItem)}
+      {isSuperAdmin && (
+        <>
+          <div className="mx-3 my-2 border-t border-white/10" />
+          <p className="px-3 pb-1 text-[10px] font-black uppercase tracking-wide text-white/40">超级管理员</p>
+          {superItems.map(renderItem)}
+        </>
+      )}
     </nav>
   );
 }

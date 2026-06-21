@@ -10,6 +10,7 @@ import {
   setAdminSessionCookie,
   verifyPassword
 } from "@/lib/admin-auth";
+import { logAdminAction } from "@/lib/admin-audit";
 import { prisma } from "@/lib/db";
 import { sendMail } from "@/lib/mailer";
 
@@ -60,13 +61,15 @@ export async function loginAdmin(_prevState: { error?: string }, formData: FormD
   }
 
   const admin = await prisma.adminUser.findUnique({ where: { email } });
-  if (!admin || admin.role !== "ADMIN" || !verifyPassword(parsed.data.password, admin.passwordHash)) {
+  const role = admin?.role === "SUPER_ADMIN" ? "SUPER_ADMIN" : "ADMIN";
+  if (!admin || !admin.isActive || (admin.role !== "ADMIN" && admin.role !== "SUPER_ADMIN") || !verifyPassword(parsed.data.password, admin.passwordHash)) {
     recordLoginFailure(email);
     return { error: "管理员凭据无效。" };
   }
 
   failedLogins.delete(email);
-  setAdminSessionCookie(createAdminToken({ sub: admin.id, email: admin.email, role: "ADMIN" }, admin.passwordHash));
+  setAdminSessionCookie(createAdminToken({ sub: admin.id, email: admin.email, role }, admin.passwordHash));
+  await logAdminAction(admin, "admin.login");
   redirect(parsed.data.next?.startsWith("/admin") ? parsed.data.next : "/admin/dashboard");
 }
 
@@ -107,7 +110,7 @@ export async function requestPasswordReset(
   resetRequests.set(email, Date.now());
 
   const admin = await prisma.adminUser.findUnique({ where: { email } });
-  if (admin && admin.role === "ADMIN") {
+  if (admin && admin.isActive && (admin.role === "ADMIN" || admin.role === "SUPER_ADMIN")) {
     const token = crypto.randomBytes(32).toString("base64url");
     await prisma.adminUser.update({
       where: { id: admin.id },

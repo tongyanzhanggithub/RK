@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
+import { logAdminAction } from "@/lib/admin-audit";
 import { prisma } from "@/lib/db";
 
 export type ProductFormState = {
@@ -251,6 +252,7 @@ export async function createProduct(_prevState: ProductFormState, formData: Form
     return { error: error instanceof Error ? error.message : "无法创建产品。" };
   }
 
+  await logAdminAction(admin, "product.create", product.name);
   revalidateProductRoutes(product.slug);
   redirect(`/admin/products/${product.id}/edit?saved=1`);
 }
@@ -293,15 +295,17 @@ export async function updateProduct(productId: string, _prevState: ProductFormSt
     return { error: error instanceof Error ? error.message : "无法更新产品。" };
   }
 
+  await logAdminAction(admin, "product.update", product.name);
   revalidateProductRoutes(product.slug);
   redirect(`/admin/products/${product.id}/edit?saved=1`);
 }
 
 export async function archiveProduct(productId: string) {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const product = await prisma.product.update({
     where: { id: productId },
     data: { status: "ARCHIVED" }
   });
+  await logAdminAction(admin, "product.archive", product.name);
   revalidateProductRoutes(product.slug);
 }

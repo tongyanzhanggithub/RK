@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
+import { logAdminAction } from "@/lib/admin-audit";
 import { prisma } from "@/lib/db";
 
 export type CategoryFormState = {
@@ -83,7 +84,7 @@ function revalidateCategoryRoutes() {
 }
 
 export async function createCategory(_prev: CategoryFormState, formData: FormData): Promise<CategoryFormState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const result = categoryDataFromForm(formData);
   if ("error" in result) return { error: result.error };
 
@@ -94,6 +95,7 @@ export async function createCategory(_prev: CategoryFormState, formData: FormDat
     return { error: error instanceof Error ? error.message : "无法创建分类（slug 可能已存在）。" };
   }
 
+  await logAdminAction(admin, "category.create", category.name);
   revalidateCategoryRoutes();
   redirect(`/admin/categories/${category.id}/edit?saved=1`);
 }
@@ -103,7 +105,7 @@ export async function updateCategory(
   _prev: CategoryFormState,
   formData: FormData
 ): Promise<CategoryFormState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const result = categoryDataFromForm(formData);
   if ("error" in result) return { error: result.error };
 
@@ -114,13 +116,15 @@ export async function updateCategory(
     return { error: error instanceof Error ? error.message : "无法更新分类。" };
   }
 
+  await logAdminAction(admin, "category.update", category.name);
   revalidateCategoryRoutes();
   redirect(`/admin/categories/${category.id}/edit?saved=1`);
 }
 
 export async function deleteCategory(categoryId: string) {
-  await requireAdmin();
-  await prisma.category.delete({ where: { id: categoryId } });
+  const admin = await requireAdmin();
+  const removed = await prisma.category.delete({ where: { id: categoryId } });
+  await logAdminAction(admin, "category.delete", removed.name);
   revalidateCategoryRoutes();
   redirect("/admin/categories");
 }

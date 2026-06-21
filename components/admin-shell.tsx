@@ -7,7 +7,15 @@ import { logoutAdmin } from "@/app/admin/auth-actions";
 import { AdminSidebarNav } from "@/components/admin-sidebar-nav";
 import { LogoMark } from "@/components/logo";
 
-export function AdminShell({ children, adminName }: { children: React.ReactNode; adminName: string }) {
+export function AdminShell({
+  children,
+  adminName,
+  isSuperAdmin = false
+}: {
+  children: React.ReactNode;
+  adminName: string;
+  isSuperAdmin?: boolean;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -42,7 +50,7 @@ export function AdminShell({ children, adminName }: { children: React.ReactNode;
             </span>
           </Link>
         </div>
-        <AdminSidebarNav onNavigate={() => setOpen(false)} />
+        <AdminSidebarNav onNavigate={() => setOpen(false)} isSuperAdmin={isSuperAdmin} />
         {/* Mobile-only: who's signed in + logout (desktop shows these in the top header). */}
         <div className="flex items-center justify-between gap-3 border-t border-white/10 p-4 lg:hidden">
           <span className="text-sm font-bold text-white/70">{adminName}</span>
