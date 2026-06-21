@@ -357,20 +357,25 @@ model EngineModel {
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String     @id @default(cuid())
+  slug        String     @unique
   name        String
   nameZh      String?
   nameAr      String?
   nameRu      String?
   description String?
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  icon        String?
+  parentId    String?
+  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children    Category[] @relation("CategoryTree")
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   @@index([isActive])
   @@index([sortOrder])
+  @@index([parentId])
 }
 
 model RepairGuide {

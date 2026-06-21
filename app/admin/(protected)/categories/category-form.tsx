@@ -21,12 +21,14 @@ export function CategoryForm({
   action,
   category,
   submitLabel,
-  saved
+  saved,
+  parents = []
 }: {
   action: (state: CategoryFormState, formData: FormData) => Promise<CategoryFormState>;
   category?: Category;
   submitLabel: string;
   saved?: boolean;
+  parents?: { id: string; name: string }[];
 }) {
   const [state, formAction] = useFormState(action, {});
 
@@ -97,6 +99,33 @@ export function CategoryForm({
           placeholder="分类简介，用于前台展示与 SEO。"
         />
       </label>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="grid gap-2 text-sm font-bold">
+          父分类（留空 = 顶级大类）
+          <select
+            name="parentId"
+            defaultValue={category?.parentId ?? ""}
+            className="h-11 border border-line bg-white px-3 font-normal outline-none focus:border-navy"
+          >
+            <option value="">— 顶级大类 —</option>
+            {parents.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          图标（可选，Lucide 名，如 Cog / Fuel / Zap）
+          <input
+            name="icon"
+            defaultValue={category?.icon ?? ""}
+            className="h-11 border border-line px-3 font-normal outline-none focus:border-navy"
+            placeholder="Cog"
+          />
+        </label>
+      </div>
 
       <label className="grid gap-2 text-sm font-bold">
         排序（数字越小越靠前）

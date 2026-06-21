@@ -11,6 +11,7 @@ import {
   Star,
   Stethoscope
 } from "lucide-react";
+import { CategoryIcon } from "@/components/category-icon";
 import { HeroCarousel, type HeroSlide } from "@/components/hero-carousel";
 import { PartFinder } from "@/components/part-finder";
 import { ProductCard } from "@/components/product-card";
@@ -44,15 +45,20 @@ export default async function HomePage() {
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }]
   });
   const locale = getServerLocale();
-  const categories: { label: string; name: string; count: number }[] = managedCategories.length
-    ? managedCategories.map((category) => ({
-        label: categoryLabel(category, locale),
-        name: category.name,
-        count: categoryCounts.get(category.name) || 0
-      }))
+  const categories: { label: string; name: string; slug: string; icon: string | null; count: number }[] = managedCategories.length
+    ? managedCategories
+        .filter((category) => !category.parentId) // top-level only on the homepage
+        .map((category) => ({
+          label: categoryLabel(category, locale),
+          name: category.name,
+          slug: category.slug,
+          icon: category.icon,
+          count: categoryCounts.get(category.name) || 0
+        }))
+        .filter((c) => c.count > 0) // hide empty categories on the homepage
     : [...categoryCounts.entries()]
         .sort((a, b) => b[1] - a[1])
-        .map(([name, count]) => ({ label: name, name, count }));
+        .map(([name, count]) => ({ label: name, name, slug: "", icon: null, count }));
 
   const supplyAdvantages = [
     [Factory, hp.supply_badge, hp.adv1_body],
@@ -162,16 +168,21 @@ export default async function HomePage() {
             <Link href="/products" className="font-black text-navy">{dict.common.view_catalog}</Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map(({ label, name, count }) => (
+            {categories.map(({ label, name, slug, icon, count }) => (
               <Link
                 key={name}
-                href={`/products?category=${encodeURIComponent(name)}`}
+                href={slug ? `/c/${slug}` : `/products?category=${encodeURIComponent(name)}`}
                 className="group flex items-center justify-between gap-3 border border-line bg-white p-5 shadow-sm hover:border-navy"
               >
-                <span>
-                  <strong className="block leading-snug">{label}</strong>
-                  <span className="mt-1 block text-sm font-bold text-steel">
-                    {hp.products_count.replace("{n}", String(count))}
+                <span className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand/10 text-brand">
+                    <CategoryIcon slug={slug} icon={icon} size={20} />
+                  </span>
+                  <span>
+                    <strong className="block leading-snug">{label}</strong>
+                    <span className="mt-1 block text-sm font-bold text-steel">
+                      {hp.products_count.replace("{n}", String(count))}
+                    </span>
                   </span>
                 </span>
                 <ArrowRight size={18} className="shrink-0 text-navy transition-transform group-hover:translate-x-1" />

@@ -11,6 +11,7 @@ import { useLanguage } from "@/components/language-provider";
 import { MyEngineChip } from "@/components/my-engine-chip";
 import { SearchBox } from "@/components/search-box";
 import { Logo } from "@/components/logo";
+import { CategoryIcon } from "@/components/category-icon";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { categoryLabel, type CategoryLite } from "@/lib/category-label";
 
@@ -20,7 +21,9 @@ export function SiteHeader({ categories = [] }: { categories?: CategoryLite[] })
   const h = dict.header;
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const catHref = (c: CategoryLite) => `/products?category=${encodeURIComponent(c.name)}`;
+  const catHref = (c: CategoryLite) => `/c/${c.slug}`;
+  const topLevel = categories.filter((c) => !c.parentId);
+  const childrenOf = (id?: string) => categories.filter((c) => c.parentId && c.parentId === id);
 
   // Nav after 产品 (which gets its own category dropdown).
   const tailItems: [string, string][] = [
@@ -96,8 +99,8 @@ export function SiteHeader({ categories = [] }: { categories?: CategoryLite[] })
             {nav.home}
           </Link>
 
-          {/* 产品 — category mega-menu on hover */}
-          {categories.length > 0 ? (
+          {/* 产品 — two-level category mega-menu on hover */}
+          {topLevel.length > 0 ? (
             <div className="group relative">
               <Link
                 href="/products"
@@ -106,12 +109,27 @@ export function SiteHeader({ categories = [] }: { categories?: CategoryLite[] })
                 {nav.products} <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
               </Link>
               <div className="invisible absolute left-0 top-full z-50 translate-y-1 opacity-0 transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                <div className="grid w-[34rem] grid-cols-2 gap-1 border border-line bg-white p-3 shadow-card-lg">
-                  {categories.map((c) => (
-                    <Link key={c.slug} href={catHref(c)} className="rounded-lg px-3 py-2 text-sm font-bold text-graphite hover:bg-panel hover:text-navy">
-                      {categoryLabel(c, locale)}
-                    </Link>
-                  ))}
+                <div className="grid w-[46rem] grid-cols-3 gap-x-5 gap-y-4 border border-line bg-white p-5 shadow-card-lg">
+                  {topLevel.map((parent) => {
+                    const kids = childrenOf(parent.id);
+                    return (
+                      <div key={parent.slug}>
+                        <Link href={catHref(parent)} className="flex items-center gap-2 text-sm font-black text-navy hover:underline">
+                          <CategoryIcon slug={parent.slug} icon={parent.icon} size={16} className="shrink-0 text-brand" />
+                          {categoryLabel(parent, locale)}
+                        </Link>
+                        {kids.length > 0 && (
+                          <div className="mt-1.5 grid gap-0.5">
+                            {kids.map((ch) => (
+                              <Link key={ch.slug} href={catHref(ch)} className="text-sm font-bold text-graphite hover:text-navy">
+                                {categoryLabel(ch, locale)}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -143,18 +161,30 @@ export function SiteHeader({ categories = [] }: { categories?: CategoryLite[] })
             <Link href="/products" onClick={() => setMenuOpen(false)} className="border-b border-line px-4 py-3 text-sm font-black text-graphite hover:bg-panel">
               {nav.products}
             </Link>
-            {/* Category sub-links */}
-            {categories.length > 0 && (
+            {/* Category sub-links (two-level) */}
+            {topLevel.length > 0 && (
               <div className="grid border-b border-line bg-panel/60">
-                {categories.map((c) => (
-                  <Link
-                    key={c.slug}
-                    href={catHref(c)}
-                    onClick={() => setMenuOpen(false)}
-                    className="border-b border-line/60 px-8 py-2.5 text-sm font-bold text-graphite last:border-b-0 hover:bg-white"
-                  >
-                    {categoryLabel(c, locale)}
-                  </Link>
+                {topLevel.map((parent) => (
+                  <div key={parent.slug}>
+                    <Link
+                      href={catHref(parent)}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 border-b border-line/60 px-8 py-2.5 text-sm font-black text-navy hover:bg-white"
+                    >
+                      <CategoryIcon slug={parent.slug} icon={parent.icon} size={15} className="shrink-0 text-brand" />
+                      {categoryLabel(parent, locale)}
+                    </Link>
+                    {childrenOf(parent.id).map((ch) => (
+                      <Link
+                        key={ch.slug}
+                        href={catHref(ch)}
+                        onClick={() => setMenuOpen(false)}
+                        className="block border-b border-line/60 px-12 py-2 text-sm font-bold text-graphite hover:bg-white"
+                      >
+                        {categoryLabel(ch, locale)}
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </div>
             )}

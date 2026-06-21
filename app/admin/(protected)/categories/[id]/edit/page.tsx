@@ -21,6 +21,12 @@ export default async function EditCategoryPage({
 }) {
   const category = await prisma.category.findUnique({ where: { id: params.id } });
   if (!category) notFound();
+  // Only top-level categories (other than this one) can be a parent — keep it 2 levels.
+  const parents = await prisma.category.findMany({
+    where: { parentId: null, id: { not: category.id } },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    select: { id: true, name: true }
+  });
 
   return (
     <main>
@@ -40,6 +46,7 @@ export default async function EditCategoryPage({
         action={updateCategory.bind(null, category.id)}
         submitLabel="保存分类"
         saved={searchParams?.saved === "1"}
+        parents={parents}
       />
 
       <form action={deleteCategory.bind(null, category.id)} className="mt-6 max-w-2xl">

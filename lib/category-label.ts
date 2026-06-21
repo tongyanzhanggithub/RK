@@ -1,11 +1,14 @@
 import type { Locale } from "@/lib/i18n";
 
 export type CategoryLite = {
+  id?: string;
   slug: string;
   name: string;
   nameZh?: string | null;
   nameAr?: string | null;
   nameRu?: string | null;
+  icon?: string | null;
+  parentId?: string | null;
 };
 
 /** Localized display name for a category, falling back to the canonical English name. */

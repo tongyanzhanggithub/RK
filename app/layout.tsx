@@ -24,7 +24,7 @@ async function getNavCategories(): Promise<CategoryLite[]> {
     return await prisma.category.findMany({
       where: { isActive: true },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-      select: { slug: true, name: true, nameZh: true, nameAr: true, nameRu: true }
+      select: { id: true, slug: true, name: true, nameZh: true, nameAr: true, nameRu: true, icon: true, parentId: true }
     });
   } catch {
     return [];

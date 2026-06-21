@@ -2,13 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createCategory } from "@/app/admin/(protected)/categories/actions";
 import { CategoryForm } from "@/app/admin/(protected)/categories/category-form";
+import { prisma } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "新增分类",
   description: "创建产品分类。"
 };
 
-export default function NewCategoryPage() {
+export default async function NewCategoryPage() {
+  const parents = await prisma.category.findMany({
+    where: { parentId: null },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    select: { id: true, name: true }
+  });
   return (
     <main>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
@@ -21,7 +29,7 @@ export default function NewCategoryPage() {
           返回分类列表
         </Link>
       </div>
-      <CategoryForm action={createCategory} submitLabel="创建分类" />
+      <CategoryForm action={createCategory} submitLabel="创建分类" parents={parents} />
     </main>
   );
 }

@@ -15,6 +15,8 @@ const categorySchema = z.object({
   nameZh: z.string().max(60).optional(),
   nameAr: z.string().max(60).optional(),
   nameRu: z.string().max(60).optional(),
+  parentId: z.string().optional(),
+  icon: z.string().max(40).optional(),
   slug: z
     .string()
     .min(2)
@@ -45,6 +47,8 @@ function categoryDataFromForm(formData: FormData) {
     nameZh: text(formData, "nameZh") || undefined,
     nameAr: text(formData, "nameAr") || undefined,
     nameRu: text(formData, "nameRu") || undefined,
+    parentId: text(formData, "parentId") || undefined,
+    icon: text(formData, "icon") || undefined,
     slug: rawSlug,
     description: text(formData, "description") || undefined,
     sortOrder: text(formData, "sortOrder") || "0",
@@ -62,6 +66,8 @@ function categoryDataFromForm(formData: FormData) {
       nameZh: c.nameZh ?? null,
       nameAr: c.nameAr ?? null,
       nameRu: c.nameRu ?? null,
+      parentId: c.parentId || null,
+      icon: c.icon ?? null,
       slug: c.slug,
       description: c.description ?? null,
       sortOrder: c.sortOrder,
