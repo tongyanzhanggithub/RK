@@ -42,7 +42,7 @@ const items: [string, string, typeof Tag][] = [
   ["设置", "/admin/settings", Settings]
 ];
 
-export function AdminSidebarNav() {
+export function AdminSidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
     <nav className="grid gap-1 p-3">
@@ -52,6 +52,7 @@ export function AdminSidebarNav() {
           <Link
             key={href}
             href={href}
+            onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={`flex items-center gap-3 px-3 py-3 text-sm font-black transition-colors ${
               active ? "bg-brand text-white" : "text-white/85 hover:bg-white/10"
