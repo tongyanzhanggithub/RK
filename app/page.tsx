@@ -19,7 +19,8 @@ import { problems } from "@/data/problems";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
-import { getServerDict } from "@/lib/locale";
+import { getServerDict, getServerLocale } from "@/lib/locale";
+import { categoryLabel } from "@/lib/category-label";
 
 export const dynamic = "force-dynamic";
 
@@ -42,9 +43,16 @@ export default async function HomePage() {
     where: { isActive: true },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }]
   });
-  const categories: [string, number][] = managedCategories.length
-    ? managedCategories.map((category) => [category.name, categoryCounts.get(category.name) || 0])
-    : [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]);
+  const locale = getServerLocale();
+  const categories: { label: string; name: string; count: number }[] = managedCategories.length
+    ? managedCategories.map((category) => ({
+        label: categoryLabel(category, locale),
+        name: category.name,
+        count: categoryCounts.get(category.name) || 0
+      }))
+    : [...categoryCounts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, count]) => ({ label: name, name, count }));
 
   const supplyAdvantages = [
     [Factory, hp.supply_badge, hp.adv1_body],
@@ -154,14 +162,14 @@ export default async function HomePage() {
             <Link href="/products" className="font-black text-navy">{dict.common.view_catalog}</Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map(([category, count]) => (
+            {categories.map(({ label, name, count }) => (
               <Link
-                key={category}
-                href={`/products?category=${encodeURIComponent(category)}`}
+                key={name}
+                href={`/products?category=${encodeURIComponent(name)}`}
                 className="group flex items-center justify-between gap-3 border border-line bg-white p-5 shadow-sm hover:border-navy"
               >
                 <span>
-                  <strong className="block leading-snug">{category}</strong>
+                  <strong className="block leading-snug">{label}</strong>
                   <span className="mt-1 block text-sm font-bold text-steel">
                     {hp.products_count.replace("{n}", String(count))}
                   </span>

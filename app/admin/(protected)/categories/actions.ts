@@ -12,6 +12,9 @@ export type CategoryFormState = {
 
 const categorySchema = z.object({
   name: z.string().min(2).max(60),
+  nameZh: z.string().max(60).optional(),
+  nameAr: z.string().max(60).optional(),
+  nameRu: z.string().max(60).optional(),
   slug: z
     .string()
     .min(2)
@@ -39,6 +42,9 @@ function categoryDataFromForm(formData: FormData) {
   const rawSlug = text(formData, "slug") || slugify(rawName);
   const parsed = categorySchema.safeParse({
     name: rawName,
+    nameZh: text(formData, "nameZh") || undefined,
+    nameAr: text(formData, "nameAr") || undefined,
+    nameRu: text(formData, "nameRu") || undefined,
     slug: rawSlug,
     description: text(formData, "description") || undefined,
     sortOrder: text(formData, "sortOrder") || "0",
@@ -53,6 +59,9 @@ function categoryDataFromForm(formData: FormData) {
   return {
     data: {
       name: c.name,
+      nameZh: c.nameZh ?? null,
+      nameAr: c.nameAr ?? null,
+      nameRu: c.nameRu ?? null,
       slug: c.slug,
       description: c.description ?? null,
       sortOrder: c.sortOrder,

@@ -36,15 +36,46 @@ export function CategoryForm({
       {state?.error && <p className="border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-800">{state.error}</p>}
 
       <label className="grid gap-2 text-sm font-bold">
-        分类名称
+        分类名称（英文 / 默认，也用于匹配产品）
         <input
           name="name"
           defaultValue={category?.name}
           required
           className="h-11 border border-line px-3 font-normal outline-none focus:border-navy"
-          placeholder="例如：水泵维修套件"
+          placeholder="例如：Complete Engines"
         />
       </label>
+
+      <div className="grid gap-4 border border-line bg-panel/40 p-4 sm:grid-cols-3">
+        <label className="grid gap-2 text-sm font-bold">
+          中文名
+          <input
+            name="nameZh"
+            defaultValue={category?.nameZh ?? ""}
+            className="h-11 border border-line bg-white px-3 font-normal outline-none focus:border-navy"
+            placeholder="整机"
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          العربية 阿拉伯名
+          <input
+            name="nameAr"
+            defaultValue={category?.nameAr ?? ""}
+            dir="rtl"
+            className="h-11 border border-line bg-white px-3 font-normal outline-none focus:border-navy"
+            placeholder="محركات كاملة"
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-bold">
+          Русский 俄语名
+          <input
+            name="nameRu"
+            defaultValue={category?.nameRu ?? ""}
+            className="h-11 border border-line bg-white px-3 font-normal outline-none focus:border-navy"
+            placeholder="Двигатели в сборе"
+          />
+        </label>
+      </div>
 
       <label className="grid gap-2 text-sm font-bold">
         Slug（URL 标识，留空则按名称自动生成）

@@ -14,6 +14,22 @@ import { headers } from "next/headers";
 import { RTL_LOCALES } from "@/lib/i18n";
 import { getServerLocale } from "@/lib/locale";
 import { getServerCountry } from "@/lib/region-server";
+import { prisma } from "@/lib/db";
+import type { CategoryLite } from "@/lib/category-label";
+
+// Active categories for the storefront nav. Resilient: a DB hiccup must not 500
+// the whole site, so we fall back to an empty menu.
+async function getNavCategories(): Promise<CategoryLite[]> {
+  try {
+    return await prisma.category.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+      select: { slug: true, name: true, nameZh: true, nameAr: true, nameRu: true }
+    });
+  } catch {
+    return [];
+  }
+}
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 const SITE_NAME = "Partavio";
@@ -42,12 +58,13 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const country = getServerCountry();
   const locale = getServerLocale();
   const dir = RTL_LOCALES.includes(locale) ? "rtl" : "ltr";
   // The admin area has its own shell — render it without the storefront chrome.
   const isAdmin = (headers().get("x-pathname") || "").startsWith("/admin");
+  const categories = isAdmin ? [] : await getNavCategories();
   return (
     <html lang={locale} dir={dir}>
       <body>
@@ -61,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     children
                   ) : (
                     <>
-                      <SiteHeader />
+                      <SiteHeader categories={categories} />
                       {children}
                       <SiteFooter />
                       <WhatsAppFloat />
