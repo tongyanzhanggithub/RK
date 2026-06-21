@@ -13,6 +13,14 @@ export type Product = {
   priceCents: number;
   currency: "usd";
   compareAtPriceCents?: number;
+  /** Flash-sale price (raw value, independent of whether the window is live). */
+  salePriceCents?: number;
+  /** Flash-sale window start (raw). Admin form only. */
+  saleStartsAt?: string | Date;
+  /** When the flash sale ends (raw, or the live end when storefront-normalized). */
+  saleEndsAt?: string | Date;
+  /** True when a flash sale is currently active for this product. */
+  onSale?: boolean;
   wholesalePriceCents?: number;
   costPriceCents?: number;
   allowCoupons?: boolean;

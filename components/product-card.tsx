@@ -6,6 +6,7 @@ import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { FitBadge } from "@/components/fit-badge";
 import { InquiryButton } from "@/components/inquiry-button";
 import { Price } from "@/components/price";
+import { SaleCountdown } from "@/components/sale-countdown";
 import { StockStatus } from "@/components/stock-status";
 import type { Product } from "@/data/products";
 import { getServerDict } from "@/lib/locale";
@@ -18,6 +19,11 @@ export function ProductCard({ product, activeModel }: { product: Product; active
     <article className="grid min-h-[360px] rounded-2xl border border-line bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-card-lg">
       <div>
         <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-xl bg-panel industrial-grid">
+          {product.onSale && (
+            <span className="absolute left-2 top-2 z-10 inline-flex items-center rounded-md bg-red-600 px-2 py-1 text-xs font-black text-white shadow">
+              {t.sale_badge}
+            </span>
+          )}
           {product.image || product.images?.[0]?.url ? (
             <Image
               src={(product.image || product.images?.[0]?.url) as string}
@@ -69,14 +75,18 @@ export function ProductCard({ product, activeModel }: { product: Product; active
       <div className="mt-5 flex items-center justify-between gap-3">
         <span>
           <span className="flex items-baseline gap-2">
-            <Price cents={product.priceCents} className="text-lg font-black text-ink" />
+            <Price cents={product.priceCents} className={`text-lg font-black ${product.onSale ? "text-red-600" : "text-ink"}`} />
             {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
               <small className="font-bold text-steel line-through">
                 <Price cents={product.compareAtPriceCents} />
               </small>
             )}
           </span>
-          <small className="font-bold text-steel">{t.wholesale_by_volume}</small>
+          {product.onSale && product.saleEndsAt ? (
+            <SaleCountdown endsAt={product.saleEndsAt} className="text-xs text-red-600" />
+          ) : (
+            <small className="font-bold text-steel">{t.wholesale_by_volume}</small>
+          )}
         </span>
         <Link className="rounded-lg bg-navy px-4 py-2 text-sm font-black text-white" href={`/products/${product.slug}`}>
           {t.view_details}

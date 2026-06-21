@@ -5,6 +5,7 @@ import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { FitmentChecker } from "@/components/fitment-checker";
 import { RecentlyViewed } from "@/components/recently-viewed";
+import { SaleCountdown } from "@/components/sale-countdown";
 import { InquiryButton } from "@/components/inquiry-button";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
@@ -179,6 +180,11 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                   </>
                 )}
               </p>
+              {product.onSale && product.saleEndsAt && (
+                <p className="mt-2 inline-flex items-center gap-2 bg-red-600 px-3 py-1.5 text-sm font-black text-white">
+                  {dict.card.sale_badge} · {dict.card.sale_ends} <SaleCountdown endsAt={product.saleEndsAt} />
+                </p>
+              )}
               <p className="mt-1 text-sm font-bold text-navy">{dict.product.wholesale_note}</p>
               {shipCountry.vat && <p className="mt-1 text-xs text-steel">{shipCountry.vat}.</p>}
               <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} className="mt-2" />

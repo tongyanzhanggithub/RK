@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@/components/analytics";
+import { AnnouncementBar } from "@/components/announcement-bar";
 import { CartProvider } from "@/components/cart-provider";
 import { CookieConsent } from "@/components/cookie-consent";
 import { EngineProvider } from "@/components/engine-provider";
@@ -14,6 +15,7 @@ import { headers } from "next/headers";
 import { RTL_LOCALES } from "@/lib/i18n";
 import { getServerLocale } from "@/lib/locale";
 import { getServerCountry } from "@/lib/region-server";
+import { getSettings } from "@/lib/settings";
 import { prisma } from "@/lib/db";
 import type { CategoryLite } from "@/lib/category-label";
 
@@ -64,7 +66,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const dir = RTL_LOCALES.includes(locale) ? "rtl" : "ltr";
   // The admin area has its own shell — render it without the storefront chrome.
   const isAdmin = (headers().get("x-pathname") || "").startsWith("/admin");
-  const categories = isAdmin ? [] : await getNavCategories();
+  const [categories, settings] = isAdmin
+    ? [[], {} as Record<string, string>]
+    : await Promise.all([getNavCategories(), getSettings().catch(() => ({}) as Record<string, string>)]);
   return (
     <html lang={locale} dir={dir}>
       <body>
@@ -78,6 +82,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     children
                   ) : (
                     <>
+                      {settings.announcement ? (
+                        <AnnouncementBar text={settings.announcement} link={settings.announcement_link} />
+                      ) : null}
                       <SiteHeader categories={categories} />
                       {children}
                       <SiteFooter />

@@ -1,6 +1,7 @@
 import type { Product as DbProduct } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { Product } from "@/data/products";
+import { saleState } from "@/lib/sale";
 
 function parseJson<T>(value: string | null | undefined, fallback: T): T {
   if (!value) return fallback;
@@ -12,6 +13,9 @@ function parseJson<T>(value: string | null | undefined, fallback: T): T {
 }
 
 export function normalizeProduct(product: DbProduct): Product {
+  // Resolve the flash-sale window once: when live, priceCents becomes the sale
+  // price and the original is surfaced as compareAtPriceCents for the strike-through.
+  const sale = saleState(product);
   return {
     id: product.id,
     slug: product.slug,
@@ -24,9 +28,12 @@ export function normalizeProduct(product: DbProduct): Product {
     description: product.description || undefined,
     status: product.status as Product["status"],
     priceRange: product.priceRange,
-    priceCents: product.priceCents,
+    priceCents: sale.priceCents,
     currency: "usd",
-    compareAtPriceCents: product.compareAtPriceCents || undefined,
+    compareAtPriceCents: sale.originalCents || undefined,
+    salePriceCents: sale.onSale ? sale.priceCents : undefined,
+    saleEndsAt: sale.onSale && sale.endsAt ? sale.endsAt.toISOString() : undefined,
+    onSale: sale.onSale,
     wholesalePriceCents: product.wholesalePriceCents || undefined,
     costPriceCents: product.costPriceCents || undefined,
     allowCoupons: product.allowCoupons,
