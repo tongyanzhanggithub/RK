@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { CreditCard, ShieldCheck, Timer, Truck } from "lucide-react";
-import { getServerDict } from "@/lib/locale";
+import { useLanguage } from "@/components/language-provider";
 
 export function TrustBadges({ className = "" }: { className?: string }) {
-  const t = getServerDict().ui;
+  const t = useLanguage().dict.ui;
   const items = [
     [Truck, t.trust_ships, "/shipping"],
     [Timer, t.trust_delivery, "/shipping"],
