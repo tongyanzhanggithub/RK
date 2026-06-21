@@ -75,9 +75,9 @@ export default async function AdminInventoryPage({
         </select>
         <select name="status" defaultValue={status} className="border border-line px-3 py-2">
           <option value="">全部商品状态</option>
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="DRAFT">DRAFT</option>
-          <option value="ARCHIVED">ARCHIVED</option>
+          <option value="ACTIVE">在售</option>
+          <option value="DRAFT">草稿</option>
+          <option value="ARCHIVED">已归档</option>
         </select>
         <button className="bg-navy px-4 py-2 font-black text-white lg:col-start-5">筛选</button>
       </form>

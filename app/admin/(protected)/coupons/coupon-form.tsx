@@ -59,9 +59,9 @@ export function CouponForm({ coupon, action, submitLabel, saved }: Props) {
           <label className="grid gap-2 text-sm font-bold">
             类型
             <select name="type" defaultValue={coupon?.type || "PERCENTAGE"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-              <option value="PERCENTAGE">PERCENTAGE</option>
-              <option value="FIXED_AMOUNT">FIXED_AMOUNT</option>
-              <option value="FREE_SHIPPING">FREE_SHIPPING</option>
+              <option value="PERCENTAGE">百分比折扣</option>
+              <option value="FIXED_AMOUNT">固定金额减免</option>
+              <option value="FREE_SHIPPING">免运费</option>
             </select>
           </label>
           <Field

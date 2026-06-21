@@ -83,9 +83,9 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
         <label className="grid gap-2 text-sm font-bold">
           产品状态
           <select name="status" defaultValue={product?.status || "ACTIVE"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="DRAFT">DRAFT</option>
-            <option value="ARCHIVED">ARCHIVED</option>
+            <option value="ACTIVE">在售</option>
+            <option value="DRAFT">草稿</option>
+            <option value="ARCHIVED">已归档</option>
           </select>
         </label>
         <Checkbox label="精选" name="isFeatured" defaultChecked={product?.isFeatured} />

@@ -41,9 +41,9 @@ export function WholesaleReviewForm({ application, action, saved }: Props) {
       <label className="grid gap-2 text-sm font-bold">
         审核状态
         <select name="status" defaultValue={application.status} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-          <option value="PENDING">PENDING</option>
-          <option value="APPROVED">APPROVED</option>
-          <option value="REJECTED">REJECTED</option>
+          <option value="PENDING">待审核</option>
+          <option value="APPROVED">通过</option>
+          <option value="REJECTED">拒绝</option>
         </select>
       </label>
 

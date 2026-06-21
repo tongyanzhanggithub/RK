@@ -65,16 +65,16 @@ export function CustomerManagementForm({ customer, action, saved, submitLabel = 
         <label className="grid gap-2 text-sm font-bold">
           客户状态
           <select name="status" defaultValue={customer?.status || "ACTIVE"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-            <option value="ACTIVE">ACTIVE</option>
+            <option value="ACTIVE">正常</option>
             <option value="VIP">VIP</option>
-            <option value="BLOCKED">BLOCKED</option>
+            <option value="BLOCKED">已拉黑</option>
           </select>
         </label>
         <label className="grid gap-2 text-sm font-bold">
           角色
           <select name="role" defaultValue={customer?.role || "CUSTOMER"} className="h-11 border border-line px-3 font-normal outline-none focus:border-navy">
-            <option value="CUSTOMER">CUSTOMER</option>
-            <option value="WHOLESALE">WHOLESALE</option>
+            <option value="CUSTOMER">普通客户</option>
+            <option value="WHOLESALE">批发客户</option>
           </select>
         </label>
       </div>
