@@ -2,6 +2,7 @@
 
 import { Check, FilePlus2 } from "lucide-react";
 import { useQuote } from "@/components/quote-provider";
+import { useLanguage } from "@/components/language-provider";
 
 type Props = {
   slug: string;
@@ -12,6 +13,7 @@ type Props = {
 
 export function AddToQuoteButton({ slug, name, className = "", quantity = 1 }: Props) {
   const { hasItem, addItem } = useQuote();
+  const t = useLanguage().dict.card;
   const inQuote = hasItem(slug);
 
   return (
@@ -24,7 +26,7 @@ export function AddToQuoteButton({ slug, name, className = "", quantity = 1 }: P
       } ${className}`}
     >
       {inQuote ? <Check size={17} /> : <FilePlus2 size={17} />}
-      {inQuote ? "In quote list" : "Add to quote"}
+      {inQuote ? t.in_quote : t.add_to_quote}
     </button>
   );
 }

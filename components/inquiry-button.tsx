@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { productInquiryMessage, whatsappLink } from "@/lib/contact";
+import { getServerDict } from "@/lib/locale";
 
 type InquiryButtonProps = {
   name: string;
@@ -9,7 +10,8 @@ type InquiryButtonProps = {
   label?: string;
 };
 
-export function InquiryButton({ name, sku, url, className = "", label = "Get Wholesale Price" }: InquiryButtonProps) {
+export function InquiryButton({ name, sku, url, className = "", label }: InquiryButtonProps) {
+  const text = label ?? getServerDict().card.get_wholesale_price;
   return (
     <a
       href={whatsappLink(productInquiryMessage({ name, sku, url }))}
@@ -17,7 +19,7 @@ export function InquiryButton({ name, sku, url, className = "", label = "Get Who
       rel="noopener noreferrer"
       className={`inline-flex min-h-[2.75rem] rounded-lg items-center justify-center gap-1.5 bg-[#25D366] px-3 py-1.5 text-center font-black leading-tight text-white transition hover:brightness-95 ${className}`}
     >
-      <MessageCircle size={18} /> {label}
+      <MessageCircle size={18} /> {text}
     </a>
   );
 }

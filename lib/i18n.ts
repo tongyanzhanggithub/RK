@@ -153,6 +153,22 @@ const en = {
     save_pct: "Save {n}%",
     recently_viewed: "Recently viewed"
   },
+  card: {
+    models: "Models:",
+    solves: "Solves:",
+    wholesale_available: "Wholesale available",
+    wholesale_by_volume: "Wholesale by volume",
+    view_details: "View Details",
+    get_wholesale_price: "Get Wholesale Price",
+    in_stock: "In stock — ready to ship",
+    low_stock: "Only {n} left in stock",
+    out_of_stock: "Out of stock — ask for restock date",
+    add_to_cart: "Add to Cart",
+    added: "Added",
+    sold_out: "Out of Stock",
+    add_to_quote: "Add to quote",
+    in_quote: "In quote list"
+  },
   cart: {
     badge: "Secure checkout",
     heading: "Cart",
@@ -526,6 +542,22 @@ const zh: typeof en = {
     inquiry: "WhatsApp 询价",
     save_pct: "节省 {n}%",
     recently_viewed: "最近浏览"
+  },
+  card: {
+    models: "型号：",
+    solves: "解决：",
+    wholesale_available: "支持批发",
+    wholesale_by_volume: "按量批发价",
+    view_details: "查看详情",
+    get_wholesale_price: "获取批发价",
+    in_stock: "现货 — 可立即发货",
+    low_stock: "仅剩 {n} 件",
+    out_of_stock: "缺货 — 询问补货时间",
+    add_to_cart: "加入购物车",
+    added: "已加入",
+    sold_out: "缺货",
+    add_to_quote: "加入报价单",
+    in_quote: "已在报价单"
   },
   cart: {
     badge: "安全结账",
@@ -916,6 +948,22 @@ const arOverrides: DeepPartial<Dict> = {
     save_pct: "وفّر {n}%",
     recently_viewed: "شوهدت مؤخرًا"
   },
+  card: {
+    models: "الطُرز:",
+    solves: "يحل:",
+    wholesale_available: "متوفر بالجملة",
+    wholesale_by_volume: "سعر الجملة حسب الكمية",
+    view_details: "عرض التفاصيل",
+    get_wholesale_price: "احصل على سعر الجملة",
+    in_stock: "متوفر — جاهز للشحن",
+    low_stock: "بقي {n} فقط",
+    out_of_stock: "غير متوفر — اسأل عن موعد التوفر",
+    add_to_cart: "أضف إلى السلة",
+    added: "تمت الإضافة",
+    sold_out: "غير متوفر",
+    add_to_quote: "أضف إلى طلب عرض السعر",
+    in_quote: "في طلب عرض السعر"
+  },
   cart: {
     badge: "دفع آمن",
     heading: "السلة",
@@ -1140,6 +1188,22 @@ const ruOverrides: DeepPartial<Dict> = {
     inquiry: "Спросить в WhatsApp",
     save_pct: "Экономия {n}%",
     recently_viewed: "Недавно просмотренные"
+  },
+  card: {
+    models: "Модели:",
+    solves: "Решает:",
+    wholesale_available: "Доступен опт",
+    wholesale_by_volume: "Оптовая цена по объёму",
+    view_details: "Подробнее",
+    get_wholesale_price: "Узнать оптовую цену",
+    in_stock: "В наличии — готов к отправке",
+    low_stock: "Осталось всего {n}",
+    out_of_stock: "Нет в наличии — уточните срок",
+    add_to_cart: "В корзину",
+    added: "Добавлено",
+    sold_out: "Нет в наличии",
+    add_to_quote: "В запрос цены",
+    in_quote: "В запросе цены"
   },
   cart: {
     badge: "Безопасная оплата",

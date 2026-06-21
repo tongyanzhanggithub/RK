@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, ShoppingCart, XCircle } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
+import { useLanguage } from "@/components/language-provider";
 
 type AddToCartButtonProps = {
   slug: string;
@@ -14,6 +15,7 @@ type AddToCartButtonProps = {
 
 export function AddToCartButton({ slug, name, className = "", quantity = 1, outOfStock = false }: AddToCartButtonProps) {
   const { addItem } = useCart();
+  const t = useLanguage().dict.card;
   const [added, setAdded] = useState(false);
 
   function handleAdd() {
@@ -30,7 +32,7 @@ export function AddToCartButton({ slug, name, className = "", quantity = 1, outO
         aria-label={`${name} is out of stock`}
         className={`inline-flex min-h-[2.75rem] rounded-lg cursor-not-allowed items-center justify-center gap-1.5 border border-line bg-panel px-3 py-1.5 text-center text-sm font-black leading-tight text-steel ${className}`}
       >
-        <XCircle size={17} /> Out of Stock
+        <XCircle size={17} /> {t.sold_out}
       </button>
     );
   }
@@ -43,7 +45,7 @@ export function AddToCartButton({ slug, name, className = "", quantity = 1, outO
       className={`inline-flex min-h-[2.75rem] rounded-lg items-center justify-center gap-1.5 py-1.5 text-center leading-tight bg-brand px-3 text-sm font-black text-white transition-colors hover:bg-[#1c54bf] ${className}`}
     >
       {added ? <Check size={17} /> : <ShoppingCart size={17} />}
-      {added ? "Added" : "Add to Cart"}
+      {added ? t.added : t.add_to_cart}
     </button>
   );
 }

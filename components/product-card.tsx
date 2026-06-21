@@ -8,10 +8,12 @@ import { InquiryButton } from "@/components/inquiry-button";
 import { Price } from "@/components/price";
 import { StockStatus } from "@/components/stock-status";
 import type { Product } from "@/data/products";
+import { getServerDict } from "@/lib/locale";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 
 export function ProductCard({ product, activeModel }: { product: Product; activeModel?: string }) {
+  const t = getServerDict().card;
   return (
     <article className="grid min-h-[360px] rounded-2xl border border-line bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-card-lg">
       <div>
@@ -51,15 +53,15 @@ export function ProductCard({ product, activeModel }: { product: Product; active
         />
         {product.compatibleModels.length > 0 && (
           <p>
-            <strong>Models:</strong> {product.compatibleModels.slice(0, 3).join(", ")}
+            <strong>{t.models}</strong> {product.compatibleModels.slice(0, 3).join(", ")}
           </p>
         )}
         <p>
-          <strong>Solves:</strong> {product.problemsSolved.slice(0, 2).join(", ")}
+          <strong>{t.solves}</strong> {product.problemsSolved.slice(0, 2).join(", ")}
         </p>
         {product.wholesaleAvailable && (
           <p className="inline-flex items-center gap-1 font-bold text-navy">
-            <CheckCircle2 size={16} /> Wholesale available
+            <CheckCircle2 size={16} /> {t.wholesale_available}
           </p>
         )}
         <StockStatus stock={product.stock} lowStockThreshold={product.lowStockThreshold} />
@@ -74,16 +76,17 @@ export function ProductCard({ product, activeModel }: { product: Product; active
               </small>
             )}
           </span>
-          <small className="font-bold text-steel">Wholesale by volume</small>
+          <small className="font-bold text-steel">{t.wholesale_by_volume}</small>
         </span>
         <Link className="rounded-lg bg-navy px-4 py-2 text-sm font-black text-white" href={`/products/${product.slug}`}>
-          View Details
+          {t.view_details}
         </Link>
       </div>
       <InquiryButton
         name={product.name}
         sku={product.sku}
         url={`${SITE_URL}/products/${product.slug}`}
+        label={t.get_wholesale_price}
         className="mt-3 w-full"
       />
       <div className="mt-2 grid grid-cols-1 gap-2">
