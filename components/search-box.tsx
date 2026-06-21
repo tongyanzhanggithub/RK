@@ -3,18 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Cog, Package, Search, Stethoscope } from "lucide-react";
+import { useLanguage } from "@/components/language-provider";
 
 type Suggestion = {
   type: "engine" | "problem" | "product";
   label: string;
   hint?: string;
   href: string;
-};
-
-const GROUP_LABELS: Record<Suggestion["type"], string> = {
-  engine: "Engines",
-  problem: "Troubleshooting",
-  product: "Products"
 };
 
 const GROUP_ICONS: Record<Suggestion["type"], typeof Cog> = {
@@ -25,6 +20,12 @@ const GROUP_ICONS: Record<Suggestion["type"], typeof Cog> = {
 
 export function SearchBox() {
   const router = useRouter();
+  const t = useLanguage().dict.ui;
+  const GROUP_LABELS: Record<Suggestion["type"], string> = {
+    engine: t.search_group_engines,
+    problem: t.search_group_problems,
+    product: t.search_group_products
+  };
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const [query, setQuery] = useState("");
@@ -90,10 +91,10 @@ export function SearchBox() {
             if (event.key === "Escape") setOpen(false);
           }}
           className="min-w-0 px-4 py-3 outline-none"
-          placeholder="Search 168F, GX160, water pump seal, recoil starter..."
+          placeholder={t.search_placeholder}
         />
         <button className="inline-flex items-center gap-2 bg-brand px-4 font-bold text-white transition hover:bg-[#1c54bf]" type="button" onClick={submit}>
-          <Search size={18} /> Search
+          <Search size={18} /> {t.search}
         </button>
       </div>
       {open && (
@@ -125,7 +126,7 @@ export function SearchBox() {
             onClick={submit}
             className="w-full px-4 py-2.5 text-left text-sm font-black text-navy hover:bg-panel"
           >
-            See all results for “{query.trim()}”
+            {t.search_see_all.replace("{q}", query.trim())}
           </button>
         </div>
       )}

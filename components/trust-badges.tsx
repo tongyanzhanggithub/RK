@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { CreditCard, ShieldCheck, Timer, Truck } from "lucide-react";
-
-const items = [
-  [Truck, "Ships within 3–5 business days", "/shipping"],
-  [Timer, "Delivery in 7–15 business days", "/shipping"],
-  [ShieldCheck, "30-day warranty on defects", "/returns"],
-  [CreditCard, "Secure card payment", null]
-] as const;
+import { getServerDict } from "@/lib/locale";
 
 export function TrustBadges({ className = "" }: { className?: string }) {
+  const t = getServerDict().ui;
+  const items = [
+    [Truck, t.trust_ships, "/shipping"],
+    [Timer, t.trust_delivery, "/shipping"],
+    [ShieldCheck, t.trust_warranty, "/returns"],
+    [CreditCard, t.trust_secure, null]
+  ] as const;
   return (
     <ul className={`grid gap-2 text-sm font-bold text-steel ${className}`}>
       {items.map(([Icon, label, href]) => (

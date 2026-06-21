@@ -3,15 +3,17 @@
 import Link from "next/link";
 import { Cog, X } from "lucide-react";
 import { useMyEngine } from "@/components/engine-provider";
+import { useLanguage } from "@/components/language-provider";
 
 export function MyEngineChip() {
   const { garage, activeEngine, setActiveEngine, removeEngine } = useMyEngine();
+  const t = useLanguage().dict.ui;
   if (garage.length === 0) return null;
 
   return (
     <span className="my-1.5 ml-auto inline-flex shrink-0 items-center gap-2 self-center">
       <span className="inline-flex items-center gap-1 text-xs font-black uppercase text-steel">
-        <Cog size={13} /> My garage
+        <Cog size={13} /> {t.my_garage}
       </span>
       {garage.map((engine) => {
         const isActive = engine.toLowerCase() === activeEngine?.toLowerCase();
@@ -32,7 +34,7 @@ export function MyEngineChip() {
             <button
               type="button"
               onClick={() => removeEngine(engine)}
-              aria-label={`Remove ${engine} from garage`}
+              aria-label={t.remove_from_garage.replace("{engine}", engine)}
               className={`px-1.5 py-1.5 ${isActive ? "text-white/80 hover:text-white" : "text-steel hover:text-ink"}`}
             >
               <X size={13} />

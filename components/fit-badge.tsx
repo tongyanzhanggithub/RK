@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle2, CircleSlash, Globe, ShieldCheck } from "lucide-react";
 import { engineMatchesModels, matchInGarage, useMyEngine } from "@/components/engine-provider";
+import { useLanguage } from "@/components/language-provider";
 
 type FitBadgeProps = {
   fitmentType?: "SPECIFIC" | "UNIVERSAL";
@@ -16,19 +17,21 @@ type FitBadgeProps = {
 };
 
 function GuaranteedBadge({ model }: { model: string }) {
+  const t = useLanguage().dict.ui;
   return (
     <Link
       href="/guaranteed-fit"
-      title="Guaranteed Fit — free 30-day returns if it doesn't fit"
+      title={t.fit_guaranteed_title}
       className="inline-flex items-center gap-1.5 border border-green-700 bg-green-600 px-2.5 py-1.5 text-sm font-black text-white hover:bg-green-700"
     >
-      <ShieldCheck size={16} className="shrink-0" /> Guaranteed Fit: {model}
+      <ShieldCheck size={16} className="shrink-0" /> {t.fit_guaranteed.replace("{model}", model)}
     </Link>
   );
 }
 
 export function FitBadge({ fitmentType, fitmentNote, compatibleModels, notCompatibleWith, activeModel, guaranteed }: FitBadgeProps) {
   const { garage } = useMyEngine();
+  const t = useLanguage().dict.ui;
 
   // Explicit incompatibility with an engine the buyer cares about — warn first.
   const blockedBy =
@@ -37,7 +40,7 @@ export function FitBadge({ fitmentType, fitmentNote, compatibleModels, notCompat
   if (blockedBy) {
     return (
       <p className="inline-flex items-center gap-1.5 border border-red-300 bg-red-50 px-2 py-1 text-xs font-black text-red-700">
-        <CircleSlash size={14} className="shrink-0" /> Not for your {blockedBy}
+        <CircleSlash size={14} className="shrink-0" /> {t.fit_not_for.replace("{model}", blockedBy)}
       </p>
     );
   }
@@ -46,7 +49,7 @@ export function FitBadge({ fitmentType, fitmentNote, compatibleModels, notCompat
     return (
       <p className="inline-flex items-start gap-1.5 bg-navy/10 px-2 py-1 text-xs font-black text-navy">
         <Globe size={14} className="mt-0.5 shrink-0" />
-        <span>Universal · {fitmentNote || "fits all small engines"}</span>
+        <span>{t.fit_universal.replace("{note}", fitmentNote || t.fit_universal_note)}</span>
       </p>
     );
   }
@@ -56,7 +59,7 @@ export function FitBadge({ fitmentType, fitmentNote, compatibleModels, notCompat
     if (guaranteed) return <GuaranteedBadge model={activeModel} />;
     return (
       <p className="inline-flex items-center gap-1.5 border border-green-600 bg-green-100 px-2.5 py-1.5 text-sm font-black text-green-800">
-        <CheckCircle2 size={16} className="shrink-0" /> Confirmed fit: {activeModel}
+        <CheckCircle2 size={16} className="shrink-0" /> {t.fit_confirmed.replace("{model}", activeModel)}
       </p>
     );
   }
@@ -66,7 +69,7 @@ export function FitBadge({ fitmentType, fitmentNote, compatibleModels, notCompat
     if (guaranteed) return <GuaranteedBadge model={fitsEngine} />;
     return (
       <p className="inline-flex items-center gap-1.5 bg-green-100 px-2 py-1 text-xs font-black text-green-800">
-        <CheckCircle2 size={14} className="shrink-0" /> Fits your {fitsEngine}
+        <CheckCircle2 size={14} className="shrink-0" /> {t.fit_yours.replace("{model}", fitsEngine)}
       </p>
     );
   }
