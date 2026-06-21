@@ -5,6 +5,7 @@ import { logoutCustomer } from "@/app/account/actions";
 import { requireCustomer } from "@/lib/customer-auth";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
+import { getServerDict } from "@/lib/locale";
 
 export const dynamic = "force-dynamic";
 
@@ -13,14 +14,14 @@ export const metadata: Metadata = {
   description: "Manage your orders and details."
 };
 
-const PAYMENT_LABEL: Record<string, { label: string; cls: string }> = {
-  PAID: { label: "Paid", cls: "bg-green-100 text-green-800" },
-  PENDING: { label: "Pending", cls: "bg-amber-100 text-amber-800" },
-  FAILED: { label: "Failed", cls: "bg-red-100 text-red-800" },
-  REFUNDED: { label: "Refunded", cls: "bg-blue-100 text-blue-800" }
-};
-
 export default async function AccountPage() {
+  const t = getServerDict().acct;
+  const PAYMENT_LABEL: Record<string, { label: string; cls: string }> = {
+    PAID: { label: t.pay_paid, cls: "bg-green-100 text-green-800" },
+    PENDING: { label: t.pay_pending, cls: "bg-amber-100 text-amber-800" },
+    FAILED: { label: t.pay_failed, cls: "bg-red-100 text-red-800" },
+    REFUNDED: { label: t.pay_refunded, cls: "bg-blue-100 text-blue-800" }
+  };
   const customer = await requireCustomer();
 
   // Match all orders placed with this email (incl. past guest orders).
@@ -37,42 +38,42 @@ export default async function AccountPage() {
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-black uppercase text-brand">My account</p>
-            <h1 className="text-4xl font-black">Welcome, {customer.name.split(" ")[0]}</h1>
+            <p className="font-black uppercase text-brand">{t.badge}</p>
+            <h1 className="text-4xl font-black">{t.welcome.replace("{name}", customer.name.split(" ")[0])}</h1>
             <p className="mt-2 text-steel">{customer.email}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/account/addresses" className="inline-flex h-11 items-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel">
-              <MapPin size={17} /> Shipping addresses
+              <MapPin size={17} /> {t.addresses}
             </Link>
             <form action={logoutCustomer}>
               <button type="submit" className="inline-flex h-11 items-center gap-2 border border-navy px-4 font-black text-navy hover:bg-panel">
-                <LogOut size={17} /> Sign out
+                <LogOut size={17} /> {t.sign_out}
               </button>
             </form>
           </div>
         </div>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-3">
-          <Stat icon={ShoppingBag} label="Orders" value={String(orders.length)} />
-          <Stat icon={Package} label="Paid orders" value={String(paidCount)} />
+          <Stat icon={ShoppingBag} label={t.stat_orders} value={String(orders.length)} />
+          <Stat icon={Package} label={t.stat_paid} value={String(paidCount)} />
           <div className="border border-line bg-white p-5">
-            <p className="text-sm font-bold text-steel">Need parts?</p>
+            <p className="text-sm font-bold text-steel">{t.need_parts}</p>
             <Link href="/products" className="mt-3 inline-flex h-10 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
-              Browse products
+              {t.browse}
             </Link>
           </div>
         </section>
 
         <section className="mt-8">
-          <h2 className="text-2xl font-black">Order history</h2>
+          <h2 className="text-2xl font-black">{t.history}</h2>
           {orders.length === 0 ? (
             <div className="mt-4 border border-line bg-white p-8 text-center">
               <Package className="mx-auto text-steel" size={40} />
-              <p className="mt-3 font-black">No orders yet</p>
-              <p className="mt-1 text-steel">When you place an order with this email, it will appear here.</p>
+              <p className="mt-3 font-black">{t.no_orders}</p>
+              <p className="mt-1 text-steel">{t.no_orders_body}</p>
               <Link href="/products" className="mt-5 inline-flex h-11 items-center justify-center bg-brand px-4 font-black text-white hover:bg-[#1c54bf]">
-                Start shopping
+                {t.start_shopping}
               </Link>
             </div>
           ) : (
@@ -101,11 +102,11 @@ export default async function AccountPage() {
                     </ul>
                     {order.trackingNumber && (
                       <p className="mt-3 text-sm font-bold text-navy">
-                        Tracking: {order.shippingCarrier ? `${order.shippingCarrier} · ` : ""}{order.trackingNumber}
+                        {t.tracking} {order.shippingCarrier ? `${order.shippingCarrier} · ` : ""}{order.trackingNumber}
                       </p>
                     )}
                     <Link href={`/account/orders/${order.id}`} className="mt-3 inline-flex items-center gap-1 text-sm font-black text-navy hover:underline">
-                      View details <ArrowRight size={15} />
+                      {t.view_details} <ArrowRight size={15} />
                     </Link>
                   </article>
                 );

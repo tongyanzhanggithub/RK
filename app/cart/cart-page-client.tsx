@@ -94,7 +94,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
     setAppliedCoupon(null);
 
     if (!couponCode.trim()) {
-      setCouponError("Enter a coupon code first.");
+      setCouponError(c.coupon_enter_first);
       return;
     }
 
@@ -110,12 +110,12 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
       });
       const data = (await response.json()) as AppliedCoupon & { error?: string };
       if (!response.ok || !data.code) {
-        throw new Error(data.error || "Coupon could not be applied.");
+        throw new Error(data.error || c.coupon_failed);
       }
       setCouponCode(data.code);
       setAppliedCoupon({ code: data.code, label: data.label, discountCents: data.discountCents });
     } catch (error) {
-      setCouponError(error instanceof Error ? error.message : "Coupon could not be applied.");
+      setCouponError(error instanceof Error ? error.message : c.coupon_failed);
     } finally {
       setIsApplyingCoupon(false);
     }
@@ -136,11 +136,11 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
       });
       const data = (await response.json()) as CheckoutResponse;
       if (!response.ok || !data.url) {
-        throw new Error(data.error || "Unable to start checkout.");
+        throw new Error(data.error || c.checkout_failed);
       }
       window.location.href = data.url;
     } catch (error) {
-      setCheckoutError(error instanceof Error ? error.message : "Unable to start checkout.");
+      setCheckoutError(error instanceof Error ? error.message : c.checkout_failed);
       setPendingProvider(null);
     }
   }
