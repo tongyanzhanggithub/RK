@@ -109,27 +109,51 @@ export function SiteHeader({ categories = [] }: { categories?: CategoryLite[] })
                 {nav.products} <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
               </Link>
               <div className="invisible absolute left-0 top-full z-50 translate-y-1 opacity-0 transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                <div className="grid w-[46rem] grid-cols-3 gap-x-5 gap-y-4 border border-line bg-white p-5 shadow-card-lg">
-                  {topLevel.map((parent) => {
-                    const kids = childrenOf(parent.id);
-                    return (
-                      <div key={parent.slug}>
-                        <Link href={catHref(parent)} className="flex items-center gap-2 text-sm font-black text-navy hover:underline">
-                          <CategoryIcon slug={parent.slug} icon={parent.icon} size={16} className="shrink-0 text-brand" />
-                          {categoryLabel(parent, locale)}
-                        </Link>
-                        {kids.length > 0 && (
-                          <div className="mt-1.5 grid gap-0.5">
-                            {kids.map((ch) => (
+                <div className="w-[48rem] border border-line bg-white p-5 shadow-card-lg">
+                  {/* Categories with sub-categories — balanced multi-column lists. */}
+                  <div className="grid grid-cols-3 gap-x-6 gap-y-5">
+                    {topLevel
+                      .filter((parent) => childrenOf(parent.id).length > 0)
+                      .map((parent) => (
+                        <div key={parent.slug}>
+                          <Link href={catHref(parent)} className="flex items-center gap-2 text-sm font-black text-navy hover:underline">
+                            <CategoryIcon slug={parent.slug} icon={parent.icon} size={16} className="shrink-0 text-brand" />
+                            {categoryLabel(parent, locale)}
+                          </Link>
+                          <div className="mt-2 grid gap-1 border-l border-line pl-3">
+                            {childrenOf(parent.id).map((ch) => (
                               <Link key={ch.slug} href={catHref(ch)} className="text-sm font-bold text-graphite hover:text-navy">
                                 {categoryLabel(ch, locale)}
                               </Link>
                             ))}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                        </div>
+                      ))}
+                  </div>
+
+                  {/* Single-level categories — compact quick-access chips. */}
+                  {topLevel.some((parent) => childrenOf(parent.id).length === 0) && (
+                    <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
+                      {topLevel
+                        .filter((parent) => childrenOf(parent.id).length === 0)
+                        .map((parent) => (
+                          <Link
+                            key={parent.slug}
+                            href={catHref(parent)}
+                            className="inline-flex items-center gap-2 border border-line px-3 py-1.5 text-sm font-black text-graphite hover:border-navy hover:text-navy"
+                          >
+                            <CategoryIcon slug={parent.slug} icon={parent.icon} size={15} className="shrink-0 text-brand" />
+                            {categoryLabel(parent, locale)}
+                          </Link>
+                        ))}
+                    </div>
+                  )}
+
+                  <div className="mt-4 border-t border-line pt-3">
+                    <Link href="/products" className="inline-flex items-center gap-1 text-sm font-black text-navy hover:underline">
+                      {dict.common.view_catalog} <ChevronDown size={14} className="-rotate-90" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
