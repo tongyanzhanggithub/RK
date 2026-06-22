@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Mail, Check, Loader2 } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 
-export function NewsletterForm({ source = "footer" }: { source?: string }) {
+export function NewsletterForm({ source = "footer", onSubscribed }: { source?: string; onSubscribed?: () => void }) {
   const { dict, locale } = useLanguage();
   const n = dict.newsletter;
   const [email, setEmail] = useState("");
@@ -21,7 +21,12 @@ export function NewsletterForm({ source = "footer" }: { source?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, company, source, locale })
       });
-      setStatus(res.ok ? "done" : "error");
+      if (res.ok) {
+        setStatus("done");
+        onSubscribed?.();
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }

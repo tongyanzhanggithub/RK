@@ -8,6 +8,7 @@ import { EngineProvider } from "@/components/engine-provider";
 import { LanguageProvider } from "@/components/language-provider";
 import { QuoteProvider } from "@/components/quote-provider";
 import { RegionProvider } from "@/components/region-provider";
+import { NewsletterPopup } from "@/components/newsletter-popup";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
@@ -90,6 +91,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                       <SiteFooter />
                       <WhatsAppFloat />
                       <CookieConsent />
+                      {settings.popup_enabled === "on" ? (
+                        <NewsletterPopup
+                          title={settings.popup_title || "Wholesale prices & restock alerts"}
+                          body={settings.popup_body || "Leave your email for wholesale deals and new-arrival alerts."}
+                          delaySeconds={Number(settings.popup_delay_seconds) || 8}
+                        />
+                      ) : null}
                     </>
                   )}
                 </QuoteProvider>
