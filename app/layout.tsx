@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/components/language-provider";
 import { QuoteProvider } from "@/components/quote-provider";
 import { RegionProvider } from "@/components/region-provider";
 import { NewsletterPopup } from "@/components/newsletter-popup";
+import { ToastProvider } from "@/components/toast-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
@@ -74,6 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang={locale} dir={dir}>
       <body>
         <Analytics />
+        <ToastProvider>
         <LanguageProvider initialLocale={locale}>
           <RegionProvider initialCountryCode={country.code} chargeEnabled={process.env.STRIPE_MULTICURRENCY === "1"}>
             <EngineProvider>
@@ -105,6 +107,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </EngineProvider>
           </RegionProvider>
         </LanguageProvider>
+        </ToastProvider>
       </body>
     </html>
   );

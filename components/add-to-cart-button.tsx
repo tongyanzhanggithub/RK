@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, ShoppingCart, XCircle } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
 import { useLanguage } from "@/components/language-provider";
+import { useToast } from "@/components/toast-provider";
 
 type AddToCartButtonProps = {
   slug: string;
@@ -16,11 +17,13 @@ type AddToCartButtonProps = {
 export function AddToCartButton({ slug, name, className = "", quantity = 1, outOfStock = false }: AddToCartButtonProps) {
   const { addItem } = useCart();
   const t = useLanguage().dict.card;
+  const toast = useToast();
   const [added, setAdded] = useState(false);
 
   function handleAdd() {
     addItem(slug, quantity);
     setAdded(true);
+    toast.success(`${name} · ${t.added}`);
     window.setTimeout(() => setAdded(false), 1400);
   }
 
