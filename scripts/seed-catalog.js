@@ -7,13 +7,13 @@ const prisma = new PrismaClient();
 
 // Top-level part systems.
 const TOP = [
-  { slug: "complete-engines", name: "Complete Engines", nameZh: "整机", nameAr: "محركات كاملة", nameRu: "Двигатели в сборе", description: "Complete small-engine and general-purpose engines, GX-series and clones — drop-in power for generators, pumps and machinery." },
+  { slug: "complete-engines", name: "Complete Engines & Power Units", nameZh: "整机动力", nameAr: "محركات ووحدات طاقة كاملة", nameRu: "Двигатели и силовые установки", description: "Complete small-engine and general-purpose engines, GX-series and clones — drop-in power for generators, pumps and machinery." },
   { slug: "engine-parts", name: "Engine Parts", nameZh: "发动机配件", nameAr: "قطع غيار المحرك", nameRu: "Запчасти двигателя", description: "Pistons, valves, crankshafts, gaskets and core engine components." },
   { slug: "fuel-system", name: "Fuel System", nameZh: "燃油系统", nameAr: "نظام الوقود", nameRu: "Топливная система", description: "Carburetors, fuel pumps, filters and fuel-line parts." },
   { slug: "ignition-electrical", name: "Ignition & Electrical", nameZh: "点火/电气", nameAr: "الإشعال والكهرباء", nameRu: "Зажигание и электрика", description: "Spark plugs, ignition coils, stators and electrical parts." },
-  { slug: "drivetrain-clutch", name: "Drivetrain & Clutch", nameZh: "传动/离合", nameAr: "نقل الحركة والقابض", nameRu: "Трансмиссия и сцепление", description: "Clutches, pulleys, belts and power-transmission parts." },
-  { slug: "cooling-water-pump", name: "Cooling & Water Pump", nameZh: "冷却/水泵", nameAr: "التبريد ومضخة الماء", nameRu: "Охлаждение и водяной насос", description: "Water-pump seals, impellers and cooling components." },
-  { slug: "starter-system", name: "Starter System", nameZh: "启动系统", nameAr: "نظام التشغيل", nameRu: "Система запуска", description: "Recoil starters, electric starters and starting components." },
+  { slug: "water-pump-parts", name: "Water Pump Parts", nameZh: "水泵配件", nameAr: "قطع غيار مضخة الماء", nameRu: "Запчасти водяного насоса", description: "Mechanical seals, impellers, gaskets and repair parts for 2\" / 3\" gasoline water pumps." },
+  { slug: "clutch-gearbox", name: "Clutch & Gearbox", nameZh: "离合/变速箱", nameAr: "القابض وعلبة التروس", nameRu: "Сцепление и редуктор", description: "Clutches, gearboxes, pulleys and belts for tillers and powered machinery." },
+  { slug: "starter-system", name: "Recoil & Electric Start", nameZh: "启动系统", nameAr: "نظام التشغيل", nameRu: "Система запуска", description: "Recoil (pull) starters, electric starters and starting components." },
   { slug: "repair-kits", name: "Repair Kits", nameZh: "维修套件", nameAr: "أطقم الإصلاح", nameRu: "Ремкомплекты", description: "Curated repair and maintenance kits assembled around real field failures." },
   { slug: "tools-consumables", name: "Tools & Consumables", nameZh: "工具耗材", nameAr: "الأدوات والمستهلكات", nameRu: "Инструменты и расходники", description: "Workshop tools, lubricants and consumables." },
   { slug: "universal-parts", name: "Universal Parts", nameZh: "通用件", nameAr: "قطع عالمية", nameRu: "Универсальные детали", description: "Parts that fit nearly all small engines and machines." }
@@ -35,8 +35,12 @@ const REMAP = {
   "Generator Repair Kit": "Repair Kits",
   "Maintenance Kit": "Repair Kits",
   "Small Engine Repair Kit": "Repair Kits",
-  "Starter System Kit": "Starter System",
-  "Water Pump Repair Kit": "Cooling & Water Pump"
+  "Starter System Kit": "Recoil & Electric Start",
+  "Starter System": "Recoil & Electric Start",
+  "Water Pump Repair Kit": "Water Pump Parts",
+  "Cooling & Water Pump": "Water Pump Parts",
+  "Drivetrain & Clutch": "Clutch & Gearbox",
+  "Complete Engines": "Complete Engines & Power Units"
 };
 
 async function main() {
