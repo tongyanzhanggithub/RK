@@ -4,11 +4,10 @@ import { ArrowRight, Factory, Globe2, MessageCircle, ShieldCheck, Wrench } from 
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "Partavio is a factory-direct supplier of small engine repair kits, spare parts and complete engines from the Chongqing manufacturing cluster."
-};
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.about_page.title, description: d.about_page.intro };
+}
 
 export const dynamic = "force-dynamic";
 

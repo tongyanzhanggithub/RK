@@ -12,6 +12,26 @@ function text(fd: FormData, k: string) {
   return String(fd.get(k) || "").trim();
 }
 
+// Collect the per-locale overrides (zh/ar/ru) into a compact JSON object. Empty
+// fields are omitted so the storefront falls back to the English base columns.
+function translationsFromForm(fd: FormData): string | null {
+  const result: Record<string, Record<string, unknown>> = {};
+  for (const code of ["zh", "ar", "ru"]) {
+    const o: Record<string, unknown> = {};
+    for (const key of ["badge", "title", "subtitle", "primaryLabel", "secondaryLabel", "panelTitle"]) {
+      const v = text(fd, `${code}_${key}`);
+      if (v) o[key] = v;
+    }
+    const bullets = text(fd, `${code}_bullets`)
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (bullets.length) o.bullets = bullets;
+    if (Object.keys(o).length) result[code] = o;
+  }
+  return Object.keys(result).length ? JSON.stringify(result) : null;
+}
+
 function dataFromForm(fd: FormData) {
   return {
     badge: text(fd, "badge"),
@@ -33,6 +53,7 @@ function dataFromForm(fd: FormData) {
         .map((s) => s.trim())
         .filter(Boolean)
     ),
+    translations: translationsFromForm(fd),
     sortOrder: Number(text(fd, "sortOrder") || "0") || 0,
     isActive: fd.get("isActive") === "on"
   };

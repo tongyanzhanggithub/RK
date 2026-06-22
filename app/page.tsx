@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -20,10 +21,16 @@ import { problems } from "@/data/problems";
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { prisma } from "@/lib/db";
 import { getStoreProducts } from "@/lib/product-store";
+import { localizeHeroSlide } from "@/lib/hero";
 import { getServerDict, getServerLocale } from "@/lib/locale";
 import { categoryLabel } from "@/lib/category-label";
 
 export const dynamic = "force-dynamic";
+
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.homepage.headline, description: d.homepage.subtext };
+}
 
 export default async function HomePage() {
   const dict = getServerDict();
@@ -103,17 +110,21 @@ export default async function HomePage() {
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }]
   });
   const slides: HeroSlide[] = dbHero.length
-    ? dbHero.map((s) => ({
-        badge: s.badge,
-        title: s.title,
-        subtitle: s.subtitle,
-        image: s.image,
-        linkHref: s.linkHref,
-        primary: { label: s.primaryLabel, href: s.primaryHref, external: s.primaryExternal || undefined, whatsapp: s.primaryWhatsapp || undefined },
-        secondary: s.secondaryLabel && s.secondaryHref ? { label: s.secondaryLabel, href: s.secondaryHref } : undefined,
-        panelTitle: s.panelTitle,
-        bullets: JSON.parse(s.bullets || "[]") as string[]
-      }))
+    ? dbHero.map((s) => {
+        // Resolve per-locale text overrides (falls back to the English base fields).
+        const t = localizeHeroSlide(s, locale);
+        return {
+          badge: t.badge,
+          title: t.title,
+          subtitle: t.subtitle,
+          image: s.image,
+          linkHref: s.linkHref,
+          primary: { label: t.primaryLabel, href: s.primaryHref, external: s.primaryExternal || undefined, whatsapp: s.primaryWhatsapp || undefined },
+          secondary: t.secondaryLabel && s.secondaryHref ? { label: t.secondaryLabel, href: s.secondaryHref } : undefined,
+          panelTitle: t.panelTitle,
+          bullets: t.bullets
+        };
+      })
     : heroSlides;
 
   return (

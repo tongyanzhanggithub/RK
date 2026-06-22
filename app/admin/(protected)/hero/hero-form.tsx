@@ -18,9 +18,36 @@ type SlideDefaults = {
   secondaryHref: string | null;
   panelTitle: string;
   bullets: string; // JSON
+  translations: string | null; // JSON: { zh|ar|ru: {...} }
   sortOrder: number;
   isActive: boolean;
 };
+
+const LOCALES: { code: "zh" | "ar" | "ru"; label: string }[] = [
+  { code: "zh", label: "中文" },
+  { code: "ar", label: "العربية" },
+  { code: "ru", label: "Русский" }
+];
+
+type Override = {
+  badge?: string;
+  title?: string;
+  subtitle?: string;
+  primaryLabel?: string;
+  secondaryLabel?: string;
+  panelTitle?: string;
+  bullets?: string[];
+};
+
+function parseTranslations(raw: string | null | undefined): Record<string, Override> {
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -43,6 +70,7 @@ export function HeroForm({
 }) {
   const [state, formAction] = useFormState(action, {});
   const bulletsText = slide?.bullets ? (JSON.parse(slide.bullets) as string[]).join("\n") : "";
+  const tr = parseTranslations(slide?.translations);
 
   return (
     <form action={formAction} className="grid max-w-2xl gap-4 border border-line bg-white p-6">
@@ -117,6 +145,54 @@ export function HeroForm({
           <input type="checkbox" name="isActive" defaultChecked={slide ? slide.isActive : true} /> 启用(显示在首页)
         </label>
       </div>
+
+      <details className="border border-line bg-panel/30 p-4">
+        <summary className="cursor-pointer text-sm font-black text-navy">
+          多语言覆盖(可选)— 留空则该语言沿用上方英文
+        </summary>
+        <p className="mt-2 text-xs leading-5 text-steel">
+          只填你想翻译的字段;任何留空的字段在对应语言下会自动回退到上方英文内容。按钮链接、图片、排序等为所有语言共用,不在此处翻译。
+        </p>
+        {LOCALES.map(({ code, label }) => {
+          const ov = tr[code] || {};
+          const bl = Array.isArray(ov.bullets) ? ov.bullets.join("\n") : "";
+          return (
+            <fieldset key={code} className="mt-4 grid gap-3 border border-line bg-white p-4">
+              <legend className="px-1 text-sm font-black">{label}</legend>
+              <label className={labelCls}>
+                小标签 Badge
+                <input name={`${code}_badge`} defaultValue={ov.badge || ""} className={field} />
+              </label>
+              <label className={labelCls}>
+                大标题 Title
+                <input name={`${code}_title`} defaultValue={ov.title || ""} className={field} />
+              </label>
+              <label className={labelCls}>
+                副标题 Subtitle
+                <textarea name={`${code}_subtitle`} rows={2} defaultValue={ov.subtitle || ""} className={field} />
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className={labelCls}>
+                  主按钮文字
+                  <input name={`${code}_primaryLabel`} defaultValue={ov.primaryLabel || ""} className={field} />
+                </label>
+                <label className={labelCls}>
+                  次按钮文字
+                  <input name={`${code}_secondaryLabel`} defaultValue={ov.secondaryLabel || ""} className={field} />
+                </label>
+              </div>
+              <label className={labelCls}>
+                右侧面板标题
+                <input name={`${code}_panelTitle`} defaultValue={ov.panelTitle || ""} className={field} />
+              </label>
+              <label className={labelCls}>
+                面板卖点(每行一条)
+                <textarea name={`${code}_bullets`} rows={3} defaultValue={bl} className={field} />
+              </label>
+            </fieldset>
+          );
+        })}
+      </details>
 
       {state.error && <p className="text-sm font-bold text-red-700">{state.error}</p>}
       <SubmitButton />

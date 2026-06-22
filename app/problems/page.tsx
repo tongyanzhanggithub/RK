@@ -7,11 +7,10 @@ import { getTroubleshooting } from "@/lib/troubleshooting";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Engine Troubleshooting Guides | Fix by Symptom",
-  description:
-    "Diagnose common small engine problems — engine won't start, pull starter broken, water pump leaking — and find the exact repair kit that fixes it."
-};
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.problems.heading, description: d.problems.subtext };
+}
 
 export default async function ProblemsPage() {
   const dict = getServerDict();

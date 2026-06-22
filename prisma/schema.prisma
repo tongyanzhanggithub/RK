@@ -434,6 +434,9 @@ model HeroSlide {
   secondaryHref   String?
   panelTitle      String
   bullets         String   @default("[]") // JSON 字符串数组
+  // 多语言覆盖(可选)。JSON: { zh|ar|ru: { badge,title,subtitle,primaryLabel,secondaryLabel,panelTitle,bullets[] } }
+  // 缺省字段回退到上面的英文基准字段。
+  translations    String?
   sortOrder       Int      @default(0)
   isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())

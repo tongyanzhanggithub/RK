@@ -5,10 +5,10 @@ import { WholesaleApplicationForm } from "@/app/wholesale/wholesale-application-
 import { GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { getServerDict } from "@/lib/locale";
 
-export const metadata: Metadata = {
-  title: "Wholesale & RFQ — Engine Parts Supplier",
-  description: "Request a wholesale quote for small engine parts, repair kits and complete engines. Factory-direct from China, serving the Middle East, Central Asia and Southeast Asia."
-};
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.wholesale.heading, description: d.wholesale.subtext };
+}
 
 export const dynamic = "force-dynamic";
 

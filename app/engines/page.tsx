@@ -6,11 +6,10 @@ import { getStoreProducts } from "@/lib/product-store";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Shop Parts by Engine Model",
-  description:
-    "Find repair kits and spare parts for 168F, 170F, 188F, GX160 and GX200 style engines, water pumps and generators. Fitment notes included for every model."
-};
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.engines.heading, description: d.engines.subtext };
+}
 
 export default async function EnginesPage() {
   const dict = getServerDict();

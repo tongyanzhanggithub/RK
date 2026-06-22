@@ -6,11 +6,10 @@ import { getServerDict } from "@/lib/locale";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Repair Guides",
-  description:
-    "Step-by-step repair and troubleshooting guides for small gasoline engines, water pumps and generators — 168F, 170F, GX160, GX200 and more."
-};
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.guides.main_heading, description: d.guides.main_sub };
+}
 
 export default async function GuidesPage() {
   const dict = getServerDict();

@@ -10,10 +10,10 @@ import { getStoreProducts } from "@/lib/product-store";
 import { getServerDict } from "@/lib/locale";
 import type { Product } from "@/data/products";
 
-export const metadata: Metadata = {
-  title: "Auto Parts & Complete Engines",
-  description: "Browse auto parts, engine spares, repair kits and complete engines by category, model, equipment and problem solved."
-};
+export function generateMetadata(): Metadata {
+  const d = getServerDict();
+  return { title: d.products.heading, description: d.products.subtext };
+}
 
 export const dynamic = "force-dynamic";
 
