@@ -19,6 +19,15 @@ function money(cents?: number) {
   return (cents / 100).toFixed(2);
 }
 
+function dateTimeLocal(value?: Date | string | null) {
+  if (!value) return "";
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  // Format as local datetime-local value (YYYY-MM-DDTHH:mm).
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
 function list(items?: string[]) {
   return items?.join("\n") || "";
 }
@@ -97,6 +106,9 @@ export function ProductForm({ product, categories, action, submitLabel, saved }:
         <Field label="零售价 USD" name="retailPrice" required type="number" step="0.01" defaultValue={money(product?.priceCents)} />
         <Field label="划线价 USD" name="compareAtPrice" type="number" step="0.01" defaultValue={money(product?.compareAtPriceCents)} />
         <Field label="批发价 USD" name="wholesalePrice" type="number" step="0.01" defaultValue={money(product?.wholesalePriceCents)} />
+        <Field label="限时促销价 USD（低于零售价才生效，留空=无促销）" name="salePrice" type="number" step="0.01" defaultValue={money(product?.salePriceCents)} />
+        <Field label="促销开始时间（留空=立即）" name="saleStartsAt" type="datetime-local" defaultValue={dateTimeLocal(product?.saleStartsAt)} />
+        <Field label="促销结束时间（留空=不过期；填了前台显示倒计时）" name="saleEndsAt" type="datetime-local" defaultValue={dateTimeLocal(product?.saleEndsAt)} />
         <Field label="成本价 USD" name="costPrice" type="number" step="0.01" defaultValue={money(product?.costPriceCents)} />
         <label className="grid gap-2 text-sm font-bold">
           货币
