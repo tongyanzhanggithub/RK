@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { NewsletterForm } from "@/components/newsletter-form";
+import { CONSENT_EVENT, readConsent } from "@/lib/consent";
 
 const DISMISS_KEY = "nl_popup_dismissed_at";
 // Re-show only after this long if the visitor closed without subscribing.
@@ -18,8 +19,22 @@ export function NewsletterPopup({
   delaySeconds: number;
 }) {
   const [open, setOpen] = useState(false);
+  // Don't stack on top of the cookie banner — wait until the visitor has made a
+  // cookie choice before the newsletter popup is allowed to appear.
+  const [consentReady, setConsentReady] = useState(false);
 
   useEffect(() => {
+    const check = () => {
+      if (readConsent() !== null) setConsentReady(true);
+    };
+    check();
+    window.addEventListener(CONSENT_EVENT, check);
+    return () => window.removeEventListener(CONSENT_EVENT, check);
+  }, []);
+
+  useEffect(() => {
+    if (!consentReady) return;
+
     // Respect a recent dismissal or an existing subscription.
     try {
       const dismissedAt = Number(localStorage.getItem(DISMISS_KEY) || 0);
@@ -50,7 +65,7 @@ export function NewsletterPopup({
       document.removeEventListener("mouseout", onMouseOut);
     }
     return cleanup;
-  }, [delaySeconds]);
+  }, [delaySeconds, consentReady]);
 
   if (!open) return null;
 

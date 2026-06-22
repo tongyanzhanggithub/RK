@@ -62,9 +62,11 @@ export function ProductCard({ product, activeModel }: { product: Product; active
             <strong>{t.models}</strong> {product.compatibleModels.slice(0, 3).join(", ")}
           </p>
         )}
-        <p>
-          <strong>{t.solves}</strong> {product.problemsSolved.slice(0, 2).join(", ")}
-        </p>
+        {product.problemsSolved.length > 0 && (
+          <p>
+            <strong>{t.solves}</strong> {product.problemsSolved.slice(0, 2).join(", ")}
+          </p>
+        )}
         {product.wholesaleAvailable && (
           <p className="inline-flex items-center gap-1 font-bold text-navy">
             <CheckCircle2 size={16} /> {t.wholesale_available}

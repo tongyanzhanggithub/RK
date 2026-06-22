@@ -26,6 +26,7 @@ type ProductsSearchParams = {
   sort?: string;
   fits?: string;
   guaranteed?: string;
+  page?: string;
 };
 
 function fuzzyIncludes(values: string[], needle: string) {
@@ -102,6 +103,28 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
           ? universalLast.sort((a, b) => a.name.localeCompare(b.name))
           : universalLast;
 
+  // Pagination: keep the in-memory filter/sort, then render one page at a time so
+  // a growing catalog doesn't ship hundreds of cards in a single response.
+  const PAGE_SIZE = 24;
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const page = Math.min(Math.max(1, Number(searchParams?.page) || 1), totalPages);
+  const pageItems = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  // Build a query string for a target page, preserving every active filter.
+  const pageHref = (target: number) => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(searchParams ?? {})) {
+      if (key === "page" || value == null || value === "") continue;
+      params.set(key, String(value));
+    }
+    if (target > 1) params.set("page", String(target));
+    const qs = params.toString();
+    return qs ? `/products?${qs}` : "/products";
+  };
+  const pageWindow = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+    (n) => n === 1 || n === totalPages || Math.abs(n - page) <= 2
+  );
+
   return (
     <main className="px-4 py-10">
       <div className="mx-auto max-w-7xl">
@@ -121,11 +144,44 @@ export default async function ProductsPage({ searchParams }: { searchParams?: Pr
           {sorted.length === 1 ? p.count_one : p.count_other.replace("{n}", String(sorted.length))}
         </p>
         {sorted.length > 0 ? (
-          <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {sorted.map((product) => (
-              <ProductCard key={product.slug} product={product} activeModel={model || undefined} />
-            ))}
-          </div>
+          <>
+            <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map((product) => (
+                <ProductCard key={product.slug} product={product} activeModel={model || undefined} />
+              ))}
+            </div>
+            {totalPages > 1 && (
+              <nav className="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
+                {page > 1 && (
+                  <Link href={pageHref(page - 1)} className="inline-flex h-10 items-center justify-center border border-line bg-white px-3 font-black text-navy hover:border-navy">
+                    ‹
+                  </Link>
+                )}
+                {pageWindow.map((n, i) => {
+                  const gap = i > 0 && n - pageWindow[i - 1] > 1;
+                  return (
+                    <span key={n} className="flex items-center gap-2">
+                      {gap && <span className="px-1 text-steel">…</span>}
+                      <Link
+                        href={pageHref(n)}
+                        aria-current={n === page ? "page" : undefined}
+                        className={`inline-flex h-10 min-w-10 items-center justify-center border px-3 font-black ${
+                          n === page ? "border-brand bg-brand text-white" : "border-line bg-white text-navy hover:border-navy"
+                        }`}
+                      >
+                        {n}
+                      </Link>
+                    </span>
+                  );
+                })}
+                {page < totalPages && (
+                  <Link href={pageHref(page + 1)} className="inline-flex h-10 items-center justify-center border border-line bg-white px-3 font-black text-navy hover:border-navy">
+                    ›
+                  </Link>
+                )}
+              </nav>
+            )}
+          </>
         ) : (
           <div className="mt-4 border border-line bg-white p-10 text-center">
             <SearchX className="mx-auto text-steel" size={44} />
