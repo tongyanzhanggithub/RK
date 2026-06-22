@@ -17,6 +17,7 @@ import {
   ScrollText,
   Settings,
   ShoppingBag,
+  Mails,
   Star,
   Stethoscope,
   Tag,
@@ -36,7 +37,7 @@ const GROUPS: Group[] = [
   { label: "商品", items: [["产品", "/admin/products", Package], ["分类", "/admin/categories", Tag], ["库存", "/admin/inventory", Boxes], ["适配健康度", "/admin/fitment", Target]] },
   { label: "销售", items: [["订单", "/admin/orders", ShoppingBag], ["退货", "/admin/returns", RotateCcw], ["客户", "/admin/customers", Users]] },
   { label: "批发", items: [["批发申请", "/admin/wholesale", BarChart3], ["询价单", "/admin/quotes", FileSpreadsheet]] },
-  { label: "营销", items: [["优惠券", "/admin/coupons", Ticket], ["首页轮播", "/admin/hero", GalleryHorizontalEnd]] },
+  { label: "营销", items: [["优惠券", "/admin/coupons", Ticket], ["首页轮播", "/admin/hero", GalleryHorizontalEnd], ["邮件订阅", "/admin/newsletter", Mails]] },
   { label: "内容", items: [["故障排查", "/admin/problems", Stethoscope], ["维修指南", "/admin/guides", FileText], ["用户评价", "/admin/testimonials", MessageSquareQuote], ["产品评价", "/admin/reviews", Star]] },
   { label: "系统", items: [["设置", "/admin/settings", Settings]] }
 ];

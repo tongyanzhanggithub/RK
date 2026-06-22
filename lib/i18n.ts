@@ -42,7 +42,15 @@ const en = {
     terms: "Terms & Conditions",
     privacy: "Privacy Policy",
     contact: "Contact Us",
-    quote: "Get a quote"
+    quote: "Get a quote",
+    newsletter_title: "Parts deals & restock alerts"
+  },
+  newsletter: {
+    placeholder: "Your email address",
+    cta: "Subscribe",
+    success: "You're in — watch your inbox.",
+    error: "Something went wrong. Please try again.",
+    consent: "Wholesale price updates and new-arrival alerts. Unsubscribe anytime."
   },
   common: {
     in_stock: "In Stock",
@@ -601,7 +609,15 @@ const zh: typeof en = {
     terms: "条款与条件",
     privacy: "隐私政策",
     contact: "联系我们",
-    quote: "获取报价"
+    quote: "获取报价",
+    newsletter_title: "配件优惠与到货提醒"
+  },
+  newsletter: {
+    placeholder: "你的邮箱地址",
+    cta: "订阅",
+    success: "订阅成功 — 请留意你的邮箱。",
+    error: "出错了,请重试。",
+    consent: "批发价格更新与新品到货提醒,可随时退订。"
   },
   common: {
     in_stock: "有库存",
@@ -1166,7 +1182,15 @@ const arOverrides: DeepPartial<Dict> = {
     terms: "الشروط والأحكام",
     privacy: "سياسة الخصوصية",
     contact: "اتصل بنا",
-    quote: "اطلب عرض سعر"
+    quote: "اطلب عرض سعر",
+    newsletter_title: "عروض القطع وتنبيهات التوفر"
+  },
+  newsletter: {
+    placeholder: "بريدك الإلكتروني",
+    cta: "اشترك",
+    success: "تم الاشتراك — تابع بريدك الوارد.",
+    error: "حدث خطأ ما. حاول مرة أخرى.",
+    consent: "تحديثات أسعار الجملة وتنبيهات الوصول الجديد. يمكنك إلغاء الاشتراك في أي وقت."
   },
   common: {
     in_stock: "متوفر",
@@ -1577,7 +1601,15 @@ const ruOverrides: DeepPartial<Dict> = {
     terms: "Условия и положения",
     privacy: "Политика конфиденциальности",
     contact: "Контакты",
-    quote: "Запросить цену"
+    quote: "Запросить цену",
+    newsletter_title: "Акции на детали и оповещения о поступлении"
+  },
+  newsletter: {
+    placeholder: "Ваш адрес эл. почты",
+    cta: "Подписаться",
+    success: "Готово — проверьте почту.",
+    error: "Что-то пошло не так. Попробуйте снова.",
+    consent: "Обновления оптовых цен и оповещения о новинках. Отписаться можно в любой момент."
   },
   common: {
     in_stock: "В наличии",

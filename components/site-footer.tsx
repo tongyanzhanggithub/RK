@@ -5,6 +5,7 @@ import { Mail, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { CONTACT_EMAIL, GENERAL_INQUIRY_MESSAGE, whatsappLink } from "@/lib/contact";
 import { Logo } from "@/components/logo";
+import { NewsletterForm } from "@/components/newsletter-form";
 
 export function SiteFooter() {
   const { dict } = useLanguage();
@@ -55,6 +56,10 @@ export function SiteFooter() {
             <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 text-white hover:text-brand">
               <Mail size={16} /> {CONTACT_EMAIL}
             </a>
+          </div>
+          <strong className="mt-6 block text-sm uppercase tracking-wide text-brand">{f.newsletter_title}</strong>
+          <div className="mt-3">
+            <NewsletterForm source="footer" />
           </div>
         </div>
       </div>
