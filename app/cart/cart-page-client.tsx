@@ -9,6 +9,7 @@ import { AddToCartButton } from "@/components/add-to-cart-button";
 import { TrustBadges } from "@/components/trust-badges";
 import { useCart } from "@/components/cart-provider";
 import { useLanguage } from "@/components/language-provider";
+import { useToast } from "@/components/toast-provider";
 import { useRegion } from "@/components/region-provider";
 import type { Product } from "@/data/products";
 import { formatMoney } from "@/lib/format";
@@ -35,6 +36,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
   const { items, updateItem, removeItem, clearCart, totalQuantity } = useCart();
   const { dict } = useLanguage();
   const c = dict.cart;
+  const toast = useToast();
   const { local, isUsd, country, charged } = useRegion();
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
@@ -114,6 +116,7 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
       }
       setCouponCode(data.code);
       setAppliedCoupon({ code: data.code, label: data.label, discountCents: data.discountCents });
+      toast.success(`${data.label} · ${c.coupon_apply}`);
     } catch (error) {
       setCouponError(error instanceof Error ? error.message : c.coupon_failed);
     } finally {
@@ -140,7 +143,9 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
       }
       window.location.href = data.url;
     } catch (error) {
-      setCheckoutError(error instanceof Error ? error.message : c.checkout_failed);
+      const message = error instanceof Error ? error.message : c.checkout_failed;
+      setCheckoutError(message);
+      toast.error(message);
       setPendingProvider(null);
     }
   }
@@ -224,7 +229,10 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
                       <button
                         type="button"
                         className="inline-flex items-center gap-2 text-sm font-black text-red-700"
-                        onClick={() => removeItem(product.slug)}
+                        onClick={() => {
+                          removeItem(product.slug);
+                          toast.info(`${product.name} · ${c.item_removed}`);
+                        }}
                       >
                         <Trash2 size={16} /> Remove
                       </button>
@@ -399,7 +407,10 @@ export function CartPageClient({ products, paymentOptions }: CartPageClientProps
               )}
               <button
                 type="button"
-                onClick={clearCart}
+                onClick={() => {
+                  clearCart();
+                  toast.info(c.cart_cleared);
+                }}
                 className="mt-3 inline-flex min-h-[2.75rem] rounded-lg w-full items-center justify-center border border-line px-4 py-2 text-center font-black leading-tight text-navy hover:bg-panel"
               >
                 {c.clear_cart}
