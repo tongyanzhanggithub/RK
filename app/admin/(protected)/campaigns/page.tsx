@@ -91,7 +91,7 @@ export default async function AdminCampaignsPage() {
                           >
                             预览 <ExternalLink size={12} />
                           </a>
-                          <DeleteCampaignButton id={c.id} />
+                          <DeleteCampaignButton id={c.id} title={c.title} />
                         </div>
                       </td>
                     </tr>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { archiveProduct } from "@/app/admin/(protected)/products/actions";
+import { ArchiveProductButton } from "@/app/admin/(protected)/products/archive-button";
 import { zhLabel, PRODUCT_STATUS } from "@/lib/admin-status";
 import { prisma } from "@/lib/db";
 import { formatMoney } from "@/lib/format";
@@ -165,9 +165,7 @@ export default async function AdminProductsPage({
                   <div className="flex flex-wrap gap-2">
                     <Link href={`/admin/products/${product.id}/edit`} className="font-black text-navy">编辑</Link>
                     {product.status !== "ARCHIVED" && (
-                      <form action={archiveProduct.bind(null, product.id)}>
-                        <button className="font-black text-red-700" type="submit">归档</button>
-                      </form>
+                      <ArchiveProductButton id={product.id} name={product.name} />
                     )}
                   </div>
                 </td>

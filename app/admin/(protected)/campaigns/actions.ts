@@ -146,5 +146,4 @@ export async function deleteCampaign(campaignId: string) {
   const campaign = await prisma.campaign.delete({ where: { id: campaignId } });
   await logAdminAction(admin, "campaign.delete", campaign.title);
   revalidateCampaignRoutes(campaign.slug);
-  redirect("/admin/campaigns");
 }

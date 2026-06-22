@@ -1,20 +1,29 @@
 "use client";
 
-import { useTransition } from "react";
+import { Trash2 } from "lucide-react";
+import { ConfirmButton } from "@/components/confirm-dialog";
+import { useToast } from "@/components/toast-provider";
 import { deleteCampaign } from "./actions";
 
-export function DeleteCampaignButton({ id }: { id: string }) {
-  const [pending, start] = useTransition();
+export function DeleteCampaignButton({ id, title }: { id: string; title: string }) {
+  const toast = useToast();
   return (
-    <button
-      type="button"
-      disabled={pending}
-      onClick={() => {
-        if (confirm("确定删除这个活动？此操作不可撤销。")) start(() => deleteCampaign(id));
+    <ConfirmButton
+      title="删除活动"
+      message={`确定删除「${title}」？此操作不可撤销。`}
+      confirmLabel="删除"
+      aria-label={`删除 ${title}`}
+      className="inline-flex items-center gap-1 text-xs font-black text-red-600 hover:underline"
+      onConfirm={async () => {
+        try {
+          await deleteCampaign(id);
+          toast.success("活动已删除");
+        } catch {
+          toast.error("删除失败，请重试");
+        }
       }}
-      className="text-xs font-black text-red-600 underline-offset-2 hover:underline disabled:opacity-50"
     >
-      {pending ? "删除中…" : "删除"}
-    </button>
+      <Trash2 size={13} /> 删除
+    </ConfirmButton>
   );
 }

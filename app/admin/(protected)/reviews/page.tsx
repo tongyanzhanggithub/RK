@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { deleteReview, toggleReviewPublished } from "@/app/admin/(protected)/reviews/actions";
+import { ReviewActions } from "@/app/admin/(protected)/reviews/review-actions";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -61,18 +61,7 @@ export default async function AdminReviewsPage() {
               </div>
               {review.title && <p className="font-black">{review.title}</p>}
               <p className="text-sm leading-6 text-steel">{review.body}</p>
-              <div className="flex gap-3">
-                <form action={toggleReviewPublished.bind(null, review.id)}>
-                  <button type="submit" className="text-sm font-black text-navy hover:underline">
-                    {review.isPublished ? "下架" : "通过并发布"}
-                  </button>
-                </form>
-                <form action={deleteReview.bind(null, review.id)}>
-                  <button type="submit" className="text-sm font-black text-red-700 hover:underline">
-                    删除
-                  </button>
-                </form>
-              </div>
+              <ReviewActions id={review.id} isPublished={review.isPublished} />
             </article>
           ))
         )}
