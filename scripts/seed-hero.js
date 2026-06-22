@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 const slides = [
   {
     badge: "Factory-direct B2B supplier",
-    title: "Wholesale Small Engine Parts & Complete Engines — Direct From China",
+    title: "Wholesale Auto Parts & Complete Engines — Direct From China",
     subtitle:
-      "Repair kits, spare parts and complete 168F / GX160-style engines for repair shops, distributors and dealers across the Middle East, Central Asia and Southeast Asia. Factory pricing, low MOQ, OEM welcome.",
+      "Auto parts, engine spares, repair kits and complete 168F / GX160-style engines for repair shops, distributors and dealers across the Middle East, Central Asia and Southeast Asia. Factory pricing, low MOQ, OEM welcome.",
     primaryLabel: "Get Wholesale Quote",
     primaryHref: "/wholesale",
     primaryWhatsapp: true,

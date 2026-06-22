@@ -11,8 +11,8 @@ import { getServerDict } from "@/lib/locale";
 import type { Product } from "@/data/products";
 
 export const metadata: Metadata = {
-  title: "Repair Kit Products",
-  description: "Browse small engine repair kits by category, model, equipment and problem solved."
+  title: "Auto Parts & Complete Engines",
+  description: "Browse auto parts, engine spares, repair kits and complete engines by category, model, equipment and problem solved."
 };
 
 export const dynamic = "force-dynamic";

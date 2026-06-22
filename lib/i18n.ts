@@ -14,7 +14,7 @@ const en = {
     learn_more: "Privacy Policy"
   },
   header: {
-    topbar_left: "Factory-direct engine parts & complete engines — Chongqing, China",
+    topbar_left: "Factory-direct auto parts & complete engines — Chongqing, China",
     topbar_right: "Serving the Middle East, Central Asia & Southeast Asia",
     tagline: "Factory-direct engine parts supplier",
     quote: "Get a Quote"
@@ -31,7 +31,7 @@ const en = {
   },
   footer: {
     description:
-      "Factory-direct supplier of small engine parts, repair kits and complete engines from the Chongqing manufacturing cluster. Wholesale and OEM for the Middle East, Central Asia and Southeast Asia.",
+      "Factory-direct supplier of auto parts, engine spares, repair kits and complete engines from the Chongqing manufacturing cluster. Wholesale and OEM for the Middle East, Central Asia and Southeast Asia.",
     logistics: "Logistics: sea LCL/FCL and China–Central Asia rail · full export documents · T/T payment terms.",
     navigate: "Navigate",
     policies: "Policies",
@@ -64,9 +64,9 @@ const en = {
   },
   homepage: {
     badge: "Factory-direct B2B supplier",
-    headline: "Wholesale Small Engine Parts & Complete Engines — Direct From China",
+    headline: "Wholesale Auto Parts & Complete Engines — Direct From China",
     subtext:
-      "Repair kits, spare parts and complete 168F / GX160-style engines for repair shops, distributors and dealers across the Middle East, Central Asia and Southeast Asia. Factory pricing, low MOQ, OEM welcome.",
+      "Auto parts, engine spares, repair kits and complete 168F / GX160-style engines for repair shops, distributors and dealers across the Middle East, Central Asia and Southeast Asia. Factory pricing, low MOQ, OEM welcome.",
     cta_quote: "Get Wholesale Quote",
     cta_distributor: "Become a Distributor",
     cta_browse: "Browse Catalog",
@@ -121,12 +121,12 @@ const en = {
     region_me: "Middle East",
     region_ca: "Central Asia",
     region_sea: "Southeast Asia",
-    region_tagline: "Complete engines · Spare parts · Repair kits · OEM"
+    region_tagline: "Complete engines · Auto parts · Repair kits · OEM"
   },
   products: {
-    heading: "Repair Kit Products",
+    heading: "Auto Parts & Complete Engines",
     subtext:
-      "Filter by category, compatible model, equipment and problem solved. Model-specific kits show first; universal parts that also fit are listed after them.",
+      "Filter auto parts, engine spares, repair kits and complete engines by category, compatible model, equipment and problem solved. Model-specific items show first; universal parts that also fit are listed after them.",
     count_one: "1 product found",
     count_other: "{n} products found",
     no_results: "No products match these filters.",
@@ -142,7 +142,7 @@ const en = {
     active_filters: "Active filters:",
     clear_all: "Clear all",
     guaranteed_only: "Guaranteed Fit only",
-    search_ph: "Search kits...",
+    search_ph: "Search parts, engines or SKU...",
     fitment_title: "Find parts for your engine",
     fitment_sub: "Select your engine to see only parts confirmed to fit — universal parts are shown last.",
     fitment_select: "Select your engine / machine...",
@@ -225,7 +225,7 @@ const en = {
     badge: "About us",
     title: "A parts supplier that speaks repair",
     intro:
-      "Partavio sells small engine repair kits, spare parts and complete 168F / GX160-style engines directly from the factory floor in Chongqing, China. We exist for the repair shop that needs the right carburetor the first time, and the distributor who wants one supplier for the full range.",
+      "Partavio sells auto parts, engine spares, repair kits and complete 168F / GX160-style engines directly from the factory floor in Chongqing, China. We exist for the repair shop that needs the right part the first time, and the distributor who wants one supplier for the full range.",
     fact1_title: "Factory-direct from Chongqing",
     fact1_body:
       "We source from China's largest motorcycle and small-engine manufacturing cluster — the ecosystem behind Loncin, Zongshen and Lifan engines.",
@@ -328,9 +328,9 @@ const en = {
   cart: {
     badge: "Secure checkout",
     heading: "Cart",
-    subtext: "Review repair kits before secure checkout. Prices are sample-order prices; bulk quotes can be handled later.",
+    subtext: "Review your items before secure checkout. Prices are sample-order prices; bulk quotes can be handled later.",
     empty_heading: "Your cart is empty",
-    empty_sub: "Add repair kits from the product list or product detail page.",
+    empty_sub: "Add items from the product list or product detail page.",
     browse: "Browse Products",
     unit_price: "Unit price:",
     cross_sell_title: "You may also need",
@@ -437,7 +437,7 @@ const en = {
   },
   engines: {
     heading: "Shop by Engine Model",
-    subtext: "Select your engine to see compatible repair kits, spare parts and maintenance accessories.",
+    subtext: "Select your engine to see compatible parts, repair kits and maintenance accessories.",
     set_engine: "Set as My Engine",
     badge: "Shop by engine",
     main_heading: "Pick your engine or machine",
@@ -561,7 +561,7 @@ const en = {
     back_to_cart: "Back to Cart"
   },
   finder: {
-    heading: "Find the right repair kit",
+    heading: "Find the right part",
     subtext: "3 steps — or send a photo on WhatsApp and we confirm fitment for free.",
     step1: "1 · MY EQUIPMENT",
     step2: "2 · ENGINE / MODEL",
@@ -583,9 +583,9 @@ const zh: typeof en = {
     learn_more: "隐私政策"
   },
   header: {
-    topbar_left: "工厂直供 · 小型发动机零配件及整机 — 中国重庆",
+    topbar_left: "工厂直供 · 汽车配件与整机 — 中国重庆",
     topbar_right: "服务中东、中亚及东南亚市场",
-    tagline: "工厂直供发动机零配件",
+    tagline: "工厂直供汽车配件与整机",
     quote: "获取报价"
   },
   nav: {
@@ -600,7 +600,7 @@ const zh: typeof en = {
   },
   footer: {
     description:
-      "重庆制造业集群工厂直供小型发动机零配件、维修套件及整机。面向中东、中亚及东南亚市场提供批发及OEM服务。",
+      "重庆制造业集群工厂直供汽车配件、发动机零配件、维修套件及整机。面向中东、中亚及东南亚市场提供批发及OEM服务。",
     logistics: "物流方式：海运拼箱/整柜 · 中国-中亚铁路 · 提供完整出口单证 · 支持电汇付款。",
     navigate: "导航",
     policies: "政策",
@@ -633,9 +633,9 @@ const zh: typeof en = {
   },
   homepage: {
     badge: "工厂直供 B2B 供应商",
-    headline: "小型发动机零配件及整机批发 — 中国直发",
+    headline: "汽车配件与整机批发 — 中国直发",
     subtext:
-      "168F / GX160 系列发动机维修套件、备品备件及整机，服务中东、中亚及东南亚地区的维修店、经销商和代理商。工厂价格，低起订量，支持OEM。",
+      "汽车配件、发动机零配件、维修套件及 168F / GX160 系列整机，服务中东、中亚及东南亚地区的维修店、经销商和代理商。工厂价格，低起订量，支持OEM。",
     cta_quote: "获取批发报价",
     cta_distributor: "成为经销商",
     cta_browse: "浏览产品目录",
@@ -690,11 +690,11 @@ const zh: typeof en = {
     region_me: "中东",
     region_ca: "中亚",
     region_sea: "东南亚",
-    region_tagline: "整机 · 配件 · 维修套件 · OEM"
+    region_tagline: "整机 · 汽车配件 · 维修套件 · OEM"
   },
   products: {
-    heading: "维修套件产品",
-    subtext: "按品类、兼容型号、设备类型和故障症状筛选。特定型号套件优先显示，通用件排列在后。",
+    heading: "汽车配件与整机",
+    subtext: "按品类、兼容型号、设备类型和故障症状筛选汽车配件、发动机零配件、维修套件与整机。特定型号商品优先显示，通用件排列在后。",
     count_one: "找到 1 件产品",
     count_other: "找到 {n} 件产品",
     no_results: "没有产品符合当前筛选条件。",
@@ -710,7 +710,7 @@ const zh: typeof en = {
     active_filters: "已选筛选：",
     clear_all: "清除全部",
     guaranteed_only: "只看保证适配",
-    search_ph: "搜索套件…",
+    search_ph: "搜索配件、整机或 SKU…",
     fitment_title: "查找适配您发动机的零件",
     fitment_sub: "选择您的发动机，只看确认适配的零件 —— 通用件排在最后。",
     fitment_select: "选择您的发动机 / 设备...",
@@ -792,7 +792,7 @@ const zh: typeof en = {
     badge: "关于我们",
     title: "一个真正懂维修的配件供应商",
     intro:
-      "Partavio 直接从中国重庆的工厂供应小型发动机维修套件、配件与 168F / GX160 类整机。我们服务的是「第一次就要拿到对的化油器」的维修店，以及「想用一个供应商搞定全品类」的经销商。",
+      "Partavio 直接从中国重庆的工厂供应汽车配件、发动机零配件、维修套件与 168F / GX160 类整机。我们服务的是「第一次就要拿到对的配件」的维修店，以及「想用一个供应商搞定全品类」的经销商。",
     fact1_title: "重庆工厂直供",
     fact1_body: "我们采购自中国最大的摩托车与小型发动机制造集群 —— 隆鑫、宗申、力帆等发动机背后的同一生态。",
     fact2_title: "围绕真实维修打造",
@@ -890,9 +890,9 @@ const zh: typeof en = {
   cart: {
     badge: "安全结账",
     heading: "购物车",
-    subtext: "安全结账前请确认维修套件。价格为试样订单价格；批量报价可后续处理。",
+    subtext: "安全结账前请确认商品。价格为试样订单价格；批量报价可后续处理。",
     empty_heading: "购物车为空",
-    empty_sub: "请从产品列表或产品详情页添加维修套件。",
+    empty_sub: "请从产品列表或产品详情页添加商品。",
     browse: "浏览产品",
     unit_price: "单价：",
     cross_sell_title: "您可能还需要",
@@ -993,7 +993,7 @@ const zh: typeof en = {
   },
   engines: {
     heading: "按发动机型号选购",
-    subtext: "选择您的发动机型号，查看兼容的维修套件、备品备件及保养配件。",
+    subtext: "选择您的发动机型号，查看兼容的配件、维修套件及保养配件。",
     set_engine: "设为我的发动机",
     badge: "按型号选购",
     main_heading: "选择您的发动机或机器",
@@ -1117,7 +1117,7 @@ const zh: typeof en = {
     back_to_cart: "返回购物车"
   },
   finder: {
-    heading: "找到合适的维修套件",
+    heading: "找到合适的配件",
     subtext: "3 步完成 — 或通过 WhatsApp 发送照片，我们免费确认适配型号。",
     step1: "1 · 我的设备",
     step2: "2 · 发动机 / 型号",
@@ -1152,7 +1152,7 @@ function deepMerge<T>(base: T, overrides: DeepPartial<T>): T {
 const arOverrides: DeepPartial<Dict> = {
   locale: "ar" as Locale,
   header: {
-    topbar_left: "قطع غيار المحركات والمحركات الكاملة مباشرة من المصنع — تشونغتشينغ، الصين",
+    topbar_left: "قطع غيار السيارات والمحركات الكاملة مباشرة من المصنع — تشونغتشينغ، الصين",
     topbar_right: "نخدم الشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا",
     tagline: "مورّد قطع غيار المحركات مباشرة من المصنع",
     quote: "اطلب عرض سعر"
@@ -1175,7 +1175,7 @@ const arOverrides: DeepPartial<Dict> = {
   },
   footer: {
     description:
-      "مورّد مباشر من المصنع لقطع غيار المحركات الصغيرة وأطقم الإصلاح والمحركات الكاملة من تجمّع تشونغتشينغ الصناعي. جملة وOEM للشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا.",
+      "مورّد مباشر من المصنع لقطع غيار السيارات وقطع غيار المحركات وأطقم الإصلاح والمحركات الكاملة من تجمّع تشونغتشينغ الصناعي. جملة وOEM للشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا.",
     logistics: "الشحن: بحري LCL/FCL وسكة حديد الصين–آسيا الوسطى · مستندات تصدير كاملة · دفع بالحوالة (T/T).",
     navigate: "تصفّح",
     policies: "السياسات",
@@ -1208,9 +1208,9 @@ const arOverrides: DeepPartial<Dict> = {
   },
   homepage: {
     badge: "مورّد B2B مباشر من المصنع",
-    headline: "قطع غيار ومحركات صغيرة بالجملة — مباشرة من الصين",
+    headline: "قطع غيار السيارات والمحركات الكاملة بالجملة — مباشرة من الصين",
     subtext:
-      "أطقم إصلاح وقطع غيار ومحركات كاملة بنمط 168F / GX160 لورش الإصلاح والموزعين والتجار في الشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا. أسعار المصنع، حد أدنى منخفض للطلب، نرحّب بـ OEM.",
+      "قطع غيار السيارات وقطع غيار المحركات وأطقم الإصلاح ومحركات كاملة بنمط 168F / GX160 لورش الإصلاح والموزعين والتجار في الشرق الأوسط وآسيا الوسطى وجنوب شرق آسيا. أسعار المصنع، حد أدنى منخفض للطلب، نرحّب بـ OEM.",
     cta_quote: "اطلب عرض سعر بالجملة",
     cta_distributor: "كن موزّعًا",
     cta_browse: "تصفّح الكتالوج",
@@ -1268,9 +1268,9 @@ const arOverrides: DeepPartial<Dict> = {
     region_tagline: "محركات كاملة · قطع غيار · أطقم إصلاح · OEM"
   },
   products: {
-    heading: "منتجات أطقم الإصلاح",
+    heading: "قطع غيار السيارات والمحركات الكاملة",
     subtext:
-      "صفِّ حسب الفئة والطراز المتوافق والمعدّات والمشكلة المحلولة. تظهر الأطقم الخاصة بالطراز أولًا؛ القطع العامة المتوافقة تُدرَج بعدها.",
+      "صفِّ قطع غيار السيارات وقطع غيار المحركات وأطقم الإصلاح والمحركات الكاملة حسب الفئة والطراز المتوافق والمعدّات والمشكلة المحلولة. تظهر العناصر الخاصة بالطراز أولًا؛ القطع العامة المتوافقة تُدرَج بعدها.",
     count_one: "تم العثور على منتج واحد",
     count_other: "تم العثور على {n} منتج",
     no_results: "لا توجد منتجات مطابقة لهذه الفلاتر.",
@@ -1286,7 +1286,7 @@ const arOverrides: DeepPartial<Dict> = {
     active_filters: "الفلاتر النشطة:",
     clear_all: "مسح الكل",
     guaranteed_only: "التوافق المضمون فقط",
-    search_ph: "ابحث في الأطقم...",
+    search_ph: "ابحث عن قطع غيار أو محركات أو SKU...",
     fitment_title: "اعثر على قطع محرّكك",
     fitment_sub: "اختر محرّكك لرؤية القطع المؤكَّد توافقها فقط — القطع العامة تظهر أخيرًا.",
     fitment_select: "اختر محرّكك / آلتك...",
@@ -1369,7 +1369,7 @@ const arOverrides: DeepPartial<Dict> = {
     badge: "من نحن",
     title: "مورّد قطع غيار يفهم لغة الإصلاح",
     intro:
-      "تبيع Partavio أطقم إصلاح المحركات الصغيرة وقطع الغيار والمحركات الكاملة من طراز 168F / GX160 مباشرةً من المصنع في تشونغتشينغ بالصين. نحن هنا من أجل ورشة الإصلاح التي تريد المكربن الصحيح من المرة الأولى، والموزّع الذي يريد مورّدًا واحدًا لكامل التشكيلة.",
+      "تبيع Partavio قطع غيار السيارات وقطع غيار المحركات وأطقم الإصلاح والمحركات الكاملة من طراز 168F / GX160 مباشرةً من المصنع في تشونغتشينغ بالصين. نحن هنا من أجل ورشة الإصلاح التي تريد القطعة الصحيحة من المرة الأولى، والموزّع الذي يريد مورّدًا واحدًا لكامل التشكيلة.",
     fact1_title: "تصنيع مباشر من تشونغتشينغ",
     fact1_body:
       "نحصل على منتجاتنا من أكبر تجمّع لتصنيع الدراجات النارية والمحركات الصغيرة في الصين — المنظومة وراء محركات Loncin وZongshen وLifan.",
@@ -1471,9 +1471,9 @@ const arOverrides: DeepPartial<Dict> = {
   cart: {
     badge: "دفع آمن",
     heading: "السلة",
-    subtext: "راجع أطقم الإصلاح قبل الدفع الآمن. الأسعار لطلبات العيّنة؛ يمكن التعامل مع عروض الجملة لاحقًا.",
+    subtext: "راجع منتجاتك قبل الدفع الآمن. الأسعار لطلبات العيّنة؛ يمكن التعامل مع عروض الجملة لاحقًا.",
     empty_heading: "سلتك فارغة",
-    empty_sub: "أضف أطقم الإصلاح من قائمة المنتجات أو صفحة المنتج.",
+    empty_sub: "أضف المنتجات من قائمة المنتجات أو صفحة المنتج.",
     browse: "تصفّح المنتجات",
     unit_price: "سعر الوحدة:",
     cross_sell_title: "قد تحتاج أيضًا",
@@ -1573,7 +1573,7 @@ const arOverrides: DeepPartial<Dict> = {
 const ruOverrides: DeepPartial<Dict> = {
   locale: "ru" as Locale,
   header: {
-    topbar_left: "Запчасти и двигатели напрямую с завода — Чунцин, Китай",
+    topbar_left: "Автозапчасти и двигатели в сборе напрямую с завода — Чунцин, Китай",
     topbar_right: "Обслуживаем Ближний Восток, Центральную Азию и Юго-Восточную Азию",
     tagline: "Поставщик запчастей для двигателей напрямую с завода",
     quote: "Запросить цену"
@@ -1596,7 +1596,7 @@ const ruOverrides: DeepPartial<Dict> = {
   },
   footer: {
     description:
-      "Прямой заводской поставщик запчастей для малых двигателей, ремкомплектов и двигателей в сборе из промышленного кластера Чунцина. Опт и OEM для Ближнего Востока, Центральной Азии и Юго-Восточной Азии.",
+      "Прямой заводской поставщик автозапчастей, запчастей для двигателей, ремкомплектов и двигателей в сборе из промышленного кластера Чунцина. Опт и OEM для Ближнего Востока, Центральной Азии и Юго-Восточной Азии.",
     logistics: "Логистика: морем LCL/FCL и ж/д Китай–Центральная Азия · полный пакет экспортных документов · оплата T/T.",
     navigate: "Навигация",
     policies: "Правила",
@@ -1629,9 +1629,9 @@ const ruOverrides: DeepPartial<Dict> = {
   },
   homepage: {
     badge: "Прямой заводской B2B-поставщик",
-    headline: "Оптовые запчасти и двигатели для малой техники — напрямую из Китая",
+    headline: "Оптовые автозапчасти и двигатели в сборе — напрямую из Китая",
     subtext:
-      "Ремкомплекты, запчасти и двигатели в сборе типа 168F / GX160 для ремонтных мастерских, дистрибьюторов и дилеров на Ближнем Востоке, в Центральной и Юго-Восточной Азии. Заводские цены, низкий MOQ, OEM приветствуется.",
+      "Автозапчасти, запчасти для двигателей, ремкомплекты и двигатели в сборе типа 168F / GX160 для ремонтных мастерских, дистрибьюторов и дилеров на Ближнем Востоке, в Центральной и Юго-Восточной Азии. Заводские цены, низкий MOQ, OEM приветствуется.",
     cta_quote: "Получить оптовую цену",
     cta_distributor: "Стать дистрибьютором",
     cta_browse: "Смотреть каталог",
@@ -1689,9 +1689,9 @@ const ruOverrides: DeepPartial<Dict> = {
     region_tagline: "Двигатели · Запчасти · Ремкомплекты · OEM"
   },
   products: {
-    heading: "Ремкомплекты",
+    heading: "Автозапчасти и двигатели в сборе",
     subtext:
-      "Фильтруйте по категории, совместимой модели, технике и решаемой проблеме. Сначала показаны комплекты под конкретную модель; универсальные подходящие детали — следом.",
+      "Фильтруйте автозапчасти, запчасти для двигателей, ремкомплекты и двигатели в сборе по категории, совместимой модели, технике и решаемой проблеме. Сначала показаны товары под конкретную модель; универсальные подходящие детали — следом.",
     count_one: "Найден 1 товар",
     count_other: "Найдено товаров: {n}",
     no_results: "Нет товаров по этим фильтрам.",
@@ -1707,7 +1707,7 @@ const ruOverrides: DeepPartial<Dict> = {
     active_filters: "Активные фильтры:",
     clear_all: "Сбросить всё",
     guaranteed_only: "Только гарантированная совместимость",
-    search_ph: "Поиск комплектов...",
+    search_ph: "Поиск деталей, двигателей или SKU...",
     fitment_title: "Найдите детали для двигателя",
     fitment_sub: "Выберите двигатель, чтобы видеть только подходящие детали — универсальные показаны в конце.",
     fitment_select: "Выберите двигатель / технику...",
@@ -1790,7 +1790,7 @@ const ruOverrides: DeepPartial<Dict> = {
     badge: "О нас",
     title: "Поставщик запчастей, который говорит на языке ремонта",
     intro:
-      "Partavio продаёт ремкомплекты для малых двигателей, запчасти и двигатели в сборе типа 168F / GX160 напрямую с завода в Чунцине (Китай). Мы работаем для мастерской, которой нужен правильный карбюратор с первого раза, и для дистрибьютора, которому нужен один поставщик на весь ассортимент.",
+      "Partavio продаёт автозапчасти, запчасти для двигателей, ремкомплекты и двигатели в сборе типа 168F / GX160 напрямую с завода в Чунцине (Китай). Мы работаем для мастерской, которой нужна правильная деталь с первого раза, и для дистрибьютора, которому нужен один поставщик на весь ассортимент.",
     fact1_title: "Напрямую с завода в Чунцине",
     fact1_body:
       "Мы закупаем в крупнейшем в Китае кластере по производству мотоциклов и малых двигателей — экосистеме, стоящей за двигателями Loncin, Zongshen и Lifan.",
@@ -1892,9 +1892,9 @@ const ruOverrides: DeepPartial<Dict> = {
   cart: {
     badge: "Безопасная оплата",
     heading: "Корзина",
-    subtext: "Проверьте ремкомплекты перед безопасной оплатой. Цены — для пробных заказов; оптовые расчёты можно сделать позже.",
+    subtext: "Проверьте товары перед безопасной оплатой. Цены — для пробных заказов; оптовые расчёты можно сделать позже.",
     empty_heading: "Корзина пуста",
-    empty_sub: "Добавьте ремкомплекты из списка товаров или со страницы товара.",
+    empty_sub: "Добавьте товары из списка товаров или со страницы товара.",
     browse: "Смотреть товары",
     unit_price: "Цена за шт.:",
     cross_sell_title: "Возможно, также понадобится",

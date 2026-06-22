@@ -38,12 +38,12 @@ async function getNavCategories(): Promise<CategoryLite[]> {
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:4173";
 const SITE_NAME = "Partavio";
 const SITE_DESC =
-  "Factory-direct small engine parts, repair kits and complete engines. Wholesale for the Middle East, Central Asia and Southeast Asia.";
+  "Factory-direct auto parts, engine spares, repair kits and complete engines. Wholesale for the Middle East, Central Asia and Southeast Asia.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Small Engine Repair Kits Store | Partavio",
+    default: "Auto Parts & Complete Engines — Factory Direct | Partavio",
     template: "%s | Partavio"
   },
   description: SITE_DESC,
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: "Wholesale Small Engine Parts — Factory Direct",
+    title: "Wholesale Auto Parts & Complete Engines — Factory Direct",
     description: SITE_DESC,
     url: SITE_URL
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wholesale Small Engine Parts — Factory Direct",
+    title: "Wholesale Auto Parts & Complete Engines — Factory Direct",
     description: SITE_DESC
   }
 };
