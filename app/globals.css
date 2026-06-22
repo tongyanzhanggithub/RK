@@ -17,6 +17,30 @@ body {
 
 * {
   letter-spacing: 0;
+  /* Kill the grey flash overlay on tap (iOS/Android). */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Interactive controls: remove the 300ms tap delay and double-tap zoom,
+   and give a subtle tactile press on touch/click without affecting layout. */
+button,
+a,
+[role="button"],
+summary,
+label {
+  touch-action: manipulation;
+}
+
+button:active,
+[role="button"]:active {
+  transform: translateY(0.5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:active,
+  [role="button"]:active {
+    transform: none;
+  }
 }
 
 /* Visible keyboard focus for accessibility (mouse clicks stay clean). */
